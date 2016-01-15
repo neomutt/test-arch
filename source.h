@@ -5,4 +5,6 @@ typedef struct source_t {
 	int type;
 } SOURCE;
 
+void source_free (SOURCE *src);
+
 #endif // _SOURCE_H_

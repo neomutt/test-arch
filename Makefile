@@ -18,7 +18,6 @@ CFLAGS	+= -Wall
 CFLAGS	+= -Wextra
 CFLAGS	+= -Wpedantic
 CFLAGS	+= -g
-CFLAGS	+= -I.
 
 LDFLAGS	+= -pthread
 LDFLAGS	+= -rdynamic
