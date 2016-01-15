@@ -7,7 +7,11 @@
 #include "folder.h"
 #include "item.h"
 
-const int MAGIC_MAILDIR = 345;
+#include "plugin.h"
+
+#define MAGIC_MAILDIR 345
+
+// static char *config[10];
 
 int
 maildir_init (void)
@@ -81,8 +85,29 @@ maildir_connect (void)
 	return s;
 }
 
-void
-maildir_free (SOURCE *src)
+int
+maildir_config_item (const char *name)
 {
-	free (src);
+	if (!name) {
+		return 0;
+	}
+
+	return 1;
 }
+
+void
+maildir_disconnect (void)
+{
+}
+
+static PLUGIN p = {
+	MAGIC_MAILDIR,
+	"maildir",
+	maildir_init,
+	maildir_connect,
+	maildir_disconnect,
+	maildir_config_item
+};
+
+PLUGIN *maildir_plugin = &p;
+

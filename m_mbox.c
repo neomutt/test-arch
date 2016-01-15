@@ -6,8 +6,11 @@
 #include "source.h"
 #include "folder.h"
 #include "item.h"
+#include "plugin.h"
 
-const int MAGIC_MBOX = 234;
+#define MAGIC_MBOX 234
+
+// static char *config[10];
 
 int
 mbox_init (void)
@@ -44,11 +47,8 @@ mbox_connect (void)
 	ITEM *i2 = calloc (1, sizeof (ITEM));
 	ITEM *i3 = calloc (1, sizeof (ITEM));
 	ITEM *i4 = calloc (1, sizeof (ITEM));
-	ITEM *i5 = calloc (1, sizeof (ITEM));
-	ITEM *i6 = calloc (1, sizeof (ITEM));
-	ITEM *i7 = calloc (1, sizeof (ITEM));
 
-	if (!i1 || !i2 || !i3 || !i4 || !i5 || !i6 || !i7) {
+	if (!i1 || !i2 || !i3 || !i4) {
 		printf ("imap_connect: calloc failed\n");
 		return NULL;
 	}
@@ -73,3 +73,30 @@ mbox_free (SOURCE *src)
 {
 	free (src);
 }
+
+int
+mbox_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	return 1;
+}
+
+void
+mbox_disconnect (void)
+{
+}
+
+static PLUGIN p = {
+	MAGIC_MBOX,
+	"mbox",
+	mbox_init,
+	mbox_connect,
+	mbox_disconnect,
+	mbox_config_item
+};
+
+PLUGIN *mbox_plugin = &p;
+

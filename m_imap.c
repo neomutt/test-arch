@@ -6,8 +6,11 @@
 #include "source.h"
 #include "folder.h"
 #include "item.h"
+#include "plugin.h"
 
-const int MAGIC_IMAP = 123;
+#define MAGIC_IMAP 123
+
+// static char *config[10];
 
 int
 imap_init (void)
@@ -80,8 +83,29 @@ imap_connect (void)
 	return s;
 }
 
-void
-imap_free (SOURCE *src)
+int
+imap_config_item (const char *name)
 {
-	free (src);
+	if (!name) {
+		return 0;
+	}
+
+	return 1;
 }
+
+void
+imap_disconnect (void)
+{
+}
+
+static PLUGIN p = {
+	MAGIC_IMAP,
+	"imap",
+	imap_init,
+	imap_connect,
+	imap_disconnect,
+	imap_config_item
+};
+
+PLUGIN *imap_plugin = &p;
+
