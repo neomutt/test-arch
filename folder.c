@@ -41,7 +41,7 @@ folder_display (FOLDER *f)
 		return;
 	}
 
-	printf ("\t\t%s\n", f->name);
+	printf ("\t\t\033[1;32m%s\033[m\n", f->name);
 	int i;
 	for (i = 0; i < f->num_items; i++) {
 		item_display (f->items[i]);

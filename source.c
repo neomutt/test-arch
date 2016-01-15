@@ -41,7 +41,7 @@ source_display (SOURCE *src)
 		return;
 	}
 
-	printf ("\t%s\n", src->name);
+	printf ("\t\033[1;33m%s\033[m\n", src->name);
 	int i;
 	for (i = 0; i < src->num_folders; i++) {
 		folder_display (src->folders[i]);

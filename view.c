@@ -56,7 +56,7 @@ view_display (VIEW *v)
 		return;
 	}
 
-	printf ("%s\n", v->name);
+	printf ("\033[1;31m%s\033[m\n", v->name);
 	int i;
 	for (i = 0; i < v->num_sources; i++) {
 		source_display (v->sources[i]);

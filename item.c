@@ -21,6 +21,6 @@ item_display (ITEM *i)
 		return;
 	}
 
-	printf ("\t\t\t%s\n", i->name);
+	printf ("\t\t\t\033[1;36m%s\033[m\n", i->name);
 }
 
