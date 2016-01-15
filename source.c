@@ -35,15 +35,16 @@ source_add_folder (SOURCE *src, FOLDER *f)
 }
 
 void
-source_display (SOURCE *src)
+source_display (SOURCE *src, int indent)
 {
 	if (!src) {
 		return;
 	}
 
-	printf ("\t\033[1;33m%s\033[m\n", src->name);
+	printf ("%*s\033[1;33m%s\033[m\n", indent * 8, "", src->name);
+
 	int i;
 	for (i = 0; i < src->num_folders; i++) {
-		folder_display (src->folders[i]);
+		folder_display (src->folders[i], indent + 1);
 	}
 }

@@ -50,16 +50,16 @@ view_add_source (VIEW *v, SOURCE *src)
 }
 
 void
-view_display (VIEW *v)
+view_display (VIEW *v, int indent)
 {
 	if (!v) {
 		return;
 	}
 
-	printf ("\033[1;31m%s\033[m\n", v->name);
+	printf ("%*s\033[1;31m%s\033[m\n", indent * 8, "", v->name);
 	int i;
 	for (i = 0; i < v->num_sources; i++) {
-		source_display (v->sources[i]);
+		source_display (v->sources[i], indent + 1);
 	}
 }
 

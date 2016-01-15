@@ -23,11 +23,11 @@ main (int argc, char *argv[])
 		config_read_file (argv[1]);
 	}
 
-	SOURCE *s_imap = imap_connect();
-	if (!s_imap) {
-		printf ("imap init failed\n");
-		return 1;
-	}
+	// SOURCE *s_imap = imap_connect();
+	// if (!s_imap) {
+	// 	printf ("imap init failed\n");
+	// 	return 1;
+	// }
 
 	SOURCE *s_maildir = maildir_connect();
 	if (!s_maildir) {
@@ -49,11 +49,11 @@ main (int argc, char *argv[])
 
 	v->name = strdup ("mail");
 
-	view_add_source (v, s_imap);
+	// view_add_source (v, s_imap);
 	view_add_source (v, s_maildir);
 	view_add_source (v, s_mbox);
 
-	view_display (v);
+	view_display (v, 0);
 
 	view_free (v);
 	config_free();

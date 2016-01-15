@@ -7,6 +7,6 @@ typedef struct item_t {
 } ITEM;
 
 void item_free (ITEM *i);
-void item_display (ITEM *i);
+void item_display (ITEM *i, int indent);
 
 #endif // _ITEM_H_

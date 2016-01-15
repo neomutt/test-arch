@@ -12,6 +12,6 @@ typedef struct source_t {
 
 void source_free (SOURCE *src);
 int source_add_folder (SOURCE *src, FOLDER *f);
-void source_display (SOURCE *src);
+void source_display (SOURCE *src, int indent);
 
 #endif // _SOURCE_H_

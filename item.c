@@ -15,12 +15,12 @@ item_free (ITEM *i)
 }
 
 void
-item_display (ITEM *i)
+item_display (ITEM *i, int indent)
 {
 	if (!i) {
 		return;
 	}
 
-	printf ("\t\t\t\033[1;36m%s\033[m\n", i->name);
+	printf ("%*s\033[1;36m%s\033[m\n", indent * 8, "", i->name);
 }
 

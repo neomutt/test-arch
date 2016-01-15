@@ -12,6 +12,12 @@ folder_free (FOLDER *f)
 	}
 
 	int i;
+
+	for (i = 0; i < f->num_folders; i++) {
+		// printf ("freeing folder %p\n", (void*) f->folders[i]);
+		folder_free (f->folders[i]);
+	}
+
 	for (i = 0; i < f->num_items; i++) {
 		// printf ("freeing item %p\n", (void*) f->items[i]);
 		item_free (f->items[i]);
@@ -19,6 +25,19 @@ folder_free (FOLDER *f)
 
 	free (f->name);
 	free (f);
+}
+
+int
+folder_add_folder (FOLDER *f, FOLDER *child)
+{
+	if (!f || !child) {
+		return 0;
+	}
+
+	f->folders[f->num_folders] = child;
+	f->num_folders++;
+
+	return 1;
 }
 
 int
@@ -35,15 +54,21 @@ folder_add_item (FOLDER *f, ITEM *i)
 }
 
 void
-folder_display (FOLDER *f)
+folder_display (FOLDER *f, int indent)
 {
 	if (!f) {
 		return;
 	}
 
-	printf ("\t\t\033[1;32m%s\033[m\n", f->name);
+	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->name);
+
 	int i;
+
 	for (i = 0; i < f->num_items; i++) {
-		item_display (f->items[i]);
+		item_display (f->items[i], indent + 1);
+	}
+
+	for (i = 0; i < f->num_folders; i++) {
+		folder_display (f->folders[i], indent + 1);
 	}
 }
