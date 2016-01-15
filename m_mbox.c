@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include "view.h"
@@ -9,7 +10,7 @@ const int MAGIC_MBOX = 234;
 int
 mbox_init (void)
 {
-	printf ("mbox init\n");
+	// printf ("mbox init\n");
 	return 1;
 }
 
@@ -24,6 +25,7 @@ mbox_connect (void)
 	}
 
 	s->type = MAGIC_MBOX;
+	s->name = strdup ("mbox");
 
 	return s;
 }

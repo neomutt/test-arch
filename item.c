@@ -13,3 +13,14 @@ item_free (ITEM *i)
 	free (i->name);
 	free (i);
 }
+
+void
+item_display (ITEM *i)
+{
+	if (!i) {
+		return;
+	}
+
+	printf ("\t\t\t%s\n", i->name);
+}
+

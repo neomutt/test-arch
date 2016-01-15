@@ -20,7 +20,7 @@ config_read_file (const char *file)
 	while (fgets (buffer, sizeof (buffer), f)) {
 		number++;
 	}
-	printf ("file '%s' has %d lines\n", file, number);
+	// printf ("file '%s' has %d lines\n", file, number);
 
 	fclose (f);
 	return 0;

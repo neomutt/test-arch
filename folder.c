@@ -34,3 +34,16 @@ folder_add_item (FOLDER *f, ITEM *i)
 	return 1;
 }
 
+void
+folder_display (FOLDER *f)
+{
+	if (!f) {
+		return;
+	}
+
+	printf ("\t\t%s\n", f->name);
+	int i;
+	for (i = 0; i < f->num_items; i++) {
+		item_display (f->items[i]);
+	}
+}

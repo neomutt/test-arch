@@ -17,6 +17,7 @@ source_free (SOURCE *src)
 		folder_free (src->folders[i]);
 	}
 
+	free (src->name);
 	free (src);
 }
 
@@ -33,3 +34,16 @@ source_add_folder (SOURCE *src, FOLDER *f)
 	return 1;
 }
 
+void
+source_display (SOURCE *src)
+{
+	if (!src) {
+		return;
+	}
+
+	printf ("\t%s\n", src->name);
+	int i;
+	for (i = 0; i < src->num_folders; i++) {
+		folder_display (src->folders[i]);
+	}
+}

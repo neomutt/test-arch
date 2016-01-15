@@ -12,7 +12,7 @@ const int MAGIC_IMAP = 123;
 int
 imap_init (void)
 {
-	printf ("imap init\n");
+	// printf ("imap init\n");
 	return 1;
 }
 
@@ -27,6 +27,7 @@ imap_connect (void)
 	}
 
 	s->type = MAGIC_IMAP;
+	s->name = strdup ("imap");
 
 	// Pretend to read something
 

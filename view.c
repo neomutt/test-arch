@@ -32,6 +32,7 @@ view_free (VIEW *v)
 		source_free (v->sources[i]);
 	}
 
+	free (v->name);
 	free (v);
 }
 
@@ -46,5 +47,19 @@ view_add_source (VIEW *v, SOURCE *src)
 	v->num_sources++;
 
 	return 1;
+}
+
+void
+view_display (VIEW *v)
+{
+	if (!v) {
+		return;
+	}
+
+	printf ("%s\n", v->name);
+	int i;
+	for (i = 0; i < v->num_sources; i++) {
+		source_display (v->sources[i]);
+	}
 }
 

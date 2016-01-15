@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include "view.h"
@@ -9,7 +10,7 @@ const int MAGIC_MAILDIR = 345;
 int
 maildir_init (void)
 {
-	printf ("maildir init\n");
+	// printf ("maildir init\n");
 	return 1;
 }
 
@@ -24,6 +25,7 @@ maildir_connect (void)
 	}
 
 	s->type = MAGIC_MAILDIR;
+	s->name = strdup ("maildir");
 
 	return s;
 }

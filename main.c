@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "config.h"
 #include "m_imap.h"
@@ -46,11 +47,13 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
+	v->name = strdup ("mail");
+
 	view_add_source (v, s_imap);
 	view_add_source (v, s_maildir);
 	view_add_source (v, s_mbox);
 
-	// Do something
+	view_display (v);
 
 	view_free (v);
 	config_free();
