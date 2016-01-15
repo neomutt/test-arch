@@ -3,6 +3,9 @@
 
 typedef struct item_t {
 	int type;
+	char *name;
 } ITEM;
+
+void item_free (ITEM *i);
 
 #endif // _ITEM_H_

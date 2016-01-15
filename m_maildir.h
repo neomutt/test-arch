@@ -1,6 +1,8 @@
 #ifndef _M_MAILDIR_H_
 #define _M_MAILDIR_H_
 
+extern const int MAGIC_MAILDIR;
+
 typedef struct source_t SOURCE;
 
 int      maildir_init (void);

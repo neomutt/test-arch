@@ -4,6 +4,8 @@
 #include "view.h"
 #include "source.h"
 
+const int MAGIC_MBOX = 234;
+
 int
 mbox_init (void)
 {
@@ -21,7 +23,7 @@ mbox_connect (void)
 		return NULL;
 	}
 
-	s->type = 123;
+	s->type = MAGIC_MBOX;
 
 	return s;
 }

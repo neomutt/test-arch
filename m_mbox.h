@@ -1,6 +1,8 @@
 #ifndef _M_MBOX_H_
 #define _M_MBOX_H_
 
+extern const int MAGIC_MBOX;
+
 typedef struct source_t SOURCE;
 
 int      mbox_init (void);

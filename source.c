@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "source.h"
+#include "folder.h"
 
 void
 source_free (SOURCE *src)
@@ -10,6 +11,25 @@ source_free (SOURCE *src)
 		return;
 	}
 
+	int i;
+	for (i = 0; i < src->num_folders; i++) {
+		// printf ("freeing folder %p\n", (void*) src->folders[i]);
+		folder_free (src->folders[i]);
+	}
+
 	free (src);
+}
+
+int
+source_add_folder (SOURCE *src, FOLDER *f)
+{
+	if (!src || !f) {
+		return 0;
+	}
+
+	src->folders[src->num_folders] = f;
+	src->num_folders++;
+
+	return 1;
 }
 

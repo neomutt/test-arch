@@ -4,6 +4,8 @@
 #include "view.h"
 #include "source.h"
 
+const int MAGIC_MAILDIR = 345;
+
 int
 maildir_init (void)
 {
@@ -21,7 +23,7 @@ maildir_connect (void)
 		return NULL;
 	}
 
-	s->type = 123;
+	s->type = MAGIC_MAILDIR;
 
 	return s;
 }
