@@ -40,9 +40,9 @@ maildir_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("fruit");
-	f2->name = strdup ("cars");
-	f3->name = strdup ("girls");
+	f1->name = strdup ("boys");
+	f2->name = strdup ("trees");
+	f3->name = strdup ("fish");
 
 	folder_add_folder (f1, f2);
 	folder_add_folder (f1, f3);
@@ -60,13 +60,13 @@ maildir_connect (void)
 		return NULL;
 	}
 
-	i1->name = strdup ("apple");
-	i2->name = strdup ("banana");
-	i3->name = strdup ("cherry");
-	i4->name = strdup ("audi");
-	i5->name = strdup ("bentley");
-	i6->name = strdup ("anna");
-	i7->name = strdup ("bella");
+	i1->name = strdup ("adam");
+	i2->name = strdup ("barry");
+	i3->name = strdup ("charlie");
+	i4->name = strdup ("ash");
+	i5->name = strdup ("beech");
+	i6->name = strdup ("angel");
+	i7->name = strdup ("beluga");
 
 	folder_add_item (f1, i1);
 	folder_add_item (f1, i2);
