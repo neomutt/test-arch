@@ -23,8 +23,13 @@ folder_free (FOLDER *f)
 		item_free (f->items[i]);
 	}
 
-	free (f->name);
-	free (f);
+	OBJECT *o = &f->object;
+	if (o->delete) {
+		(*o->delete)();
+	} else {
+		free (f->name);
+		free (f);
+	}
 }
 
 int

@@ -17,8 +17,13 @@ source_free (SOURCE *src)
 		folder_free (src->folders[i]);
 	}
 
-	free (src->name);
-	free (src);
+	OBJECT *o = &src->object;
+	if (o->delete) {
+		(*o->delete)();
+	} else {
+		free (src->name);
+		free (src);
+	}
 }
 
 int

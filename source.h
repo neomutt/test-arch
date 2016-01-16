@@ -1,10 +1,12 @@
 #ifndef _SOURCE_H_
 #define _SOURCE_H_
 
+#include "object.h"
+
 typedef struct folder_t FOLDER;
 
 typedef struct source_t {
-	int type;
+	OBJECT object;
 	char *name;
 	int num_folders;
 	FOLDER *folders[10];

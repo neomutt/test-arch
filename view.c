@@ -14,7 +14,7 @@ view_create (void)
 		return NULL;
 	}
 
-	v->type = 234;
+	v->object.type = 234;
 
 	return v;
 }
@@ -32,8 +32,13 @@ view_free (VIEW *v)
 		source_free (v->sources[i]);
 	}
 
-	free (v->name);
-	free (v);
+	OBJECT *o = &v->object;
+	if (o->delete) {
+		(*o->delete)();
+	} else {
+		free (v->name);
+		free (v);
+	}
 }
 
 int

@@ -1,8 +1,10 @@
 #ifndef _ITEM_H_
 #define _ITEM_H_
 
+#include "object.h"
+
 typedef struct item_t {
-	int type;
+	OBJECT object;
 	char *name;
 } ITEM;
 

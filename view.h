@@ -1,10 +1,12 @@
 #ifndef _VIEW_H_
 #define _VIEW_H_
 
+#include "object.h"
+
 typedef struct source_t SOURCE;
 
 typedef struct view_t {
-	int type;
+	OBJECT object;
 	char *name;
 	int num_sources;
 	SOURCE *sources[10];

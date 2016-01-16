@@ -30,8 +30,8 @@ maildir_connect (void)
 		return NULL;
 	}
 
-	s->type = MAGIC_MAILDIR;
-	s->name = strdup ("maildir");
+	s->object.type = MAGIC_MAILDIR;
+	s->name        = strdup ("maildir");
 
 	// Pretend to read something
 

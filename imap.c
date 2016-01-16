@@ -29,8 +29,8 @@ imap_connect (void)
 		return NULL;
 	}
 
-	s->type = MAGIC_IMAP;
-	s->name = strdup ("imap");
+	s->object.type = MAGIC_IMAP;
+	s->name        = strdup ("imap");
 
 	// Pretend to read something
 

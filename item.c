@@ -10,8 +10,13 @@ item_free (ITEM *i)
 		return;
 	}
 
-	free (i->name);
-	free (i);
+	OBJECT *o = &i->object;
+	if (o->delete) {
+		(*o->delete)();
+	} else {
+		free (i->name);
+		free (i);
+	}
 }
 
 void

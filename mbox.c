@@ -29,8 +29,8 @@ mbox_connect (void)
 		return NULL;
 	}
 
-	s->type = MAGIC_MBOX;
-	s->name = strdup ("mbox");
+	s->object.type = MAGIC_MBOX;
+	s->name        = strdup ("mbox");
 
 	// Pretend to read something
 
