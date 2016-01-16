@@ -1,11 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "config.h"
-
-static int number;
+#include "plugin.h"
 
 int
-config_read_file (const char *file)
+config_read_file (const char *file, const PLUGIN **plugins)
 {
 	if (!file)
 		return 0;
@@ -16,11 +16,26 @@ config_read_file (const char *file)
 	}
 
 	char buffer[128];
+	int i;
+	int len;
 
 	while (fgets (buffer, sizeof (buffer), f)) {
-		number++;
+		len = strnlen (buffer, sizeof (buffer));
+		if (len > 0) {
+			len--;
+		}
+		buffer[len] = 0;
+
+		for (i = 0; plugins[i]; i++) {
+			if (plugins[i]->config (buffer) == 1) {
+				break;
+			}
+		}
+
+		if (!plugins[i]) {
+			// printf ("Unknown config: %s\n", buffer);
+		}
 	}
-	// printf ("file '%s' has %d lines\n", file, number);
 
 	fclose (f);
 	return 0;
@@ -29,6 +44,5 @@ config_read_file (const char *file)
 void
 config_free (void)
 {
-	number = 0;
 }
 

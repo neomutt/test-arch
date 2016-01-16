@@ -33,7 +33,7 @@ main (int argc, char *argv[])
 	}
 
 	for (argc--; argc > 0; argc--, argv++) {
-		config_read_file (argv[1]);
+		config_read_file (argv[1], plugins);
 	}
 
 	VIEW *v = view_create();

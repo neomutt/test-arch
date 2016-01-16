@@ -68,12 +68,6 @@ mbox_connect (void)
 	return s;
 }
 
-void
-mbox_free (SOURCE *src)
-{
-	free (src);
-}
-
 int
 mbox_config_item (const char *name)
 {
@@ -81,7 +75,12 @@ mbox_config_item (const char *name)
 		return 0;
 	}
 
-	return 1;
+	if ((name[0] >= 'n') && (name[0] <= 'w')) {
+		// printf ("mbox config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
 }
 
 void

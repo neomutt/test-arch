@@ -90,7 +90,12 @@ imap_config_item (const char *name)
 		return 0;
 	}
 
-	return 1;
+	if ((name[0] >= 'a') && (name[0] <= 'e')) {
+		// printf ("imap config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
 }
 
 void

@@ -92,7 +92,12 @@ maildir_config_item (const char *name)
 		return 0;
 	}
 
-	return 1;
+	if ((name[0] >= 'f') && (name[0] <= 'm')) {
+		// printf ("maildir config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
 }
 
 void
