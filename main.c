@@ -2,12 +2,11 @@
 #include <string.h>
 
 #include "config.h"
-#include "m_imap.h"
-#include "m_maildir.h"
-#include "m_mbox.h"
-#include "view.h"
-
+#include "imap.h"
+#include "maildir.h"
+#include "mbox.h"
 #include "plugin.h"
+#include "view.h"
 
 int
 main (int argc, char *argv[])
