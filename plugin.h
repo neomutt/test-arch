@@ -17,4 +17,6 @@ typedef struct plugin_t {
 	plugin_config_fn     config;
 } PLUGIN;
 
+extern PLUGIN *plugins[];
+
 #endif // _PLUGIN_H_

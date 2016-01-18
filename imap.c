@@ -103,7 +103,7 @@ imap_disconnect (void)
 {
 }
 
-static PLUGIN p = {
+PLUGIN imap_plugin = {
 	MAGIC_IMAP,
 	"imap",
 	imap_init,
@@ -112,5 +112,4 @@ static PLUGIN p = {
 	imap_config_item
 };
 
-PLUGIN *imap_plugin = &p;
 

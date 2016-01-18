@@ -7,7 +7,7 @@ typedef struct config_t {
 
 typedef struct plugin_t PLUGIN;
 
-int config_read_file (const char *file, const PLUGIN **plugins);
+int config_read_file (const char *file, PLUGIN **plugins);
 void config_free (void);
 
 #endif // _CONFIG_H_

@@ -3,6 +3,6 @@
 
 typedef struct plugin_t PLUGIN;
 
-extern const PLUGIN *maildir_plugin;
+extern PLUGIN maildir_plugin;
 
 #endif // _M_MAILDIR_H_

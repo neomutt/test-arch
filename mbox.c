@@ -88,7 +88,7 @@ mbox_disconnect (void)
 {
 }
 
-static PLUGIN p = {
+PLUGIN mbox_plugin = {
 	MAGIC_MBOX,
 	"mbox",
 	mbox_init,
@@ -96,6 +96,4 @@ static PLUGIN p = {
 	mbox_disconnect,
 	mbox_config_item
 };
-
-PLUGIN *mbox_plugin = &p;
 

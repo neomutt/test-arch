@@ -3,6 +3,6 @@
 
 typedef struct plugin_t PLUGIN;
 
-extern const PLUGIN *imap_plugin;
+extern PLUGIN imap_plugin;
 
 #endif // _M_IMAP_H_

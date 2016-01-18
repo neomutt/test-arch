@@ -3,6 +3,6 @@
 
 typedef struct plugin_t PLUGIN;
 
-extern const PLUGIN *mbox_plugin;
+extern PLUGIN mbox_plugin;
 
 #endif // _M_MBOX_H_

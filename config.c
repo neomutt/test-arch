@@ -5,7 +5,7 @@
 #include "plugin.h"
 
 int
-config_read_file (const char *file, const PLUGIN **plugins)
+config_read_file (const char *file, PLUGIN **plugins)
 {
 	if (!file)
 		return 0;

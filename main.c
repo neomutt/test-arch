@@ -2,22 +2,12 @@
 #include <string.h>
 
 #include "config.h"
-#include "imap.h"
-#include "maildir.h"
-#include "mbox.h"
 #include "plugin.h"
 #include "view.h"
 
 int
 main (int argc, char *argv[])
 {
-	const PLUGIN *plugins[] = {
-		imap_plugin,
-		maildir_plugin,
-		mbox_plugin,
-		NULL
-	};
-
 	if (argc < 2) {
 		printf ("Usage: %s CONFIG-FILE [...]\n", argv[0]);
 		return 1;

@@ -105,7 +105,7 @@ maildir_disconnect (void)
 {
 }
 
-static PLUGIN p = {
+PLUGIN maildir_plugin = {
 	MAGIC_MAILDIR,
 	"maildir",
 	maildir_init,
@@ -113,6 +113,4 @@ static PLUGIN p = {
 	maildir_disconnect,
 	maildir_config_item
 };
-
-PLUGIN *maildir_plugin = &p;
 
