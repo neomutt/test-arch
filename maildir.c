@@ -40,7 +40,7 @@ maildir_connect (void)
 	FOLDER *f3 = calloc (1, sizeof (FOLDER));
 
 	if (!f1 || !f2 || !f3) {
-		printf ("imap_connect: calloc failed\n");
+		printf ("maildir_connect: calloc failed\n");
 		return NULL;
 	}
 
@@ -60,7 +60,7 @@ maildir_connect (void)
 	ITEM *i7 = calloc (1, sizeof (ITEM));
 
 	if (!i1 || !i2 || !i3 || !i4 || !i5 || !i6 || !i7) {
-		printf ("imap_connect: calloc failed\n");
+		printf ("maildir_connect: calloc failed\n");
 		return NULL;
 	}
 

@@ -35,9 +35,8 @@ mbox_connect (void)
 	// Pretend to read something
 
 	FOLDER *f1 = calloc (1, sizeof (FOLDER));
-
 	if (!f1) {
-		printf ("imap_connect: calloc failed\n");
+		printf ("mbox_connect: calloc failed\n");
 		return NULL;
 	}
 
@@ -49,7 +48,7 @@ mbox_connect (void)
 	ITEM *i4 = calloc (1, sizeof (ITEM));
 
 	if (!i1 || !i2 || !i3 || !i4) {
-		printf ("imap_connect: calloc failed\n");
+		printf ("mbox_connect: calloc failed\n");
 		return NULL;
 	}
 
