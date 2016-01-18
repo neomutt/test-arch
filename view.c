@@ -4,22 +4,7 @@
 #include "view.h"
 #include "source.h"
 
-VIEW *
-view_create (void)
-{
-	VIEW *v = NULL;
-
-	v = calloc (1, sizeof (VIEW));
-	if (!v) {
-		return NULL;
-	}
-
-	OBJECT *o = &v->object;
-	o->refcount    = 1;
-	v->object.type = 1001;
-
-	return v;
-}
+const int MAGIC_VIEW = 1001;
 
 void
 view_free (VIEW *v)
@@ -31,19 +16,33 @@ view_free (VIEW *v)
 	int i;
 	for (i = 0; i < v->num_sources; i++) {
 		// printf ("freeing source %p\n", (void*) v->sources[i]);
-		source_free (v->sources[i]);
+		object_release (v->sources[i]);
 	}
 
 	OBJECT *o = &v->object;
-	if (o->delete) {
-		(*o->delete)();
-	} else {
-		o->refcount--;
-		if (o->refcount < 1) {
-			free (v->name);
-			free (v);
-		}
+	o->refcount--;
+	if (o->refcount < 1) {
+		free (v->name);
+		free (v);
 	}
+}
+
+VIEW *
+view_create (void)
+{
+	VIEW *v = NULL;
+
+	v = calloc (1, sizeof (VIEW));
+	if (!v) {
+		return NULL;
+	}
+
+	OBJECT *o = &v->object;
+	o->refcount = 1;
+	o->type     = MAGIC_VIEW;
+	o->release  = (object_release_fn) view_free;
+
+	return v;
 }
 
 int

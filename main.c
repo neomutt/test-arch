@@ -43,7 +43,7 @@ main (int argc, char *argv[])
 
 	view_display (v, 0);
 
-	view_free (v);
+	object_release (v);
 	config_free();
 
 	return 0;

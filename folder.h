@@ -15,7 +15,6 @@ typedef struct folder_t {
 } FOLDER;
 
 FOLDER * folder_create (void);
-void folder_free (FOLDER *f);
 int folder_add_folder (FOLDER *f, FOLDER *child);
 int folder_add_item (FOLDER *f, ITEM *i);
 void folder_display (FOLDER *f, int indent);

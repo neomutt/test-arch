@@ -3,6 +3,23 @@
 
 #include "item.h"
 
+const int MAGIC_ITEM = 1004;
+
+void
+item_free (ITEM *i)
+{
+	if (!i) {
+		return;
+	}
+
+	OBJECT *o = &i->object;
+	o->refcount--;
+	if (o->refcount < 1) {
+		free (i->name);
+		free (i);
+	}
+}
+
 ITEM *
 item_create (void)
 {
@@ -14,29 +31,11 @@ item_create (void)
 	}
 
 	OBJECT *o = &i->object;
-	o->refcount    = 1;
-	i->object.type = 1004;
+	o->refcount = 1;
+	o->type     = MAGIC_ITEM;
+	o->release  = (object_release_fn) item_free;
 
 	return i;
-}
-
-void
-item_free (ITEM *i)
-{
-	if (!i) {
-		return;
-	}
-
-	OBJECT *o = &i->object;
-	if (o->delete) {
-		(*o->delete)();
-	} else {
-		o->refcount--;
-		if (o->refcount < 1) {
-			free (i->name);
-			free (i);
-		}
-	}
 }
 
 void

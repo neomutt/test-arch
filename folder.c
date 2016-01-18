@@ -4,22 +4,7 @@
 #include "folder.h"
 #include "item.h"
 
-FOLDER *
-folder_create (void)
-{
-	FOLDER *f = NULL;
-
-	f = calloc (1, sizeof (FOLDER));
-	if (!f) {
-		return NULL;
-	}
-
-	OBJECT *o = &f->object;
-	o->refcount    = 1;
-	f->object.type = 1003;
-
-	return f;
-}
+const int MAGIC_FOLDER = 1003;
 
 void
 folder_free (FOLDER *f)
@@ -37,19 +22,34 @@ folder_free (FOLDER *f)
 
 	for (i = 0; i < f->num_items; i++) {
 		// printf ("freeing item %p\n", (void*) f->items[i]);
-		item_free (f->items[i]);
+		object_release (f->items[i]);
 	}
 
 	OBJECT *o = &f->object;
-	if (o->delete) {
-		(*o->delete)();
-	} else {
-		o->refcount--;
-		if (o->refcount < 1) {
-			free (f->name);
-			free (f);
-		}
+	o->refcount--;
+	if (o->refcount < 1) {
+		free (f->name);
+		free (f);
 	}
+}
+
+FOLDER *
+folder_create (void)
+{
+	FOLDER *f = NULL;
+
+	f = calloc (1, sizeof (FOLDER));
+	if (!f) {
+		return NULL;
+	}
+
+	OBJECT *o = &f->object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_FOLDER;
+	o->release  = (object_release_fn) folder_free;
+
+	return f;
 }
 
 int

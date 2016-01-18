@@ -7,9 +7,9 @@
 #include "contact.h"
 
 PLUGIN *plugins[] = {
-	// &imap_plugin,
-	// &maildir_plugin,
-	// &mbox_plugin,
+	&imap_plugin,
+	&maildir_plugin,
+	&mbox_plugin,
 	&contact_plugin,
 	NULL
 };

@@ -4,22 +4,7 @@
 #include "source.h"
 #include "folder.h"
 
-SOURCE *
-source_create (void)
-{
-	SOURCE *s = NULL;
-
-	s = calloc (1, sizeof (SOURCE));
-	if (!s) {
-		return NULL;
-	}
-
-	OBJECT *o = &s->object;
-	o->refcount    = 1;
-	s->object.type = 1002;
-
-	return s;
-}
+const int MAGIC_SOURCE = 1002;
 
 void
 source_free (SOURCE *src)
@@ -31,19 +16,33 @@ source_free (SOURCE *src)
 	int i;
 	for (i = 0; i < src->num_folders; i++) {
 		// printf ("freeing folder %p\n", (void*) src->folders[i]);
-		folder_free (src->folders[i]);
+		object_release (src->folders[i]);
 	}
 
 	OBJECT *o = &src->object;
-	if (o->delete) {
-		(*o->delete)();
-	} else {
-		o->refcount--;
-		if (o->refcount < 1) {
-			free (src->name);
-			free (src);
-		}
+	o->refcount--;
+	if (o->refcount < 1) {
+		free (src->name);
+		free (src);
 	}
+}
+
+SOURCE *
+source_create (void)
+{
+	SOURCE *s = NULL;
+
+	s = calloc (1, sizeof (SOURCE));
+	if (!s) {
+		return NULL;
+	}
+
+	OBJECT *o = &s->object;
+	o->refcount = 1;
+	o->type     = MAGIC_SOURCE;
+	o->release  = (object_release_fn) source_free;
+
+	return s;
 }
 
 int
