@@ -4,6 +4,23 @@
 #include "source.h"
 #include "folder.h"
 
+SOURCE *
+source_create (void)
+{
+	SOURCE *s = NULL;
+
+	s = calloc (1, sizeof (SOURCE));
+	if (!s) {
+		return NULL;
+	}
+
+	OBJECT *o = &s->object;
+	o->refcount    = 1;
+	s->object.type = 1002;
+
+	return s;
+}
+
 void
 source_free (SOURCE *src)
 {
@@ -21,8 +38,11 @@ source_free (SOURCE *src)
 	if (o->delete) {
 		(*o->delete)();
 	} else {
-		free (src->name);
-		free (src);
+		o->refcount--;
+		if (o->refcount < 1) {
+			free (src->name);
+			free (src);
+		}
 	}
 }
 

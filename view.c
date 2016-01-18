@@ -14,7 +14,9 @@ view_create (void)
 		return NULL;
 	}
 
-	v->object.type = 234;
+	OBJECT *o = &v->object;
+	o->refcount    = 1;
+	v->object.type = 1001;
 
 	return v;
 }
@@ -36,8 +38,11 @@ view_free (VIEW *v)
 	if (o->delete) {
 		(*o->delete)();
 	} else {
-		free (v->name);
-		free (v);
+		o->refcount--;
+		if (o->refcount < 1) {
+			free (v->name);
+			free (v);
+		}
 	}
 }
 

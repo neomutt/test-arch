@@ -24,7 +24,7 @@ mbox_connect (void)
 {
 	SOURCE *s = NULL;
 
-	s = calloc (1, sizeof (SOURCE));
+	s = source_create();
 	if (!s) {
 		return NULL;
 	}
@@ -34,21 +34,21 @@ mbox_connect (void)
 
 	// Pretend to read something
 
-	FOLDER *f1 = calloc (1, sizeof (FOLDER));
+	FOLDER *f1 = folder_create();
 	if (!f1) {
-		printf ("mbox_connect: calloc failed\n");
+		printf ("mbox_connect: folder_create failed\n");
 		return NULL;
 	}
 
 	f1->name = strdup ("music");
 
-	ITEM *i1 = calloc (1, sizeof (ITEM));
-	ITEM *i2 = calloc (1, sizeof (ITEM));
-	ITEM *i3 = calloc (1, sizeof (ITEM));
-	ITEM *i4 = calloc (1, sizeof (ITEM));
+	ITEM *i1 = item_create();
+	ITEM *i2 = item_create();
+	ITEM *i3 = item_create();
+	ITEM *i4 = item_create();
 
 	if (!i1 || !i2 || !i3 || !i4) {
-		printf ("mbox_connect: calloc failed\n");
+		printf ("mbox_connect: item_create failed\n");
 		return NULL;
 	}
 

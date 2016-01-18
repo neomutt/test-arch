@@ -24,7 +24,7 @@ imap_connect (void)
 {
 	SOURCE *s = NULL;
 
-	s = calloc (1, sizeof (SOURCE));
+	s = source_create();
 	if (!s) {
 		return NULL;
 	}
@@ -34,12 +34,12 @@ imap_connect (void)
 
 	// Pretend to read something
 
-	FOLDER *f1 = calloc (1, sizeof (FOLDER));
-	FOLDER *f2 = calloc (1, sizeof (FOLDER));
-	FOLDER *f3 = calloc (1, sizeof (FOLDER));
+	FOLDER *f1 = folder_create();
+	FOLDER *f2 = folder_create();
+	FOLDER *f3 = folder_create();
 
 	if (!f1 || !f2 || !f3) {
-		printf ("imap_connect: calloc failed\n");
+		printf ("imap_connect: folder_create failed\n");
 		return NULL;
 	}
 
@@ -47,16 +47,16 @@ imap_connect (void)
 	f2->name = strdup ("cars");
 	f3->name = strdup ("girls");
 
-	ITEM *i1 = calloc (1, sizeof (ITEM));
-	ITEM *i2 = calloc (1, sizeof (ITEM));
-	ITEM *i3 = calloc (1, sizeof (ITEM));
-	ITEM *i4 = calloc (1, sizeof (ITEM));
-	ITEM *i5 = calloc (1, sizeof (ITEM));
-	ITEM *i6 = calloc (1, sizeof (ITEM));
-	ITEM *i7 = calloc (1, sizeof (ITEM));
+	ITEM *i1 = item_create();
+	ITEM *i2 = item_create();
+	ITEM *i3 = item_create();
+	ITEM *i4 = item_create();
+	ITEM *i5 = item_create();
+	ITEM *i6 = item_create();
+	ITEM *i7 = item_create();
 
 	if (!i1 || !i2 || !i3 || !i4 || !i5 || !i6 || !i7) {
-		printf ("imap_connect: calloc failed\n");
+		printf ("imap_connect: item_create failed\n");
 		return NULL;
 	}
 

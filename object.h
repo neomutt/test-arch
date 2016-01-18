@@ -5,6 +5,7 @@ typedef void (*object_delete_fn) (void);
 
 typedef struct object_t {
 	int type;
+	int refcount;
 	object_delete_fn *delete;
 } OBJECT;
 

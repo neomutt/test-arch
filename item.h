@@ -8,6 +8,7 @@ typedef struct item_t {
 	char *name;
 } ITEM;
 
+ITEM * item_create (void);
 void item_free (ITEM *i);
 void item_display (ITEM *i, int indent);
 

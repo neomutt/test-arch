@@ -4,6 +4,23 @@
 #include "folder.h"
 #include "item.h"
 
+FOLDER *
+folder_create (void)
+{
+	FOLDER *f = NULL;
+
+	f = calloc (1, sizeof (FOLDER));
+	if (!f) {
+		return NULL;
+	}
+
+	OBJECT *o = &f->object;
+	o->refcount    = 1;
+	f->object.type = 1003;
+
+	return f;
+}
+
 void
 folder_free (FOLDER *f)
 {
@@ -27,8 +44,11 @@ folder_free (FOLDER *f)
 	if (o->delete) {
 		(*o->delete)();
 	} else {
-		free (f->name);
-		free (f);
+		o->refcount--;
+		if (o->refcount < 1) {
+			free (f->name);
+			free (f);
+		}
 	}
 }
 

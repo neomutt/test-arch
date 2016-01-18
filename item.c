@@ -3,6 +3,23 @@
 
 #include "item.h"
 
+ITEM *
+item_create (void)
+{
+	ITEM *i = NULL;
+
+	i = calloc (1, sizeof (ITEM));
+	if (!i) {
+		return NULL;
+	}
+
+	OBJECT *o = &i->object;
+	o->refcount    = 1;
+	i->object.type = 1004;
+
+	return i;
+}
+
 void
 item_free (ITEM *i)
 {
@@ -14,8 +31,11 @@ item_free (ITEM *i)
 	if (o->delete) {
 		(*o->delete)();
 	} else {
-		free (i->name);
-		free (i);
+		o->refcount--;
+		if (o->refcount < 1) {
+			free (i->name);
+			free (i);
+		}
 	}
 }
 
