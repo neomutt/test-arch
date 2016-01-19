@@ -29,6 +29,7 @@ digraph inherit {
 	item    [ fillcolor="#40ffff" ];
 	contact [ fillcolor="#40ffff" ];
 	email   [ fillcolor="#40ffff" ];
+	task    [ fillcolor="#40ffff" ];
 
 	// config;
 	// panel;
@@ -40,6 +41,7 @@ digraph inherit {
 	item    -> object;
 	contact -> item;
 	email   -> item;
+	task    -> item;
 
 }
 

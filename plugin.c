@@ -5,12 +5,14 @@
 #include "maildir.h"
 #include "mbox.h"
 #include "contact_list.h"
+#include "task_list.h"
 
 PLUGIN *plugins[] = {
 	&imap_plugin,
 	&maildir_plugin,
 	&mbox_plugin,
 	&contact_list_plugin,
+	&task_list_plugin,
 	NULL
 };
 

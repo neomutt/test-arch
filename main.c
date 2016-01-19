@@ -27,13 +27,15 @@ main (int argc, char *argv[])
 
 	VIEW *v1 = view_create();
 	VIEW *v2 = view_create();
-	if (!v1 || !v2) {
+	VIEW *v3 = view_create();
+	if (!v1 || !v2 || !v3) {
 		printf ("view_create failed\n");
 		return 1;
 	}
 
 	v1->name = strdup ("mail");
 	v2->name = strdup ("contacts");
+	v3->name = strdup ("tasks");
 
 	for (i = 0; plugins[i]; i++) {
 		SOURCE *s = plugins[i]->connect();
@@ -42,17 +44,21 @@ main (int argc, char *argv[])
 		}
 		if (i < 3) {
 			view_add_child (v1, s);
-		} else {
+		} else if (i < 4) {
 			view_add_child (v2, s);
+		} else {
+			view_add_child (v3, s);
 		}
 		object_release (s);
 	}
 
 	view_display (v1, 0);
 	view_display (v2, 0);
+	view_display (v3, 0);
 
 	object_release (v1);
 	object_release (v2);
+	object_release (v3);
 	config_free();
 
 	return 0;
