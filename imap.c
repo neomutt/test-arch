@@ -68,13 +68,13 @@ imap_connect (void)
 	i6->name = strdup ("anna");
 	i7->name = strdup ("bella");
 
-	folder_add_item (f1, i1);
-	folder_add_item (f1, i2);
-	folder_add_item (f1, i3);
-	folder_add_item (f2, i4);
-	folder_add_item (f2, i5);
-	folder_add_item (f3, i6);
-	folder_add_item (f3, i7);
+	folder_add_child (f1, i1);
+	folder_add_child (f1, i2);
+	folder_add_child (f1, i3);
+	folder_add_child (f2, i4);
+	folder_add_child (f2, i5);
+	folder_add_child (f3, i6);
+	folder_add_child (f3, i7);
 
 	object_release (i1);
 	object_release (i2);
@@ -84,9 +84,9 @@ imap_connect (void)
 	object_release (i6);
 	object_release (i7);
 
-	source_add_folder (s, f1);
-	source_add_folder (s, f2);
-	source_add_folder (s, f3);
+	source_add_child (s, f1);
+	source_add_child (s, f2);
+	source_add_child (s, f3);
 
 	object_release (f1);
 	object_release (f2);

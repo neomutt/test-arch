@@ -75,19 +75,19 @@ contact_connect (void)
 	i8->name = strdup ("horse");
 	i9->name = strdup ("impala");
 
-	folder_add_item (f1, i1);	// counties
-	folder_add_item (f1, i2);
-	folder_add_item (f1, i3);
-	folder_add_item (f1, i4);
-	folder_add_item (f1, i5);
-	folder_add_item (f1, i7);
+	folder_add_child (f1, i1);	// counties
+	folder_add_child (f1, i2);
+	folder_add_child (f1, i3);
+	folder_add_child (f1, i4);
+	folder_add_child (f1, i5);
+	folder_add_child (f1, i7);
 
-	folder_add_item (f2, i4);	// animals
-	folder_add_item (f2, i5);
-	folder_add_item (f2, i6);
-	folder_add_item (f2, i7);
-	folder_add_item (f2, i8);
-	folder_add_item (f2, i9);
+	folder_add_child (f2, i4);	// animals
+	folder_add_child (f2, i5);
+	folder_add_child (f2, i6);
+	folder_add_child (f2, i7);
+	folder_add_child (f2, i8);
+	folder_add_child (f2, i9);
 
 	object_release (i1);
 	object_release (i2);
@@ -99,8 +99,8 @@ contact_connect (void)
 	object_release (i8);
 	object_release (i9);
 
-	source_add_folder (s, f1);
-	source_add_folder (s, f2);
+	source_add_child (s, f1);
+	source_add_child (s, f2);
 
 	object_release (f1);
 	object_release (f2);

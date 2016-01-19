@@ -48,8 +48,8 @@ maildir_connect (void)
 	f2->name = strdup ("trees");
 	f3->name = strdup ("fish");
 
-	folder_add_folder (f1, f2);
-	folder_add_folder (f1, f3);
+	folder_add_child (f1, f2);
+	folder_add_child (f1, f3);
 
 	object_release (f2);
 	object_release (f3);
@@ -75,13 +75,13 @@ maildir_connect (void)
 	i6->name = strdup ("angel");
 	i7->name = strdup ("beluga");
 
-	folder_add_item (f1, i1);
-	folder_add_item (f1, i2);
-	folder_add_item (f1, i3);
-	folder_add_item (f2, i4);
-	folder_add_item (f2, i5);
-	folder_add_item (f3, i6);
-	folder_add_item (f3, i7);
+	folder_add_child (f1, i1);
+	folder_add_child (f1, i2);
+	folder_add_child (f1, i3);
+	folder_add_child (f2, i4);
+	folder_add_child (f2, i5);
+	folder_add_child (f3, i6);
+	folder_add_child (f3, i7);
 
 	object_release (i1);
 	object_release (i2);
@@ -91,7 +91,7 @@ maildir_connect (void)
 	object_release (i6);
 	object_release (i7);
 
-	source_add_folder (s, f1);
+	source_add_child (s, f1);
 
 	object_release (f1);
 

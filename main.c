@@ -41,9 +41,9 @@ main (int argc, char *argv[])
 			printf ("plugin %s::connect() failed\n", plugins[i]->name);
 		}
 		if (i < 3) {
-			view_add_source (v1, s);
+			view_add_child (v1, s);
 		} else {
-			view_add_source (v2, s);
+			view_add_child (v2, s);
 		}
 		object_release (s);
 	}

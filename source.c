@@ -46,14 +46,14 @@ source_create (void)
 }
 
 int
-source_add_folder (SOURCE *src, FOLDER *f)
+source_add_child (SOURCE *src, void *child)
 {
-	if (!src || !f) {
+	if (!src || !child) {
 		return 0;
 	}
 
-	object_addref (f);
-	src->folders[src->num_folders] = f;
+	object_addref (child);
+	src->folders[src->num_folders] = child;
 	src->num_folders++;
 
 	return 1;

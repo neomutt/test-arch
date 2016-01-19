@@ -3,6 +3,8 @@
 
 #include "object.h"
 
+extern const int MAGIC_ITEM;
+
 typedef struct item_t {
 	OBJECT object;
 	char *name;

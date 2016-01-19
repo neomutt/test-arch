@@ -13,7 +13,7 @@ typedef struct view_t {
 } VIEW;
 
 VIEW * view_create (void);
-int view_add_source (VIEW *v, SOURCE *src);
+int view_add_child (VIEW *v, void *child);
 void view_display (VIEW *v, int indent);
 
 #endif // _VIEW_H_

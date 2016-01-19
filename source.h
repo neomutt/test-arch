@@ -13,7 +13,7 @@ typedef struct source_t {
 } SOURCE;
 
 SOURCE * source_create (void);
-int source_add_folder (SOURCE *src, FOLDER *f);
+int source_add_child (SOURCE *src, void *child);
 void source_display (SOURCE *src, int indent);
 
 #endif // _SOURCE_H_

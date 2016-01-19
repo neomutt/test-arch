@@ -46,14 +46,14 @@ view_create (void)
 }
 
 int
-view_add_source (VIEW *v, SOURCE *src)
+view_add_child (VIEW *v, void *child)
 {
-	if (!v || !src) {
+	if (!v || !child) {
 		return 0;
 	}
 
-	object_addref (src);
-	v->sources[v->num_sources] = src;
+	object_addref (child);
+	v->sources[v->num_sources] = child;
 	v->num_sources++;
 
 	return 1;

@@ -52,29 +52,25 @@ folder_create (void)
 }
 
 int
-folder_add_folder (FOLDER *f, FOLDER *child)
+folder_add_child (FOLDER *f, void *child)
 {
 	if (!f || !child) {
 		return 0;
 	}
 
-	object_addref (child);
-	f->folders[f->num_folders] = child;
-	f->num_folders++;
-
-	return 1;
-}
-
-int
-folder_add_item (FOLDER *f, ITEM *i)
-{
-	if (!f || !i) {
+	OBJECT *obj = child;
+	if (obj->type == MAGIC_FOLDER) {
+		object_addref (child);
+		f->folders[f->num_folders] = child;
+		f->num_folders++;
+	} else if (obj->type == MAGIC_ITEM) {
+		object_addref (child);
+		f->items[f->num_items] = child;
+		f->num_items++;
+	} else {
+		printf ("can't add object:%d to a folder\n", obj->type);
 		return 0;
 	}
-
-	object_addref (i);
-	f->items[f->num_items] = i;
-	f->num_items++;
 
 	return 1;
 }
