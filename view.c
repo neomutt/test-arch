@@ -67,9 +67,14 @@ view_display (VIEW *v, int indent)
 	}
 
 	printf ("%*s\033[1;31m%s\033[m\n", indent * 8, "", v->name);
-	int i;
-	for (i = 0; i < v->num_sources; i++) {
-		source_display (v->sources[i], indent + 1);
+
+	if (v->num_sources == 0) {
+		printf ("%*s\033[1;33m[empty]\033[m\n", (indent + 1) * 8, "");
+	} else {
+		int i;
+		for (i = 0; i < v->num_sources; i++) {
+			source_display (v->sources[i], indent + 1);
+		}
 	}
 }
 

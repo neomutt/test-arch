@@ -84,13 +84,17 @@ folder_display (FOLDER *f, int indent)
 
 	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->name);
 
-	int i;
+	if ((f->num_items == 0) && (f->num_folders == 0)) {
+		printf ("%*s\033[1;36m[empty]\033[m\n", (indent + 1) * 8, "");
+	} else {
+		int i;
 
-	for (i = 0; i < f->num_items; i++) {
-		item_display (f->items[i], indent + 1);
-	}
+		for (i = 0; i < f->num_items; i++) {
+			item_display (f->items[i], indent + 1);
+		}
 
-	for (i = 0; i < f->num_folders; i++) {
-		folder_display (f->folders[i], indent + 1);
+		for (i = 0; i < f->num_folders; i++) {
+			folder_display (f->folders[i], indent + 1);
+		}
 	}
 }

@@ -2,6 +2,7 @@
 #define _SOURCE_H_
 
 #include "object.h"
+#include "item.h"
 
 typedef struct folder_t FOLDER;
 
@@ -10,6 +11,8 @@ typedef struct source_t {
 	char *name;
 	int num_folders;
 	FOLDER *folders[10];
+	int num_items;
+	ITEM *items[10];
 } SOURCE;
 
 SOURCE * source_create (void);

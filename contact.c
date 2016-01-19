@@ -39,17 +39,6 @@ contact_connect (void)
 
 	// Pretend to read something
 
-	FOLDER *f1 = folder_create();
-	FOLDER *f2 = folder_create();
-
-	if (!f1 || !f2) {
-		printf ("contact_connect: folder_create failed\n");
-		return NULL;
-	}
-
-	f1->name = strdup ("county");
-	f2->name = strdup ("animal");
-
 	ITEM *i1 = item_create();
 	ITEM *i2 = item_create();
 	ITEM *i3 = item_create();
@@ -73,7 +62,32 @@ contact_connect (void)
 	i6->name = strdup ("frog");
 	i7->name = strdup ("gloucestershire goat");
 	i8->name = strdup ("horse");
-	i9->name = strdup ("impala");
+	i9->name = strdup ("igloo");
+
+	source_add_child (s, i1);	// Source owns all items
+	source_add_child (s, i2);
+	source_add_child (s, i3);
+	source_add_child (s, i4);
+	source_add_child (s, i5);
+	source_add_child (s, i6);
+	source_add_child (s, i7);
+	source_add_child (s, i8);
+	source_add_child (s, i9);
+
+	FOLDER *f1 = folder_create();
+	FOLDER *f2 = folder_create();
+	FOLDER *f3 = folder_create();
+	FOLDER *f4 = folder_create();
+
+	if (!f1 || !f2 || !f3 || !f4) {
+		printf ("contact_connect: folder_create failed\n");
+		return NULL;
+	}
+
+	f1->name = strdup ("county");
+	f2->name = strdup ("animal");
+	f3->name = strdup ("county + animal");
+	f4->name = strdup ("untagged");
 
 	folder_add_child (f1, i1);	// counties
 	folder_add_child (f1, i2);
@@ -87,7 +101,12 @@ contact_connect (void)
 	folder_add_child (f2, i6);
 	folder_add_child (f2, i7);
 	folder_add_child (f2, i8);
-	folder_add_child (f2, i9);
+
+	folder_add_child (f3, i4);	// counties + animals
+	folder_add_child (f3, i5);
+	folder_add_child (f3, i7);
+
+	folder_add_child (f4, i9);
 
 	object_release (i1);
 	object_release (i2);
@@ -101,9 +120,13 @@ contact_connect (void)
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);
+	source_add_child (s, f3);
+	source_add_child (s, f4);
 
 	object_release (f1);
 	object_release (f2);
+	object_release (f3);
+	object_release (f4);
 
 	return s;
 }

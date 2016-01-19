@@ -22,6 +22,11 @@ source_free (SOURCE *src)
 			object_release (src->folders[i]);
 		}
 
+		for (i = 0; i < src->num_items; i++) {
+			// printf ("freeing item %p\n", (void*) src->items[i]);
+			object_release (src->items[i]);
+		}
+
 		free (src->name);
 		free (src);
 	}
@@ -52,9 +57,19 @@ source_add_child (SOURCE *src, void *child)
 		return 0;
 	}
 
-	object_addref (child);
-	src->folders[src->num_folders] = child;
-	src->num_folders++;
+	OBJECT *obj = child;
+	if (obj->type == MAGIC_FOLDER) {
+		object_addref (child);
+		src->folders[src->num_folders] = child;
+		src->num_folders++;
+	} else if (obj->type == MAGIC_ITEM) {
+		object_addref (child);
+		src->items[src->num_items] = child;
+		src->num_items++;
+	} else {
+		printf ("can't add object:%d to a folder\n", obj->type);
+		return 0;
+	}
 
 	return 1;
 }
@@ -68,8 +83,17 @@ source_display (SOURCE *src, int indent)
 
 	printf ("%*s\033[1;33m%s\033[m\n", indent * 8, "", src->name);
 
-	int i;
-	for (i = 0; i < src->num_folders; i++) {
-		folder_display (src->folders[i], indent + 1);
+	if (src->num_folders == 0) {
+		printf ("%*s\033[1;32m[empty]\033[m\n", (indent + 1) * 8, "");
+	} else {
+		int i;
+
+		for (i = 0; i < src->num_items; i++) {
+			item_display (src->items[i], indent + 1);
+		}
+
+		for (i = 0; i < src->num_folders; i++) {
+			folder_display (src->folders[i], indent + 1);
+		}
 	}
 }

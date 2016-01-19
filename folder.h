@@ -3,6 +3,8 @@
 
 #include "object.h"
 
+extern const int MAGIC_FOLDER;
+
 typedef struct item_t ITEM;
 
 typedef struct folder_t {
