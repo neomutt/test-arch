@@ -40,11 +40,11 @@ main (int argc, char *argv[])
 		if (!s) {
 			printf ("plugin %s::connect() failed\n", plugins[i]->name);
 		}
-		// if (i < 3) {
-		// 	view_add_child (v1, s);
-		// } else {
+		if (i < 3) {
+			view_add_child (v1, s);
+		} else {
 			view_add_child (v2, s);
-		// }
+		}
 		object_release (s);
 	}
 

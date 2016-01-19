@@ -3,11 +3,15 @@
 
 #include "item.h"
 
+#define MAGIC_EMAIL ((5 << 8) + MAGIC_ITEM)
+
 typedef struct email_t {
 	ITEM item;
-	const char *from;
-	const char *to;
-	const char *subject;
+	char *from;
+	char *to;
+	char *subject;
 } EMAIL;
+
+EMAIL * email_create (void);
 
 #endif // _EMAIL_H_

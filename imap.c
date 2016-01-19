@@ -2,9 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "email.h"
 #include "folder.h"
 #include "imap.h"
-#include "item.h"
 #include "plugin.h"
 #include "source.h"
 #include "view.h"
@@ -46,42 +46,42 @@ imap_connect (void)
 	f2->name = strdup ("cars");
 	f3->name = strdup ("girls");
 
-	ITEM *i1 = item_create();
-	ITEM *i2 = item_create();
-	ITEM *i3 = item_create();
-	ITEM *i4 = item_create();
-	ITEM *i5 = item_create();
-	ITEM *i6 = item_create();
-	ITEM *i7 = item_create();
+	EMAIL *e1 = email_create();
+	EMAIL *e2 = email_create();
+	EMAIL *e3 = email_create();
+	EMAIL *e4 = email_create();
+	EMAIL *e5 = email_create();
+	EMAIL *e6 = email_create();
+	EMAIL *e7 = email_create();
 
-	if (!i1 || !i2 || !i3 || !i4 || !i5 || !i6 || !i7) {
-		printf ("imap_connect: item_create failed\n");
+	if (!e1 || !e2 || !e3 || !e4 || !e5 || !e6 || !e7) {
+		printf ("imap_connect: email_create failed\n");
 		return NULL;
 	}
 
-	i1->name = strdup ("apple");
-	i2->name = strdup ("banana");
-	i3->name = strdup ("cherry");
-	i4->name = strdup ("audi");
-	i5->name = strdup ("bentley");
-	i6->name = strdup ("anna");
-	i7->name = strdup ("bella");
+	e1->item.name = strdup ("apple");
+	e2->item.name = strdup ("banana");
+	e3->item.name = strdup ("cherry");
+	e4->item.name = strdup ("audi");
+	e5->item.name = strdup ("bentley");
+	e6->item.name = strdup ("anna");
+	e7->item.name = strdup ("bella");
 
-	folder_add_child (f1, i1);
-	folder_add_child (f1, i2);
-	folder_add_child (f1, i3);
-	folder_add_child (f2, i4);
-	folder_add_child (f2, i5);
-	folder_add_child (f3, i6);
-	folder_add_child (f3, i7);
+	folder_add_child (f1, e1);
+	folder_add_child (f1, e2);
+	folder_add_child (f1, e3);
+	folder_add_child (f2, e4);
+	folder_add_child (f2, e5);
+	folder_add_child (f3, e6);
+	folder_add_child (f3, e7);
 
-	object_release (i1);
-	object_release (i2);
-	object_release (i3);
-	object_release (i4);
-	object_release (i5);
-	object_release (i6);
-	object_release (i7);
+	object_release (e1);
+	object_release (e2);
+	object_release (e3);
+	object_release (e4);
+	object_release (e5);
+	object_release (e6);
+	object_release (e7);
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);

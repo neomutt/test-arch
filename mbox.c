@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "email.h"
 #include "folder.h"
-#include "item.h"
 #include "mbox.h"
 #include "plugin.h"
 #include "source.h"
@@ -41,30 +41,30 @@ mbox_connect (void)
 
 	f1->name = strdup ("music");
 
-	ITEM *i1 = item_create();
-	ITEM *i2 = item_create();
-	ITEM *i3 = item_create();
-	ITEM *i4 = item_create();
+	EMAIL *e1 = email_create();
+	EMAIL *e2 = email_create();
+	EMAIL *e3 = email_create();
+	EMAIL *e4 = email_create();
 
-	if (!i1 || !i2 || !i3 || !i4) {
-		printf ("mbox_connect: item_create failed\n");
+	if (!e1 || !e2 || !e3 || !e4) {
+		printf ("mbox_connect: email_create failed\n");
 		return NULL;
 	}
 
-	i1->name = strdup ("acdc");
-	i2->name = strdup ("beatles");
-	i3->name = strdup ("cream");
-	i4->name = strdup ("doors");
+	e1->item.name = strdup ("acdc");
+	e2->item.name = strdup ("beatles");
+	e3->item.name = strdup ("cream");
+	e4->item.name = strdup ("doors");
 
-	folder_add_child (f1, i1);
-	folder_add_child (f1, i2);
-	folder_add_child (f1, i3);
-	folder_add_child (f1, i4);
+	folder_add_child (f1, e1);
+	folder_add_child (f1, e2);
+	folder_add_child (f1, e3);
+	folder_add_child (f1, e4);
 
-	object_release (i1);
-	object_release (i2);
-	object_release (i3);
-	object_release (i4);
+	object_release (e1);
+	object_release (e2);
+	object_release (e3);
+	object_release (e4);
 
 	source_add_child (s, f1);
 
