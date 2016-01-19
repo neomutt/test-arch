@@ -11,8 +11,6 @@
 #include "task.h"
 #include "view.h"
 
-// static char *config[10];
-
 static void
 rss_source_free (RSS_SOURCE *s)
 {
@@ -25,17 +23,14 @@ rss_source_free (RSS_SOURCE *s)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
-			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
 			object_release (s->source.folders[i]);
 		}
 
 		for (i = 0; i < s->source.num_items; i++) {
-			// printf ("freeing item %p\n", (void*) s->source.items[i]);
 			object_release (s->source.items[i]);
 		}
 
 		for (i = 0; i < s->num_feeds; i++) {
-			// printf ("freeing item %p\n", (void*) s->feeds[i]);
 			object_release (s->feeds[i]);
 		}
 
@@ -66,7 +61,6 @@ rss_source_create (void)
 int
 rss_init (void)
 {
-	// printf ("rss init\n");
 	return 1;
 }
 
@@ -84,8 +78,6 @@ rss_connect (void)
 
 	s->object.type = MAGIC_RSS;
 	s->name        = strdup ("rss");
-
-	// Pretend to read something
 
 	const char *feeds[] = { "slashdot.org", "arstechnica.co.uk", "bbc.co.uk", NULL };
 
@@ -163,8 +155,8 @@ rss_config_item (const char *name)
 		return 0;
 	}
 
-	if ((name[0] >= 'n') && (name[0] <= 'w')) {
-		// printf ("task config: %s\n", name);
+	if ((name[0] >= 'q') && (name[0] <= 't')) {
+		// printf ("rss config: %s\n", name);
 		return 1;
 	}
 

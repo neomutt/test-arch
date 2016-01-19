@@ -50,6 +50,12 @@ view_add_child (VIEW *v, void *child)
 		return 0;
 	}
 
+	OBJECT *obj = child;
+	if ((obj->type & 0xff) != MAGIC_SOURCE) {
+		printf ("can't add object:0x%04x to a view\n", obj->type);
+		return 0;
+	}
+
 	object_addref (child);
 	v->sources[v->num_sources] = child;
 	v->num_sources++;

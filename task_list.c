@@ -10,12 +10,9 @@
 #include "source.h"
 #include "view.h"
 
-// static char *config[10];
-
 int
 task_list_init (void)
 {
-	// printf ("task_list init\n");
 	return 1;
 }
 
@@ -32,8 +29,6 @@ task_list_connect (void)
 	s->object.type = MAGIC_TASK_LIST;
 	s->name        = strdup ("task list");
 
-	// Pretend to read something
-
 	const char *names[] = { "ironing", "read book",          "plan holiday",       "play football", "get a suntan", NULL   };
 	const T_TAGS tags[] = { T_INSIDE,  T_INSIDE | T_OUTSIDE, T_INSIDE | T_OUTSIDE, T_OUTSIDE,       T_OUTSIDE,      T_NONE };
 	TASK *tasks[10];
@@ -49,7 +44,7 @@ task_list_connect (void)
 		tasks[i]->item.name = strdup (names[i]);
 		tasks[i]->tags      = tags[i];
 
-		source_add_child (s, tasks[i]);	// Source owns all items
+		source_add_child (s, tasks[i]);	// Source owns all tasks
 	}
 
 	tasks[i] = NULL;
@@ -107,7 +102,7 @@ task_list_config_item (const char *name)
 		return 0;
 	}
 
-	if ((name[0] >= 'n') && (name[0] <= 'w')) {
+	if ((name[0] >= 'u') && (name[0] <= 'x')) {
 		// printf ("task config: %s\n", name);
 		return 1;
 	}

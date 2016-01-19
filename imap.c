@@ -9,8 +9,6 @@
 #include "source.h"
 #include "view.h"
 
-// static char *config[10];
-
 static void
 imap_source_free (IMAP_SOURCE *s)
 {
@@ -23,12 +21,10 @@ imap_source_free (IMAP_SOURCE *s)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
-			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
 			object_release (s->source.folders[i]);
 		}
 
 		for (i = 0; i < s->source.num_items; i++) {
-			// printf ("freeing item %p\n", (void*) s->source.items[i]);
 			object_release (s->source.items[i]);
 		}
 
@@ -59,7 +55,6 @@ imap_source_create (void)
 int
 imap_init (void)
 {
-	// printf ("imap init\n");
 	return 1;
 }
 
@@ -77,8 +72,6 @@ imap_connect (void)
 
 	s->object.type = MAGIC_IMAP;
 	s->name        = strdup ("imap");
-
-	// Pretend to read something
 
 	FOLDER *f1 = folder_create();
 	FOLDER *f2 = folder_create();
@@ -134,7 +127,7 @@ imap_config_item (const char *name)
 		return 0;
 	}
 
-	if ((name[0] >= 'a') && (name[0] <= 'e')) {
+	if ((name[0] >= 'e') && (name[0] <= 'h')) {
 		// printf ("imap config: %s\n", name);
 		return 1;
 	}

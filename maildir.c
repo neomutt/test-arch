@@ -9,8 +9,6 @@
 #include "source.h"
 #include "view.h"
 
-// static char *config[10];
-
 static void
 maildir_source_free (MAILDIR_SOURCE *s)
 {
@@ -23,12 +21,10 @@ maildir_source_free (MAILDIR_SOURCE *s)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
-			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
 			object_release (s->source.folders[i]);
 		}
 
 		for (i = 0; i < s->source.num_items; i++) {
-			// printf ("freeing item %p\n", (void*) s->source.items[i]);
 			object_release (s->source.items[i]);
 		}
 
@@ -59,7 +55,6 @@ maildir_source_create (void)
 int
 maildir_init (void)
 {
-	// printf ("maildir init\n");
 	return 1;
 }
 
@@ -77,8 +72,6 @@ maildir_connect (void)
 
 	s->object.type = MAGIC_MAILDIR;
 	s->name        = strdup ("maildir");
-
-	// Pretend to read something
 
 	FOLDER *f1 = folder_create();
 	FOLDER *f2 = folder_create();
@@ -136,7 +129,7 @@ maildir_config_item (const char *name)
 		return 0;
 	}
 
-	if ((name[0] >= 'f') && (name[0] <= 'm')) {
+	if ((name[0] >= 'i') && (name[0] <= 'l')) {
 		// printf ("maildir config: %s\n", name);
 		return 1;
 	}

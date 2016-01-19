@@ -9,8 +9,6 @@
 #include "source.h"
 #include "view.h"
 
-// static char *config[10];
-
 static void
 mbox_source_free (MBOX_SOURCE *s)
 {
@@ -23,12 +21,10 @@ mbox_source_free (MBOX_SOURCE *s)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
-			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
 			object_release (s->source.folders[i]);
 		}
 
 		for (i = 0; i < s->source.num_items; i++) {
-			// printf ("freeing item %p\n", (void*) s->source.items[i]);
 			object_release (s->source.items[i]);
 		}
 
@@ -59,7 +55,6 @@ mbox_source_create (void)
 int
 mbox_init (void)
 {
-	// printf ("mbox init\n");
 	return 1;
 }
 
@@ -77,8 +72,6 @@ mbox_connect (void)
 
 	s->object.type = MAGIC_MBOX;
 	s->name        = strdup ("mbox");
-
-	// Pretend to read something
 
 	FOLDER *f1 = folder_create();
 	if (!f1) {
@@ -119,7 +112,7 @@ mbox_config_item (const char *name)
 		return 0;
 	}
 
-	if ((name[0] >= 'n') && (name[0] <= 'w')) {
+	if ((name[0] >= 'm') && (name[0] <= 'p')) {
 		// printf ("mbox config: %s\n", name);
 		return 1;
 	}

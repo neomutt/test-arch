@@ -10,8 +10,6 @@
 #include "source.h"
 #include "view.h"
 
-// static char *config[10];
-
 static void
 contact_list_source_free (CONTACT_LIST_SOURCE *s)
 {
@@ -24,12 +22,10 @@ contact_list_source_free (CONTACT_LIST_SOURCE *s)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
-			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
 			object_release (s->source.folders[i]);
 		}
 
 		for (i = 0; i < s->source.num_items; i++) {
-			// printf ("freeing item %p\n", (void*) s->source.items[i]);
 			object_release (s->source.items[i]);
 		}
 
@@ -60,7 +56,6 @@ contact_list_source_create (void)
 int
 contact_list_init (void)
 {
-	// printf ("contact_list init\n");
 	return 1;
 }
 
@@ -79,8 +74,6 @@ contact_list_connect (void)
 	s->object.type = MAGIC_CONTACT_LIST;
 	s->name        = strdup ("contact list");
 
-	// Pretend to read something
-
 	const char *names[] = { "avon",   "bedford", "cornwall", "devon dog",         "essex echidna",     "ferrari", "gloucestershire goat", "horse",  "igloo", NULL   };
 	const C_TAGS tags[] = { C_COUNTY, C_COUNTY,  C_COUNTY,   C_COUNTY | C_ANIMAL, C_COUNTY | C_ANIMAL, C_CAR,     C_COUNTY | C_ANIMAL,    C_ANIMAL, C_NONE,  C_NONE };
 	CONTACT *contacts[10];
@@ -90,13 +83,13 @@ contact_list_connect (void)
 	for (i = 0; names[i]; i++) {
 		contacts[i] = contact_create();
 		if (!contacts[i]) {
-			printf ("contact_list_connect: item_create failed\n");
+			printf ("contact_list_connect: contact_create failed\n");
 			return NULL;
 		}
 		contacts[i]->item.name = strdup (names[i]);
 		contacts[i]->tags      = tags[i];
 
-		source_add_child (s, contacts[i]);	// Source owns all items
+		source_add_child (s, contacts[i]);	// Source owns all contacts
 	}
 
 	contacts[i] = NULL;
@@ -164,7 +157,7 @@ contact_list_config_item (const char *name)
 		return 0;
 	}
 
-	if ((name[0] >= 'n') && (name[0] <= 'w')) {
+	if ((name[0] >= 'a') && (name[0] <= 'd')) {
 		// printf ("contact config: %s\n", name);
 		return 1;
 	}
