@@ -1,7 +1,7 @@
 #ifndef _M_CONTACT_LIST_H_
 #define _M_CONTACT_LIST_H_
 
-#include "item.h"
+#define MAGIC_CONTACT_LIST ((1 << 8) + MAGIC_SOURCE)
 
 typedef struct plugin_t PLUGIN;
 

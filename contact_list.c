@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "contact.h"
+#include "contact_list.h"
 #include "folder.h"
 #include "item.h"
 #include "plugin.h"
@@ -14,7 +15,7 @@
 int
 contact_list_init (void)
 {
-	// printf ("contact init\n");
+	// printf ("contact_list init\n");
 	return 1;
 }
 
@@ -28,8 +29,8 @@ contact_list_connect (void)
 		return NULL;
 	}
 
-	s->object.type = MAGIC_CONTACT;
-	s->name        = strdup ("contact");
+	s->object.type = MAGIC_CONTACT_LIST;
+	s->name        = strdup ("contact list");
 
 	// Pretend to read something
 

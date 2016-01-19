@@ -3,7 +3,7 @@
 
 #include "item.h"
 
-#define MAGIC_EMAIL ((5 << 8) + MAGIC_ITEM)
+#define MAGIC_EMAIL ((2 << 8) + MAGIC_ITEM)
 
 typedef struct email_t {
 	ITEM item;

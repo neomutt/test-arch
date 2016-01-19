@@ -27,8 +27,8 @@ digraph inherit {
 	source  [ fillcolor="#ffff40" ];
 	folder  [ fillcolor="#40ff40" ];
 	item    [ fillcolor="#40ffff" ];
-	email   [ fillcolor="#40ffff" ];
 	contact [ fillcolor="#40ffff" ];
+	email   [ fillcolor="#40ffff" ];
 
 	// config;
 	// panel;
@@ -38,8 +38,8 @@ digraph inherit {
 	source  -> object;
 	folder  -> object;
 	item    -> object;
-	email   -> item;
 	contact -> item;
+	email   -> item;
 
 }
 
