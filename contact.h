@@ -5,10 +5,6 @@
 
 #define MAGIC_CONTACT ((1 << 8) + MAGIC_ITEM)
 
-typedef struct plugin_t PLUGIN;
-
-extern PLUGIN contact_plugin;
-
 typedef enum {
 	C_NONE   = 0,
 	C_COUNTY = 1 << 0,
@@ -20,5 +16,7 @@ typedef struct contact_t {
 	ITEM item;
 	int tags;
 } CONTACT;
+
+CONTACT * contact_create (void);
 
 #endif // _M_CONTACT_H_

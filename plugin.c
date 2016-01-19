@@ -4,13 +4,13 @@
 #include "imap.h"
 #include "maildir.h"
 #include "mbox.h"
-#include "contact.h"
+#include "contact_list.h"
 
 PLUGIN *plugins[] = {
 	&imap_plugin,
 	&maildir_plugin,
 	&mbox_plugin,
-	&contact_plugin,
+	&contact_list_plugin,
 	NULL
 };
 
