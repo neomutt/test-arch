@@ -1,0 +1,43 @@
+digraph inherit {
+	graph [
+		rankdir="BT"
+		bgcolor="black"
+		color="white"
+		nodesep="0.1"
+		ranksep="0.5"
+	];
+
+	node [
+		shape="Mrecord"
+		fontsize="12"
+		style="filled"
+		height="0.2"
+		penwidth="0.0"
+	];
+
+	edge [
+		penwidth="1.0"
+		color="#A0A0A0"
+		arrowsize="0.5"
+	];
+
+
+	object [ fillcolor="#ffffff" ];
+	view   [ fillcolor="#ff4040" ];
+	source [ fillcolor="#ffff40" ];
+	folder [ fillcolor="#40ff40" ];
+	item   [ fillcolor="#40ffff" ];
+	email  [ fillcolor="#40ffff" ];
+
+	// config;
+	// panel;
+	// plugin;
+
+	view   -> object;
+	source -> object;
+	folder -> object;
+	item   -> object;
+	email  -> item;
+
+}
+
