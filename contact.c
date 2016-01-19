@@ -75,10 +75,6 @@ contact_connect (void)
 	i8->name = strdup ("horse");
 	i9->name = strdup ("impala");
 
-	i4->object.refcount++;
-	i5->object.refcount++;
-	i7->object.refcount++;
-
 	folder_add_item (f1, i1);	// counties
 	folder_add_item (f1, i2);
 	folder_add_item (f1, i3);
@@ -93,8 +89,21 @@ contact_connect (void)
 	folder_add_item (f2, i8);
 	folder_add_item (f2, i9);
 
+	object_release (i1);
+	object_release (i2);
+	object_release (i3);
+	object_release (i4);
+	object_release (i5);
+	object_release (i6);
+	object_release (i7);
+	object_release (i8);
+	object_release (i9);
+
 	source_add_folder (s, f1);
 	source_add_folder (s, f2);
+
+	object_release (f1);
+	object_release (f2);
 
 	return s;
 }

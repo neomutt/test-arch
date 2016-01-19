@@ -76,9 +76,21 @@ imap_connect (void)
 	folder_add_item (f3, i6);
 	folder_add_item (f3, i7);
 
+	object_release (i1);
+	object_release (i2);
+	object_release (i3);
+	object_release (i4);
+	object_release (i5);
+	object_release (i6);
+	object_release (i7);
+
 	source_add_folder (s, f1);
 	source_add_folder (s, f2);
 	source_add_folder (s, f3);
+
+	object_release (f1);
+	object_release (f2);
+	object_release (f3);
 
 	return s;
 }

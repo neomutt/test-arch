@@ -62,7 +62,14 @@ mbox_connect (void)
 	folder_add_item (f1, i3);
 	folder_add_item (f1, i4);
 
+	object_release (i1);
+	object_release (i2);
+	object_release (i3);
+	object_release (i4);
+
 	source_add_folder (s, f1);
+
+	object_release (f1);
 
 	return s;
 }

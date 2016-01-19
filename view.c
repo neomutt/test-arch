@@ -6,22 +6,22 @@
 
 const int MAGIC_VIEW = 1001;
 
-void
+static void
 view_free (VIEW *v)
 {
 	if (!v) {
 		return;
 	}
 
-	int i;
-	for (i = 0; i < v->num_sources; i++) {
-		// printf ("freeing source %p\n", (void*) v->sources[i]);
-		object_release (v->sources[i]);
-	}
-
 	OBJECT *o = &v->object;
 	o->refcount--;
 	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < v->num_sources; i++) {
+			// printf ("freeing source %p\n", (void*) v->sources[i]);
+			object_release (v->sources[i]);
+		}
+
 		free (v->name);
 		free (v);
 	}
@@ -52,6 +52,7 @@ view_add_source (VIEW *v, SOURCE *src)
 		return 0;
 	}
 
+	object_addref (src);
 	v->sources[v->num_sources] = src;
 	v->num_sources++;
 

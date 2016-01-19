@@ -51,6 +51,9 @@ maildir_connect (void)
 	folder_add_folder (f1, f2);
 	folder_add_folder (f1, f3);
 
+	object_release (f2);
+	object_release (f3);
+
 	ITEM *i1 = item_create();
 	ITEM *i2 = item_create();
 	ITEM *i3 = item_create();
@@ -80,7 +83,17 @@ maildir_connect (void)
 	folder_add_item (f3, i6);
 	folder_add_item (f3, i7);
 
+	object_release (i1);
+	object_release (i2);
+	object_release (i3);
+	object_release (i4);
+	object_release (i5);
+	object_release (i6);
+	object_release (i7);
+
 	source_add_folder (s, f1);
+
+	object_release (f1);
 
 	return s;
 }

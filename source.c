@@ -6,22 +6,22 @@
 
 const int MAGIC_SOURCE = 1002;
 
-void
+static void
 source_free (SOURCE *src)
 {
 	if (!src) {
 		return;
 	}
 
-	int i;
-	for (i = 0; i < src->num_folders; i++) {
-		// printf ("freeing folder %p\n", (void*) src->folders[i]);
-		object_release (src->folders[i]);
-	}
-
 	OBJECT *o = &src->object;
 	o->refcount--;
 	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < src->num_folders; i++) {
+			// printf ("freeing folder %p\n", (void*) src->folders[i]);
+			object_release (src->folders[i]);
+		}
+
 		free (src->name);
 		free (src);
 	}
@@ -52,6 +52,7 @@ source_add_folder (SOURCE *src, FOLDER *f)
 		return 0;
 	}
 
+	object_addref (f);
 	src->folders[src->num_folders] = f;
 	src->num_folders++;
 

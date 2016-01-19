@@ -5,7 +5,7 @@
 
 const int MAGIC_ITEM = 1004;
 
-void
+static void
 item_free (ITEM *i)
 {
 	if (!i) {

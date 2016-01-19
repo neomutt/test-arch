@@ -25,25 +25,34 @@ main (int argc, char *argv[])
 		config_read_file (argv[1], plugins);
 	}
 
-	VIEW *v = view_create();
-	if (!v) {
+	VIEW *v1 = view_create();
+	VIEW *v2 = view_create();
+	if (!v1 || !v2) {
 		printf ("view_create failed\n");
 		return 1;
 	}
 
-	v->name = strdup ("mail");
+	v1->name = strdup ("mail");
+	v2->name = strdup ("contacts");
 
 	for (i = 0; plugins[i]; i++) {
 		SOURCE *s = plugins[i]->connect();
 		if (!s) {
 			printf ("plugin %s::connect() failed\n", plugins[i]->name);
 		}
-		view_add_source (v, s);
+		if (i < 3) {
+			view_add_source (v1, s);
+		} else {
+			view_add_source (v2, s);
+		}
+		object_release (s);
 	}
 
-	view_display (v, 0);
+	view_display (v1, 0);
+	view_display (v2, 0);
 
-	object_release (v);
+	object_release (v1);
+	object_release (v2);
 	config_free();
 
 	return 0;

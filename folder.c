@@ -6,28 +6,27 @@
 
 const int MAGIC_FOLDER = 1003;
 
-void
+static void
 folder_free (FOLDER *f)
 {
 	if (!f) {
 		return;
 	}
 
-	int i;
-
-	for (i = 0; i < f->num_folders; i++) {
-		// printf ("freeing folder %p\n", (void*) f->folders[i]);
-		folder_free (f->folders[i]);
-	}
-
-	for (i = 0; i < f->num_items; i++) {
-		// printf ("freeing item %p\n", (void*) f->items[i]);
-		object_release (f->items[i]);
-	}
-
 	OBJECT *o = &f->object;
 	o->refcount--;
 	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < f->num_folders; i++) {
+			// printf ("freeing folder %p\n", (void*) f->folders[i]);
+			folder_free (f->folders[i]);
+		}
+
+		for (i = 0; i < f->num_items; i++) {
+			// printf ("freeing item %p\n", (void*) f->items[i]);
+			object_release (f->items[i]);
+		}
+
 		free (f->name);
 		free (f);
 	}
@@ -59,6 +58,7 @@ folder_add_folder (FOLDER *f, FOLDER *child)
 		return 0;
 	}
 
+	object_addref (child);
 	f->folders[f->num_folders] = child;
 	f->num_folders++;
 
@@ -72,6 +72,7 @@ folder_add_item (FOLDER *f, ITEM *i)
 		return 0;
 	}
 
+	object_addref (i);
 	f->items[f->num_items] = i;
 	f->num_items++;
 
