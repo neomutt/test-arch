@@ -22,28 +22,40 @@ digraph inherit {
 	];
 
 
-	object  [ fillcolor="#ffffff" ];
-	view    [ fillcolor="#ff4040" ];
-	source  [ fillcolor="#ffff40" ];
-	folder  [ fillcolor="#40ff40" ];
-	item    [ fillcolor="#40ffff" ];
-	article [ fillcolor="#40ffff" ];
-	contact [ fillcolor="#40ffff" ];
-	email   [ fillcolor="#40ffff" ];
-	task    [ fillcolor="#40ffff" ];
+	object       [ fillcolor="#ffffff" ];
 
-	// config;
-	// panel;
-	// plugin;
+	view         [ fillcolor="#ff4040" ];
+	source       [ fillcolor="#ffff40" ];
+	folder       [ fillcolor="#40ff40" ];
+	item         [ fillcolor="#40ffff" ];
 
-	view    -> object;
-	source  -> object;
-	folder  -> object;
-	item    -> object;
-	article -> item;
-	contact -> item;
-	email   -> item;
-	task    -> item;
+	contact_list [ fillcolor="#ffff40" ];
+	imap         [ fillcolor="#ffff40" ];
+	maildir      [ fillcolor="#ffff40" ];
+	mbox         [ fillcolor="#ffff40" ];
+	rss          [ fillcolor="#ffff40" ];
+	task_list    [ fillcolor="#ffff40" ];
 
+	article      [ fillcolor="#40ffff" ];
+	contact      [ fillcolor="#40ffff" ];
+	email        [ fillcolor="#40ffff" ];
+	task         [ fillcolor="#40ffff" ];
+
+	view         -> object;
+	source       -> object;
+	folder       -> object;
+	item         -> object;
+
+	contact_list -> source;
+	imap         -> source;
+	maildir      -> source;
+	mbox         -> source;
+	rss          -> source;
+	task_list    -> source;
+
+	article      -> item;
+	contact      -> item;
+	email        -> item;
+	task         -> item;
 }
 

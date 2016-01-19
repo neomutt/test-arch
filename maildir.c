@@ -11,6 +11,51 @@
 
 // static char *config[10];
 
+static void
+maildir_source_free (MAILDIR_SOURCE *s)
+{
+	if (!s) {
+		return;
+	}
+
+	OBJECT *o = &s->source.object;
+	o->refcount--;
+	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < s->source.num_folders; i++) {
+			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
+			object_release (s->source.folders[i]);
+		}
+
+		for (i = 0; i < s->source.num_items; i++) {
+			// printf ("freeing item %p\n", (void*) s->source.items[i]);
+			object_release (s->source.items[i]);
+		}
+
+		free (s->source.name);
+		free (s);
+	}
+}
+
+MAILDIR_SOURCE *
+maildir_source_create (void)
+{
+	MAILDIR_SOURCE *s = NULL;
+
+	s = calloc (1, sizeof (MAILDIR_SOURCE));
+	if (!s) {
+		return NULL;
+	}
+
+	OBJECT *o = &s->source.object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_MAILDIR;
+	o->release  = (object_release_fn) maildir_source_free;
+
+	return s;
+}
+
 int
 maildir_init (void)
 {
@@ -21,12 +66,14 @@ maildir_init (void)
 SOURCE *
 maildir_connect (void)
 {
-	SOURCE *s = NULL;
+	MAILDIR_SOURCE *ms = NULL;
 
-	s = source_create();
-	if (!s) {
+	ms = maildir_source_create();
+	if (!ms) {
 		return NULL;
 	}
+
+	SOURCE *s = &ms->source;
 
 	s->object.type = MAGIC_MAILDIR;
 	s->name        = strdup ("maildir");
@@ -46,48 +93,34 @@ maildir_connect (void)
 	f2->name = strdup ("trees");
 	f3->name = strdup ("fish");
 
+	const char *names[] = { "adam", "barry", "charlie", "ash", "beech", "angel", "beluga", NULL };
+
+	int i;
+	EMAIL *e;
+
+	for (i = 0; names[i]; i++) {
+		e = email_create();
+		if (!e) {
+			printf ("imap_connect: email_create failed\n");
+			return NULL;
+		}
+		e->item.name = strdup (names[i]);
+
+		if (i < 3) {
+			folder_add_child (f1, e);
+		} else if (i < 5) {
+			folder_add_child (f2, e);
+		} else {
+			folder_add_child (f3, e);
+		}
+		object_release (e);
+	}
+
 	folder_add_child (f1, f2);
 	folder_add_child (f1, f3);
 
 	object_release (f2);
 	object_release (f3);
-
-	EMAIL *e1 = email_create();
-	EMAIL *e2 = email_create();
-	EMAIL *e3 = email_create();
-	EMAIL *e4 = email_create();
-	EMAIL *e5 = email_create();
-	EMAIL *e6 = email_create();
-	EMAIL *e7 = email_create();
-
-	if (!e1 || !e2 || !e3 || !e4 || !e5 || !e6 || !e7) {
-		printf ("maildir_connect: item_create failed\n");
-		return NULL;
-	}
-
-	e1->item.name = strdup ("adam");
-	e2->item.name = strdup ("barry");
-	e3->item.name = strdup ("charlie");
-	e4->item.name = strdup ("ash");
-	e5->item.name = strdup ("beech");
-	e6->item.name = strdup ("angel");
-	e7->item.name = strdup ("beluga");
-
-	folder_add_child (f1, e1);
-	folder_add_child (f1, e2);
-	folder_add_child (f1, e3);
-	folder_add_child (f2, e4);
-	folder_add_child (f2, e5);
-	folder_add_child (f3, e6);
-	folder_add_child (f3, e7);
-
-	object_release (e1);
-	object_release (e2);
-	object_release (e3);
-	object_release (e4);
-	object_release (e5);
-	object_release (e6);
-	object_release (e7);
 
 	source_add_child (s, f1);
 

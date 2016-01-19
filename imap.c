@@ -11,6 +11,51 @@
 
 // static char *config[10];
 
+static void
+imap_source_free (IMAP_SOURCE *s)
+{
+	if (!s) {
+		return;
+	}
+
+	OBJECT *o = &s->source.object;
+	o->refcount--;
+	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < s->source.num_folders; i++) {
+			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
+			object_release (s->source.folders[i]);
+		}
+
+		for (i = 0; i < s->source.num_items; i++) {
+			// printf ("freeing item %p\n", (void*) s->source.items[i]);
+			object_release (s->source.items[i]);
+		}
+
+		free (s->source.name);
+		free (s);
+	}
+}
+
+IMAP_SOURCE *
+imap_source_create (void)
+{
+	IMAP_SOURCE *s = NULL;
+
+	s = calloc (1, sizeof (IMAP_SOURCE));
+	if (!s) {
+		return NULL;
+	}
+
+	OBJECT *o = &s->source.object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_IMAP;
+	o->release  = (object_release_fn) imap_source_free;
+
+	return s;
+}
+
 int
 imap_init (void)
 {
@@ -21,12 +66,14 @@ imap_init (void)
 SOURCE *
 imap_connect (void)
 {
-	SOURCE *s = NULL;
+	IMAP_SOURCE *is = NULL;
 
-	s = source_create();
-	if (!s) {
+	is = imap_source_create();
+	if (!is) {
 		return NULL;
 	}
+
+	SOURCE *s = &is->source;
 
 	s->object.type = MAGIC_IMAP;
 	s->name        = strdup ("imap");
@@ -46,42 +93,28 @@ imap_connect (void)
 	f2->name = strdup ("cars");
 	f3->name = strdup ("girls");
 
-	EMAIL *e1 = email_create();
-	EMAIL *e2 = email_create();
-	EMAIL *e3 = email_create();
-	EMAIL *e4 = email_create();
-	EMAIL *e5 = email_create();
-	EMAIL *e6 = email_create();
-	EMAIL *e7 = email_create();
+	const char *names[] = { "apple", "banana", "cherry", "audi", "bentley", "anna", "bella", NULL };
 
-	if (!e1 || !e2 || !e3 || !e4 || !e5 || !e6 || !e7) {
-		printf ("imap_connect: email_create failed\n");
-		return NULL;
+	int i;
+	EMAIL *e;
+
+	for (i = 0; names[i]; i++) {
+		e = email_create();
+		if (!e) {
+			printf ("imap_connect: email_create failed\n");
+			return NULL;
+		}
+		e->item.name = strdup (names[i]);
+
+		if (i < 3) {
+			folder_add_child (f1, e);
+		} else if (i < 5) {
+			folder_add_child (f2, e);
+		} else {
+			folder_add_child (f3, e);
+		}
+		object_release (e);
 	}
-
-	e1->item.name = strdup ("apple");
-	e2->item.name = strdup ("banana");
-	e3->item.name = strdup ("cherry");
-	e4->item.name = strdup ("audi");
-	e5->item.name = strdup ("bentley");
-	e6->item.name = strdup ("anna");
-	e7->item.name = strdup ("bella");
-
-	folder_add_child (f1, e1);
-	folder_add_child (f1, e2);
-	folder_add_child (f1, e3);
-	folder_add_child (f2, e4);
-	folder_add_child (f2, e5);
-	folder_add_child (f3, e6);
-	folder_add_child (f3, e7);
-
-	object_release (e1);
-	object_release (e2);
-	object_release (e3);
-	object_release (e4);
-	object_release (e5);
-	object_release (e6);
-	object_release (e7);
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);

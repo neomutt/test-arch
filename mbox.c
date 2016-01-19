@@ -11,6 +11,51 @@
 
 // static char *config[10];
 
+static void
+mbox_source_free (MBOX_SOURCE *s)
+{
+	if (!s) {
+		return;
+	}
+
+	OBJECT *o = &s->source.object;
+	o->refcount--;
+	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < s->source.num_folders; i++) {
+			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
+			object_release (s->source.folders[i]);
+		}
+
+		for (i = 0; i < s->source.num_items; i++) {
+			// printf ("freeing item %p\n", (void*) s->source.items[i]);
+			object_release (s->source.items[i]);
+		}
+
+		free (s->source.name);
+		free (s);
+	}
+}
+
+MBOX_SOURCE *
+mbox_source_create (void)
+{
+	MBOX_SOURCE *s = NULL;
+
+	s = calloc (1, sizeof (MBOX_SOURCE));
+	if (!s) {
+		return NULL;
+	}
+
+	OBJECT *o = &s->source.object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_MBOX;
+	o->release  = (object_release_fn) mbox_source_free;
+
+	return s;
+}
+
 int
 mbox_init (void)
 {
@@ -21,12 +66,14 @@ mbox_init (void)
 SOURCE *
 mbox_connect (void)
 {
-	SOURCE *s = NULL;
+	MBOX_SOURCE *ms = NULL;
 
-	s = source_create();
-	if (!s) {
+	ms = mbox_source_create();
+	if (!ms) {
 		return NULL;
 	}
+
+	SOURCE *s = &ms->source;
 
 	s->object.type = MAGIC_MBOX;
 	s->name        = strdup ("mbox");
@@ -41,30 +88,22 @@ mbox_connect (void)
 
 	f1->name = strdup ("music");
 
-	EMAIL *e1 = email_create();
-	EMAIL *e2 = email_create();
-	EMAIL *e3 = email_create();
-	EMAIL *e4 = email_create();
+	const char *names[] = { "acdc", "beatles", "cream", "doors", NULL };
 
-	if (!e1 || !e2 || !e3 || !e4) {
-		printf ("mbox_connect: email_create failed\n");
-		return NULL;
+	int i;
+	EMAIL *e;
+
+	for (i = 0; names[i]; i++) {
+		e = email_create();
+		if (!e) {
+			printf ("imap_connect: email_create failed\n");
+			return NULL;
+		}
+		e->item.name = strdup (names[i]);
+
+		folder_add_child (f1, e);
+		object_release (e);
 	}
-
-	e1->item.name = strdup ("acdc");
-	e2->item.name = strdup ("beatles");
-	e3->item.name = strdup ("cream");
-	e4->item.name = strdup ("doors");
-
-	folder_add_child (f1, e1);
-	folder_add_child (f1, e2);
-	folder_add_child (f1, e3);
-	folder_add_child (f1, e4);
-
-	object_release (e1);
-	object_release (e2);
-	object_release (e3);
-	object_release (e4);
 
 	source_add_child (s, f1);
 

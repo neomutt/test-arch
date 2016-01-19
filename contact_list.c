@@ -12,6 +12,51 @@
 
 // static char *config[10];
 
+static void
+contact_list_source_free (CONTACT_LIST_SOURCE *s)
+{
+	if (!s) {
+		return;
+	}
+
+	OBJECT *o = &s->source.object;
+	o->refcount--;
+	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < s->source.num_folders; i++) {
+			// printf ("freeing folder %p\n", (void*) s->source.folders[i]);
+			object_release (s->source.folders[i]);
+		}
+
+		for (i = 0; i < s->source.num_items; i++) {
+			// printf ("freeing item %p\n", (void*) s->source.items[i]);
+			object_release (s->source.items[i]);
+		}
+
+		free (s->source.name);
+		free (s);
+	}
+}
+
+CONTACT_LIST_SOURCE *
+contact_list_source_create (void)
+{
+	CONTACT_LIST_SOURCE *s = NULL;
+
+	s = calloc (1, sizeof (CONTACT_LIST_SOURCE));
+	if (!s) {
+		return NULL;
+	}
+
+	OBJECT *o = &s->source.object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_CONTACT_LIST;
+	o->release  = (object_release_fn) contact_list_source_free;
+
+	return s;
+}
+
 int
 contact_list_init (void)
 {
@@ -22,12 +67,14 @@ contact_list_init (void)
 SOURCE *
 contact_list_connect (void)
 {
-	SOURCE *s = NULL;
+	CONTACT_LIST_SOURCE *cs = NULL;
 
-	s = source_create();
-	if (!s) {
+	cs = contact_list_source_create();
+	if (!cs) {
 		return NULL;
 	}
+
+	SOURCE *s = &cs->source;
 
 	s->object.type = MAGIC_CONTACT_LIST;
 	s->name        = strdup ("contact list");
