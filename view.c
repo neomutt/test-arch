@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "view.h"
 #include "source.h"
-
-const int MAGIC_VIEW = 1001;
+#include "view.h"
 
 static void
 view_free (VIEW *v)

@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "source.h"
 #include "folder.h"
-
-const int MAGIC_SOURCE = 1002;
+#include "source.h"
 
 static void
 source_free (SOURCE *src)
@@ -58,16 +56,16 @@ source_add_child (SOURCE *src, void *child)
 	}
 
 	OBJECT *obj = child;
-	if (obj->type == MAGIC_FOLDER) {
+	if ((obj->type & 0xff) == MAGIC_FOLDER) {
 		object_addref (child);
 		src->folders[src->num_folders] = child;
 		src->num_folders++;
-	} else if (obj->type == MAGIC_ITEM) {
+	} else if ((obj->type & 0xff) == MAGIC_ITEM) {
 		object_addref (child);
 		src->items[src->num_items] = child;
 		src->num_items++;
 	} else {
-		printf ("can't add object:%d to a folder\n", obj->type);
+		printf ("can't add object:0x%04x to a source\n", obj->type);
 		return 0;
 	}
 

@@ -2,20 +2,48 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "view.h"
-#include "source.h"
+#include "contact.h"
 #include "folder.h"
 #include "item.h"
 #include "plugin.h"
-
-#define MAGIC_CONTACT 456
+#include "source.h"
+#include "view.h"
 
 // static char *config[10];
 
-enum {
-	C_GROUP,
-	C_TAG
-} contact_view;
+static void
+contact_free (CONTACT *c)
+{
+	if (!c) {
+		return;
+	}
+
+	OBJECT *o = &c->item.object;
+	o->refcount--;
+	if (o->refcount < 1) {
+		free (c->item.name);
+		free (c);
+	}
+}
+
+CONTACT *
+contact_create (void)
+{
+	CONTACT *c = NULL;
+
+	c = calloc (1, sizeof (CONTACT));
+	if (!c) {
+		return NULL;
+	}
+
+	OBJECT *o = &c->item.object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_CONTACT;
+	o->release  = (object_release_fn) contact_free;
+
+	return c;
+}
 
 int
 contact_init (void)
@@ -39,40 +67,25 @@ contact_connect (void)
 
 	// Pretend to read something
 
-	ITEM *i1 = item_create();
-	ITEM *i2 = item_create();
-	ITEM *i3 = item_create();
-	ITEM *i4 = item_create();
-	ITEM *i5 = item_create();
-	ITEM *i6 = item_create();
-	ITEM *i7 = item_create();
-	ITEM *i8 = item_create();
-	ITEM *i9 = item_create();
+	const char *names[] = { "avon",   "bedford", "cornwall", "devon dog",         "essex echidna",     "ferrari", "gloucestershire goat", "horse",  "igloo", NULL   };
+	const C_TAGS tags[] = { C_COUNTY, C_COUNTY,  C_COUNTY,   C_COUNTY | C_ANIMAL, C_COUNTY | C_ANIMAL, C_CAR,     C_COUNTY | C_ANIMAL,    C_ANIMAL, C_NONE,  C_NONE };
+	CONTACT *contacts[10];
 
-	if (!i1 || !i2 || !i3 || !i4 || !i5 || !i6 || !i7 || !i8 || !i9) {
-		printf ("contact_connect: item_create failed\n");
-		return NULL;
+	int i;
+
+	for (i = 0; names[i]; i++) {
+		contacts[i] = contact_create();
+		if (!contacts[i]) {
+			printf ("contact_connect: item_create failed\n");
+			return NULL;
+		}
+		contacts[i]->item.name = strdup (names[i]);
+		contacts[i]->tags      = tags[i];
+
+		source_add_child (s, contacts[i]);	// Source owns all items
 	}
 
-	i1->name = strdup ("avon");
-	i2->name = strdup ("bedford");
-	i3->name = strdup ("cornwall");
-	i4->name = strdup ("devon dog");
-	i5->name = strdup ("essex echidna");
-	i6->name = strdup ("frog");
-	i7->name = strdup ("gloucestershire goat");
-	i8->name = strdup ("horse");
-	i9->name = strdup ("igloo");
-
-	source_add_child (s, i1);	// Source owns all items
-	source_add_child (s, i2);
-	source_add_child (s, i3);
-	source_add_child (s, i4);
-	source_add_child (s, i5);
-	source_add_child (s, i6);
-	source_add_child (s, i7);
-	source_add_child (s, i8);
-	source_add_child (s, i9);
+	contacts[i] = NULL;
 
 	FOLDER *f1 = folder_create();
 	FOLDER *f2 = folder_create();
@@ -89,34 +102,33 @@ contact_connect (void)
 	f3->name = strdup ("county + animal");
 	f4->name = strdup ("untagged");
 
-	folder_add_child (f1, i1);	// counties
-	folder_add_child (f1, i2);
-	folder_add_child (f1, i3);
-	folder_add_child (f1, i4);
-	folder_add_child (f1, i5);
-	folder_add_child (f1, i7);
+	for (i = 0; contacts[i]; i++) {
+		if (contacts[i]->tags & C_COUNTY) {
+			folder_add_child (f1, contacts[i]);
+		}
+	}
 
-	folder_add_child (f2, i4);	// animals
-	folder_add_child (f2, i5);
-	folder_add_child (f2, i6);
-	folder_add_child (f2, i7);
-	folder_add_child (f2, i8);
+	for (i = 0; contacts[i]; i++) {
+		if (contacts[i]->tags & C_ANIMAL) {
+			folder_add_child (f2, contacts[i]);
+		}
+	}
 
-	folder_add_child (f3, i4);	// counties + animals
-	folder_add_child (f3, i5);
-	folder_add_child (f3, i7);
+	for (i = 0; contacts[i]; i++) {
+		if ((contacts[i]->tags & C_COUNTY) && (contacts[i]->tags & C_ANIMAL)) {
+			folder_add_child (f3, contacts[i]);
+		}
+	}
 
-	folder_add_child (f4, i9);
+	for (i = 0; contacts[i]; i++) {
+		if (contacts[i]->tags == C_NONE) {
+			folder_add_child (f4, contacts[i]);
+		}
+	}
 
-	object_release (i1);
-	object_release (i2);
-	object_release (i3);
-	object_release (i4);
-	object_release (i5);
-	object_release (i6);
-	object_release (i7);
-	object_release (i8);
-	object_release (i9);
+	for (i = 0; contacts[i]; i++) {
+		object_release (contacts[i]);
+	}
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);

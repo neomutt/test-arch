@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-extern const int MAGIC_ITEM;
+#define MAGIC_ITEM 4
 
 typedef struct item_t {
 	OBJECT object;

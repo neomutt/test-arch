@@ -2,14 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "view.h"
-#include "source.h"
 #include "folder.h"
 #include "item.h"
-
+#include "maildir.h"
 #include "plugin.h"
-
-#define MAGIC_MAILDIR 345
+#include "source.h"
+#include "view.h"
 
 // static char *config[10];
 

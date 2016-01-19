@@ -22,22 +22,24 @@ digraph inherit {
 	];
 
 
-	object [ fillcolor="#ffffff" ];
-	view   [ fillcolor="#ff4040" ];
-	source [ fillcolor="#ffff40" ];
-	folder [ fillcolor="#40ff40" ];
-	item   [ fillcolor="#40ffff" ];
-	email  [ fillcolor="#40ffff" ];
+	object  [ fillcolor="#ffffff" ];
+	view    [ fillcolor="#ff4040" ];
+	source  [ fillcolor="#ffff40" ];
+	folder  [ fillcolor="#40ff40" ];
+	item    [ fillcolor="#40ffff" ];
+	email   [ fillcolor="#40ffff" ];
+	contact [ fillcolor="#40ffff" ];
 
 	// config;
 	// panel;
 	// plugin;
 
-	view   -> object;
-	source -> object;
-	folder -> object;
-	item   -> object;
-	email  -> item;
+	view    -> object;
+	source  -> object;
+	folder  -> object;
+	item    -> object;
+	email   -> item;
+	contact -> item;
 
 }
 

@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-extern const int MAGIC_FOLDER;
+#define MAGIC_FOLDER 3
 
 typedef struct item_t ITEM;
 

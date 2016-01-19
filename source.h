@@ -4,6 +4,8 @@
 #include "object.h"
 #include "item.h"
 
+#define MAGIC_SOURCE 2
+
 typedef struct folder_t FOLDER;
 
 typedef struct source_t {

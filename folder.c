@@ -4,8 +4,6 @@
 #include "folder.h"
 #include "item.h"
 
-const int MAGIC_FOLDER = 1003;
-
 static void
 folder_free (FOLDER *f)
 {
@@ -59,16 +57,16 @@ folder_add_child (FOLDER *f, void *child)
 	}
 
 	OBJECT *obj = child;
-	if (obj->type == MAGIC_FOLDER) {
+	if ((obj->type & 0xff) == MAGIC_FOLDER) {
 		object_addref (child);
 		f->folders[f->num_folders] = child;
 		f->num_folders++;
-	} else if (obj->type == MAGIC_ITEM) {
+	} else if ((obj->type & 0xff) == MAGIC_ITEM) {
 		object_addref (child);
 		f->items[f->num_items] = child;
 		f->num_items++;
 	} else {
-		printf ("can't add object:%d to a folder\n", obj->type);
+		printf ("can't add object:0x%04x to a folder\n", obj->type);
 		return 0;
 	}
 

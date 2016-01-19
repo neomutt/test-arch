@@ -3,8 +3,6 @@
 
 #include "item.h"
 
-const int MAGIC_ITEM = 1004;
-
 static void
 item_free (ITEM *i)
 {

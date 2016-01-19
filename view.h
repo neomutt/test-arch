@@ -3,6 +3,8 @@
 
 #include "object.h"
 
+#define MAGIC_VIEW 1
+
 typedef struct source_t SOURCE;
 
 typedef struct view_t {
