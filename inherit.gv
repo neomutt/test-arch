@@ -27,6 +27,7 @@ digraph inherit {
 	source  [ fillcolor="#ffff40" ];
 	folder  [ fillcolor="#40ff40" ];
 	item    [ fillcolor="#40ffff" ];
+	article [ fillcolor="#40ffff" ];
 	contact [ fillcolor="#40ffff" ];
 	email   [ fillcolor="#40ffff" ];
 	task    [ fillcolor="#40ffff" ];
@@ -39,6 +40,7 @@ digraph inherit {
 	source  -> object;
 	folder  -> object;
 	item    -> object;
+	article -> item;
 	contact -> item;
 	email   -> item;
 	task    -> item;

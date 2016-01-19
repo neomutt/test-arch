@@ -3,7 +3,7 @@
 
 #include "item.h"
 
-#define MAGIC_TASK ((3 << 8) + MAGIC_ITEM)
+#define MAGIC_TASK ((4 << 8) + MAGIC_ITEM)
 
 typedef enum {
 	T_NONE    = 0,

@@ -3,7 +3,7 @@
 
 #include "item.h"
 
-#define MAGIC_CONTACT ((1 << 8) + MAGIC_ITEM)
+#define MAGIC_CONTACT ((2 << 8) + MAGIC_ITEM)
 
 typedef enum {
 	C_NONE   = 0,
