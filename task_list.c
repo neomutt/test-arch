@@ -52,6 +52,7 @@ task_list_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_TASK_LIST;
 	o->release  = (object_release_fn) task_list_release;
+	o->display  = (object_display_fn) source_display;
 
 	return t;
 }

@@ -78,8 +78,8 @@ month_display (FOLDER *f, int indent)
 	printf ("\n\033[m\n");
 
 	for (i = 0; i < f->num_items; i++) {
-		ITEM *it = f->items[i];
-		it->display (it, indent + 1);
+		OBJECT *o = &f->items[i]->object;
+		o->display (o, indent + 1);
 	}
 }
 
@@ -95,10 +95,10 @@ month_create (void)
 
 	OBJECT *o = &m->folder.object;
 
-	o->refcount       = 1;
-	o->type           = MAGIC_MONTH;
-	o->release        = (object_release_fn) month_release;
-	m->folder.display = (folder_display_fn) month_display;
+	o->refcount = 1;
+	o->type     = MAGIC_MONTH;
+	o->release  = (object_release_fn) month_release;
+	o->display  = (object_display_fn) month_display;
 
 	return m;
 }

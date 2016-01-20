@@ -33,6 +33,30 @@ source_release (SOURCE *src)
 	return rc;
 }
 
+void
+source_display (SOURCE *src, int indent)
+{
+	if (!src) {
+		return;
+	}
+
+	printf ("%*s\033[1;33m%s\033[m\n", indent * 8, "", src->name);
+
+	if (src->num_folders == 0) {
+		printf ("%*s\033[1;32m[empty]\033[m\n", (indent + 1) * 8, "");
+	} else {
+		int i;
+
+		for (i = 0; i < src->num_items; i++) {
+			object_display (src->items[i], indent + 1);
+		}
+
+		for (i = 0; i < src->num_folders; i++) {
+			object_display (src->folders[i], indent + 1);
+		}
+	}
+}
+
 SOURCE *
 source_create (void)
 {
@@ -47,6 +71,7 @@ source_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_SOURCE;
 	o->release  = (object_release_fn) source_release;
+	o->display  = (object_display_fn) source_display;
 
 	return s;
 }
@@ -75,28 +100,3 @@ source_add_child (SOURCE *src, void *child)
 	return 1;
 }
 
-void
-source_display (SOURCE *src, int indent)
-{
-	if (!src) {
-		return;
-	}
-
-	printf ("%*s\033[1;33m%s\033[m\n", indent * 8, "", src->name);
-
-	if (src->num_folders == 0) {
-		printf ("%*s\033[1;32m[empty]\033[m\n", (indent + 1) * 8, "");
-	} else {
-		int i;
-
-		for (i = 0; i < src->num_items; i++) {
-			ITEM *it = src->items[i];
-			it->display (it, indent + 1);
-		}
-
-		for (i = 0; i < src->num_folders; i++) {
-			FOLDER *f = src->folders[i];
-			f->display (f, indent + 1);
-		}
-	}
-}

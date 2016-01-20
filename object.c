@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "object.h"
@@ -36,5 +37,21 @@ object_release (void *obj)
 	}
 
 	return rc;
+}
+
+
+void
+object_display (void *obj, int indent)
+{
+	if (!obj) {
+		return;
+	}
+
+	OBJECT *o = obj;
+	if (o->display) {
+		o->display (o, indent);
+	} else {
+		printf ("OBJECT: 0x%04x - %p\n", o->type, obj);
+	}
 }
 

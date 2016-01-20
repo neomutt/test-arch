@@ -52,6 +52,7 @@ contact_list_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_CONTACT_LIST;
 	o->release  = (object_release_fn) contact_list_release;
+	o->display  = (object_display_fn) source_display;
 
 	return s;
 }

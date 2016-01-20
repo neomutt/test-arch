@@ -48,8 +48,8 @@ folder_display (FOLDER *f, int indent)
 		int i;
 
 		for (i = 0; i < f->num_items; i++) {
-			ITEM *it = f->items[i];
-			it->display (it, indent + 1);
+			OBJECT *o = &f->items[i]->object;
+			o->display (o, indent + 1);
 		}
 
 		for (i = 0; i < f->num_folders; i++) {
@@ -73,7 +73,7 @@ folder_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_FOLDER;
 	o->release  = (object_release_fn) folder_release;
-	f->display  = (folder_display_fn) folder_display;
+	o->display  = (object_display_fn) folder_display;
 
 	return f;
 }

@@ -51,6 +51,7 @@ maildir_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_MAILDIR;
 	o->release  = (object_release_fn) maildir_release;
+	o->display  = (object_display_fn) source_display;
 
 	return s;
 }

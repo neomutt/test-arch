@@ -45,7 +45,7 @@ item_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_ITEM;
 	o->release  = (object_release_fn) item_release;
-	i->display  = (item_display_fn)   item_display;
+	o->display  = (object_display_fn) item_display;
 
 	return i;
 }

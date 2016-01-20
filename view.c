@@ -28,6 +28,25 @@ view_release (VIEW *v)
 	return rc;
 }
 
+static void
+view_display (VIEW *v, int indent)
+{
+	if (!v) {
+		return;
+	}
+
+	printf ("%*s\033[1;31m%s\033[m\n", indent * 8, "", v->name);
+
+	if (v->num_sources == 0) {
+		printf ("%*s\033[1;33m[empty]\033[m\n", (indent + 1) * 8, "");
+	} else {
+		int i;
+		for (i = 0; i < v->num_sources; i++) {
+			object_display (v->sources[i], indent + 1);
+		}
+	}
+}
+
 VIEW *
 view_create (void)
 {
@@ -42,6 +61,7 @@ view_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_VIEW;
 	o->release  = (object_release_fn) view_release;
+	o->display  = (object_display_fn) view_display;
 
 	return v;
 }
@@ -64,24 +84,5 @@ view_add_child (VIEW *v, void *child)
 	v->num_sources++;
 
 	return 1;
-}
-
-void
-view_display (VIEW *v, int indent)
-{
-	if (!v) {
-		return;
-	}
-
-	printf ("%*s\033[1;31m%s\033[m\n", indent * 8, "", v->name);
-
-	if (v->num_sources == 0) {
-		printf ("%*s\033[1;33m[empty]\033[m\n", (indent + 1) * 8, "");
-	} else {
-		int i;
-		for (i = 0; i < v->num_sources; i++) {
-			source_display (v->sources[i], indent + 1);
-		}
-	}
 }
 

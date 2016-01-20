@@ -46,10 +46,10 @@ event_create (void)
 
 	OBJECT *o = &e->item.object;
 
-	o->refcount     = 1;
-	o->type         = MAGIC_EVENT;
-	o->release      = (object_release_fn) event_release;
-	e->item.display = (item_display_fn)   event_display;
+	o->refcount = 1;
+	o->type     = MAGIC_EVENT;
+	o->release  = (object_release_fn) event_release;
+	o->display  = (object_display_fn) event_display;
 
 	return e;
 }

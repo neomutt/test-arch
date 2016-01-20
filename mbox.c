@@ -51,6 +51,7 @@ mbox_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_MBOX;
 	o->release  = (object_release_fn) mbox_release;
+	o->display  = (object_display_fn) source_display;
 
 	return s;
 }

@@ -8,12 +8,9 @@
 typedef struct item_t   ITEM;
 typedef struct folder_t FOLDER;
 
-typedef void (*folder_display_fn) (FOLDER *f, int indent);
-
 typedef struct folder_t {
 	OBJECT object;
 	char *name;
-	folder_display_fn display;
 	int num_folders;
 	struct folder_t *folders[10];
 	int num_items;

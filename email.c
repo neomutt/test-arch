@@ -37,10 +37,10 @@ email_create (void)
 
 	OBJECT *o = &e->item.object;
 
-	o->refcount     = 1;
-	o->type         = MAGIC_EMAIL;
-	o->release      = (object_release_fn) email_release;
-	e->item.display = (item_display_fn)   item_display;
+	o->refcount = 1;
+	o->type     = MAGIC_EMAIL;
+	o->release  = (object_release_fn) email_release;
+	o->display  = (object_display_fn) item_display;
 
 	return e;
 }
