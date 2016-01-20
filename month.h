@@ -9,10 +9,11 @@ typedef struct plugin_t PLUGIN;
 
 extern PLUGIN month_plugin;
 
-typedef struct month_folder_t {
+typedef struct month_t {
 	FOLDER folder;
-} MONTH_FOLDER;
+} MONTH;
 
-MONTH_FOLDER * month_folder_create (void);
+MONTH * month_create (void);
+int month_add_child (MONTH *m, void *child);
 
 #endif // _M_MONTH_H_

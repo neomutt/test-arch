@@ -25,10 +25,8 @@ digraph inherit {
 	object       [ fillcolor="#ffffff" ];
 
 	view         [ fillcolor="#ff4040" ];
-	source       [ fillcolor="#ffff40" ];
-	folder       [ fillcolor="#40ff40" ];
-	item         [ fillcolor="#40ffff" ];
 
+	source       [ fillcolor="#ffff40" ];
 	contact_list [ fillcolor="#ffff40" ];
 	calendar     [ fillcolor="#ffff40" ];
 	imap         [ fillcolor="#ffff40" ];
@@ -37,6 +35,10 @@ digraph inherit {
 	rss          [ fillcolor="#ffff40" ];
 	task_list    [ fillcolor="#ffff40" ];
 
+	folder       [ fillcolor="#40ff40" ];
+	month        [ fillcolor="#40ff40" ];
+
+	item         [ fillcolor="#40ffff" ];
 	article      [ fillcolor="#40ffff" ];
 	contact      [ fillcolor="#40ffff" ];
 	email        [ fillcolor="#40ffff" ];
@@ -47,6 +49,8 @@ digraph inherit {
 	source       -> object;
 	folder       -> object;
 	item         -> object;
+
+	month        -> folder;
 
 	contact_list -> source;
 	calendar     -> source;

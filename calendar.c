@@ -4,6 +4,7 @@
 
 #include "calendar.h"
 #include "email.h"
+#include "event.h"
 #include "folder.h"
 #include "month.h"
 #include "plugin.h"
@@ -20,6 +21,15 @@ calendar_source_free (CALENDAR_SOURCE *s)
 	OBJECT *o = &s->source.object;
 	o->refcount--;
 	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < s->source.num_folders; i++) {
+			object_release (s->source.folders[i]);
+		}
+
+		for (i = 0; i < s->source.num_items; i++) {
+			object_release (s->source.items[i]);
+		}
+
 		free (s->source.name);
 		free (s);
 	}
@@ -65,9 +75,25 @@ calendar_connect (void)
 	s->object.type = MAGIC_CALENDAR;
 	s->name        = strdup ("calendar");
 
-	MONTH_FOLDER *m1 = month_folder_create();
+	MONTH *m1 = month_create();
 
 	m1->folder.name = strdup ("personal");
+
+	// EVENT *e1 = event_create();
+	// EVENT *e2 = event_create();
+	// EVENT *e3 = event_create();
+
+	// e1->item.name = strdup ("Meet Jim");
+	// e2->item.name = strdup ("Bob's birthday");
+	// e3->item.name = strdup ("Dave in town");
+
+	// month_add_child (m1, e1);
+	// month_add_child (m1, e2);
+	// month_add_child (m1, e3);
+
+	// object_release (e1);
+	// object_release (e2);
+	// object_release (e3);
 
 	source_add_child (s, &m1->folder);
 

@@ -30,6 +30,30 @@ folder_free (FOLDER *f)
 	}
 }
 
+static void
+folder_display (FOLDER *f, int indent)
+{
+	if (!f) {
+		return;
+	}
+
+	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->name);
+
+	if ((f->num_items == 0) && (f->num_folders == 0)) {
+		printf ("%*s\033[1;36m[empty]\033[m\n", (indent + 1) * 8, "");
+	} else {
+		int i;
+
+		for (i = 0; i < f->num_items; i++) {
+			item_display (f->items[i], indent + 1);
+		}
+
+		for (i = 0; i < f->num_folders; i++) {
+			folder_display (f->folders[i], indent + 1);
+		}
+	}
+}
+
 FOLDER *
 folder_create (void)
 {
@@ -45,6 +69,7 @@ folder_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_FOLDER;
 	o->release  = (object_release_fn) folder_free;
+	f->display  = (folder_display_fn) folder_display;
 
 	return f;
 }
@@ -73,26 +98,3 @@ folder_add_child (FOLDER *f, void *child)
 	return 1;
 }
 
-void
-folder_display (FOLDER *f, int indent)
-{
-	if (!f) {
-		return;
-	}
-
-	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->name);
-
-	if ((f->num_items == 0) && (f->num_folders == 0)) {
-		printf ("%*s\033[1;36m[empty]\033[m\n", (indent + 1) * 8, "");
-	} else {
-		int i;
-
-		for (i = 0; i < f->num_items; i++) {
-			item_display (f->items[i], indent + 1);
-		}
-
-		for (i = 0; i < f->num_folders; i++) {
-			folder_display (f->folders[i], indent + 1);
-		}
-	}
-}

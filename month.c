@@ -10,7 +10,7 @@
 #include "view.h"
 
 static void
-month_folder_free (MONTH_FOLDER *f)
+month_free (MONTH *f)
 {
 	if (!f) {
 		return;
@@ -33,28 +33,50 @@ month_folder_free (MONTH_FOLDER *f)
 	}
 }
 
-MONTH_FOLDER *
-month_folder_create (void)
+static void
+month_display (FOLDER *f, int indent)
 {
-	MONTH_FOLDER *f = NULL;
-
-	f = calloc (1, sizeof (MONTH_FOLDER));
 	if (!f) {
+		return;
+	}
+
+	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->name);
+
+	printf ("%*s\033[1;36m     January 2016   \033[m\n", (indent + 1) * 8, "");
+	printf ("%*s\033[1;36m 1  2  3  4  5  6  7\033[m\n", (indent + 1) * 8, "");
+	printf ("%*s\033[1;36m 8  9 10 11 12 13 14\033[m\n", (indent + 1) * 8, "");
+	printf ("%*s\033[1;36m15 16 17 18 19 20 21\033[m\n", (indent + 1) * 8, "");
+	printf ("%*s\033[1;36m22 23 24 25 26 27 28\033[m\n", (indent + 1) * 8, "");
+	printf ("%*s\033[1;36m29 30 31            \033[m\n", (indent + 1) * 8, "");
+}
+
+MONTH *
+month_create (void)
+{
+	MONTH *m = NULL;
+
+	m = calloc (1, sizeof (MONTH));
+	if (!m) {
 		return NULL;
 	}
 
-	OBJECT *o = &f->folder.object;
+	OBJECT *o = &m->folder.object;
 
-	o->refcount = 1;
-	o->type     = MAGIC_MONTH;
-	o->release  = (object_release_fn) month_folder_free;
+	o->refcount       = 1;
+	o->type           = MAGIC_MONTH;
+	o->release        = (object_release_fn) month_free;
+	m->folder.display = (folder_display_fn) month_display;
 
-	return f;
+	return m;
 }
 
-void
-month_display (FOLDER *f, int indent)
+int
+month_add_child (MONTH *m, void *child)
 {
-	printf ("1 2 3 4 5 6 7\n");
+	if (!m || !child) {
+		return 0;
+	}
+
+	return 1;
 }
 

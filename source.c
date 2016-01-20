@@ -91,7 +91,8 @@ source_display (SOURCE *src, int indent)
 		}
 
 		for (i = 0; i < src->num_folders; i++) {
-			folder_display (src->folders[i], indent + 1);
+			FOLDER *f = src->folders[i];
+			f->display (f, indent + 1);
 		}
 	}
 }

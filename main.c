@@ -60,10 +60,10 @@ main (int argc, char *argv[])
 		object_release (s);
 	}
 
-	// view_display (v1, 0);
-	// view_display (v2, 0);
-	// view_display (v3, 0);
-	// view_display (v4, 0);
+	view_display (v1, 0);
+	view_display (v2, 0);
+	view_display (v3, 0);
+	view_display (v4, 0);
 	view_display (v5, 0);
 
 	object_release (v1);
