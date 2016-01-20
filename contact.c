@@ -4,19 +4,22 @@
 
 #include "contact.h"
 
-static void
-contact_free (CONTACT *c)
+static int
+contact_release (CONTACT *c)
 {
 	if (!c) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &c->item.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		free (c->item.name);
 		free (c);
 	}
+
+	return rc;
 }
 
 CONTACT *
@@ -33,7 +36,7 @@ contact_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_CONTACT;
-	o->release  = (object_release_fn) contact_free;
+	o->release  = (object_release_fn) contact_release;
 
 	return c;
 }

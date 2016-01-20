@@ -9,15 +9,16 @@
 #include "source.h"
 #include "view.h"
 
-static void
-mbox_source_free (MBOX_SOURCE *s)
+static int
+mbox_source_release (MBOX_SOURCE *s)
 {
 	if (!s) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &s->source.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
@@ -31,6 +32,8 @@ mbox_source_free (MBOX_SOURCE *s)
 		free (s->source.name);
 		free (s);
 	}
+
+	return rc;
 }
 
 MBOX_SOURCE *
@@ -47,7 +50,7 @@ mbox_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_MBOX;
-	o->release  = (object_release_fn) mbox_source_free;
+	o->release  = (object_release_fn) mbox_source_release;
 
 	return s;
 }

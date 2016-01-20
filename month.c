@@ -9,15 +9,16 @@
 #include "folder.h"
 #include "view.h"
 
-static void
-month_free (MONTH *f)
+static int
+month_release (MONTH *f)
 {
 	if (!f) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &f->folder.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < f->folder.num_folders; i++) {
@@ -31,6 +32,8 @@ month_free (MONTH *f)
 		free (f->folder.name);
 		free (f);
 	}
+
+	return rc;
 }
 
 static void
@@ -64,7 +67,7 @@ month_create (void)
 
 	o->refcount       = 1;
 	o->type           = MAGIC_MONTH;
-	o->release        = (object_release_fn) month_free;
+	o->release        = (object_release_fn) month_release;
 	m->folder.display = (folder_display_fn) month_display;
 
 	return m;

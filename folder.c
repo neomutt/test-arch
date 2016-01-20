@@ -4,20 +4,21 @@
 #include "folder.h"
 #include "item.h"
 
-static void
-folder_free (FOLDER *f)
+static int
+folder_release (FOLDER *f)
 {
 	if (!f) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &f->object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < f->num_folders; i++) {
 			// printf ("freeing folder %p\n", (void*) f->folders[i]);
-			folder_free (f->folders[i]);
+			folder_release (f->folders[i]);
 		}
 
 		for (i = 0; i < f->num_items; i++) {
@@ -28,6 +29,8 @@ folder_free (FOLDER *f)
 		free (f->name);
 		free (f);
 	}
+
+	return rc;
 }
 
 static void
@@ -68,7 +71,7 @@ folder_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_FOLDER;
-	o->release  = (object_release_fn) folder_free;
+	o->release  = (object_release_fn) folder_release;
 	f->display  = (folder_display_fn) folder_display;
 
 	return f;

@@ -4,19 +4,22 @@
 
 #include "event.h"
 
-static void
-event_free (EVENT *e)
+static int
+event_release (EVENT *e)
 {
 	if (!e) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &e->item.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		free (e->item.name);
 		free (e);
 	}
+
+	return rc;
 }
 
 EVENT *
@@ -33,7 +36,7 @@ event_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_EVENT;
-	o->release  = (object_release_fn) event_free;
+	o->release  = (object_release_fn) event_release;
 
 	return e;
 }

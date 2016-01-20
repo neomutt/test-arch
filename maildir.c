@@ -9,15 +9,16 @@
 #include "source.h"
 #include "view.h"
 
-static void
-maildir_source_free (MAILDIR_SOURCE *s)
+static int
+maildir_source_release (MAILDIR_SOURCE *s)
 {
 	if (!s) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &s->source.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
@@ -31,6 +32,8 @@ maildir_source_free (MAILDIR_SOURCE *s)
 		free (s->source.name);
 		free (s);
 	}
+
+	return rc;
 }
 
 MAILDIR_SOURCE *
@@ -47,7 +50,7 @@ maildir_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_MAILDIR;
-	o->release  = (object_release_fn) maildir_source_free;
+	o->release  = (object_release_fn) maildir_source_release;
 
 	return s;
 }

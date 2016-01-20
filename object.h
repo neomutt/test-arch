@@ -1,7 +1,7 @@
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
 
-typedef void (*object_release_fn) (void*);
+typedef int (*object_release_fn) (void*);
 
 typedef struct object_t {
 	int type;

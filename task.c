@@ -4,19 +4,22 @@
 
 #include "task.h"
 
-static void
-task_free (TASK *t)
+static int
+task_release (TASK *t)
 {
 	if (!t) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &t->item.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		free (t->item.name);
 		free (t);
 	}
+
+	return rc;
 }
 
 TASK *
@@ -33,7 +36,7 @@ task_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_TASK;
-	o->release  = (object_release_fn) task_free;
+	o->release  = (object_release_fn) task_release;
 
 	return t;
 }

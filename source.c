@@ -4,15 +4,16 @@
 #include "folder.h"
 #include "source.h"
 
-static void
-source_free (SOURCE *src)
+static int
+source_release (SOURCE *src)
 {
 	if (!src) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &src->object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < src->num_folders; i++) {
@@ -28,6 +29,8 @@ source_free (SOURCE *src)
 		free (src->name);
 		free (src);
 	}
+
+	return rc;
 }
 
 SOURCE *
@@ -43,7 +46,7 @@ source_create (void)
 	OBJECT *o = &s->object;
 	o->refcount = 1;
 	o->type     = MAGIC_SOURCE;
-	o->release  = (object_release_fn) source_free;
+	o->release  = (object_release_fn) source_release;
 
 	return s;
 }

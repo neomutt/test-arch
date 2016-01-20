@@ -4,15 +4,16 @@
 #include "source.h"
 #include "view.h"
 
-static void
-view_free (VIEW *v)
+static int
+view_release (VIEW *v)
 {
 	if (!v) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &v->object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < v->num_sources; i++) {
@@ -23,6 +24,8 @@ view_free (VIEW *v)
 		free (v->name);
 		free (v);
 	}
+
+	return rc;
 }
 
 VIEW *
@@ -38,7 +41,7 @@ view_create (void)
 	OBJECT *o = &v->object;
 	o->refcount = 1;
 	o->type     = MAGIC_VIEW;
-	o->release  = (object_release_fn) view_free;
+	o->release  = (object_release_fn) view_release;
 
 	return v;
 }

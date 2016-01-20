@@ -10,15 +10,16 @@
 #include "source.h"
 #include "view.h"
 
-static void
-contact_list_source_free (CONTACT_LIST_SOURCE *s)
+static int
+contact_list_source_release (CONTACT_LIST_SOURCE *s)
 {
 	if (!s) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &s->source.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
@@ -32,6 +33,8 @@ contact_list_source_free (CONTACT_LIST_SOURCE *s)
 		free (s->source.name);
 		free (s);
 	}
+
+	return rc;
 }
 
 CONTACT_LIST_SOURCE *
@@ -48,7 +51,7 @@ contact_list_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_CONTACT_LIST;
-	o->release  = (object_release_fn) contact_list_source_free;
+	o->release  = (object_release_fn) contact_list_source_release;
 
 	return s;
 }

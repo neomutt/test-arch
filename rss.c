@@ -11,15 +11,16 @@
 #include "task.h"
 #include "view.h"
 
-static void
-rss_source_free (RSS_SOURCE *s)
+static int
+rss_source_release (RSS_SOURCE *s)
 {
 	if (!s) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &s->source.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < s->source.num_folders; i++) {
@@ -37,6 +38,8 @@ rss_source_free (RSS_SOURCE *s)
 		free (s->source.name);
 		free (s);
 	}
+
+	return rc;
 }
 
 RSS_SOURCE *
@@ -53,7 +56,7 @@ rss_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_RSS;
-	o->release  = (object_release_fn) rss_source_free;
+	o->release  = (object_release_fn) rss_source_release;
 
 	return s;
 }

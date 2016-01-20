@@ -3,19 +3,22 @@
 
 #include "item.h"
 
-static void
-item_free (ITEM *i)
+static int
+item_release (ITEM *i)
 {
 	if (!i) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &i->object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		free (i->name);
 		free (i);
 	}
+
+	return rc;
 }
 
 ITEM *
@@ -31,7 +34,7 @@ item_create (void)
 	OBJECT *o = &i->object;
 	o->refcount = 1;
 	o->type     = MAGIC_ITEM;
-	o->release  = (object_release_fn) item_free;
+	o->release  = (object_release_fn) item_release;
 
 	return i;
 }

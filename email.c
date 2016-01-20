@@ -4,15 +4,16 @@
 
 #include "email.h"
 
-static void
-email_free (EMAIL *e)
+static int
+email_release (EMAIL *e)
 {
 	if (!e) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &e->item.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		free (e->item.name);
 		free (e->from);
@@ -20,6 +21,8 @@ email_free (EMAIL *e)
 		free (e->subject);
 		free (e);
 	}
+
+	return rc;
 }
 
 EMAIL *
@@ -36,7 +39,7 @@ email_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_EMAIL;
-	o->release  = (object_release_fn) email_free;
+	o->release  = (object_release_fn) email_release;
 
 	return e;
 }

@@ -4,19 +4,22 @@
 
 #include "article.h"
 
-static void
-article_free (ARTICLE *a)
+static int
+article_release (ARTICLE *a)
 {
 	if (!a) {
-		return;
+		return -1;
 	}
 
 	OBJECT *o = &a->item.object;
 	o->refcount--;
+	int rc = o->refcount;
 	if (o->refcount < 1) {
 		free (a->item.name);
 		free (a);
 	}
+
+	return rc;
 }
 
 ARTICLE *
@@ -33,7 +36,7 @@ article_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_ARTICLE;
-	o->release  = (object_release_fn) article_free;
+	o->release  = (object_release_fn) article_release;
 
 	return a;
 }
