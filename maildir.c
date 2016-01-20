@@ -10,7 +10,7 @@
 #include "view.h"
 
 static int
-maildir_source_release (MAILDIR_SOURCE *s)
+maildir_release (MAILDIR_SOURCE *s)
 {
 	if (!s) {
 		return -1;
@@ -36,8 +36,8 @@ maildir_source_release (MAILDIR_SOURCE *s)
 	return rc;
 }
 
-MAILDIR_SOURCE *
-maildir_source_create (void)
+static MAILDIR_SOURCE *
+maildir_create (void)
 {
 	MAILDIR_SOURCE *s = NULL;
 
@@ -50,23 +50,23 @@ maildir_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_MAILDIR;
-	o->release  = (object_release_fn) maildir_source_release;
+	o->release  = (object_release_fn) maildir_release;
 
 	return s;
 }
 
-int
+static int
 maildir_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 maildir_connect (void)
 {
 	MAILDIR_SOURCE *ms = NULL;
 
-	ms = maildir_source_create();
+	ms = maildir_create();
 	if (!ms) {
 		return NULL;
 	}
@@ -125,7 +125,7 @@ maildir_connect (void)
 	return s;
 }
 
-int
+static int
 maildir_config_item (const char *name)
 {
 	if (!name) {
@@ -140,7 +140,7 @@ maildir_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 maildir_disconnect (void)
 {
 }

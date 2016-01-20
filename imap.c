@@ -10,7 +10,7 @@
 #include "view.h"
 
 static int
-imap_source_release (IMAP_SOURCE *s)
+imap_release (IMAP_SOURCE *s)
 {
 	if (!s) {
 		return -1;
@@ -36,8 +36,8 @@ imap_source_release (IMAP_SOURCE *s)
 	return rc;
 }
 
-IMAP_SOURCE *
-imap_source_create (void)
+static IMAP_SOURCE *
+imap_create (void)
 {
 	IMAP_SOURCE *s = NULL;
 
@@ -50,23 +50,23 @@ imap_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_IMAP;
-	o->release  = (object_release_fn) imap_source_release;
+	o->release  = (object_release_fn) imap_release;
 
 	return s;
 }
 
-int
+static int
 imap_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 imap_connect (void)
 {
 	IMAP_SOURCE *is = NULL;
 
-	is = imap_source_create();
+	is = imap_create();
 	if (!is) {
 		return NULL;
 	}
@@ -123,7 +123,7 @@ imap_connect (void)
 	return s;
 }
 
-int
+static int
 imap_config_item (const char *name)
 {
 	if (!name) {
@@ -138,7 +138,7 @@ imap_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 imap_disconnect (void)
 {
 }

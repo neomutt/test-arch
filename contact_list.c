@@ -11,7 +11,7 @@
 #include "view.h"
 
 static int
-contact_list_source_release (CONTACT_LIST_SOURCE *s)
+contact_list_release (CONTACT_LIST_SOURCE *s)
 {
 	if (!s) {
 		return -1;
@@ -37,8 +37,8 @@ contact_list_source_release (CONTACT_LIST_SOURCE *s)
 	return rc;
 }
 
-CONTACT_LIST_SOURCE *
-contact_list_source_create (void)
+static CONTACT_LIST_SOURCE *
+contact_list_create (void)
 {
 	CONTACT_LIST_SOURCE *s = NULL;
 
@@ -51,23 +51,23 @@ contact_list_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_CONTACT_LIST;
-	o->release  = (object_release_fn) contact_list_source_release;
+	o->release  = (object_release_fn) contact_list_release;
 
 	return s;
 }
 
-int
+static int
 contact_list_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 contact_list_connect (void)
 {
 	CONTACT_LIST_SOURCE *cs = NULL;
 
-	cs = contact_list_source_create();
+	cs = contact_list_create();
 	if (!cs) {
 		return NULL;
 	}
@@ -153,7 +153,7 @@ contact_list_connect (void)
 	return s;
 }
 
-int
+static int
 contact_list_config_item (const char *name)
 {
 	if (!name) {
@@ -168,7 +168,7 @@ contact_list_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 contact_list_disconnect (void)
 {
 }

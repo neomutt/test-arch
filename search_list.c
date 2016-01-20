@@ -10,7 +10,7 @@
 #include "view.h"
 
 static int
-search_list_source_release (SEARCH_LIST_SOURCE *s)
+search_list_release (SEARCH_LIST_SOURCE *s)
 {
 	if (!s) {
 		return -1;
@@ -36,8 +36,8 @@ search_list_source_release (SEARCH_LIST_SOURCE *s)
 	return rc;
 }
 
-SEARCH_LIST_SOURCE *
-search_list_source_create (void)
+static SEARCH_LIST_SOURCE *
+search_list_create (void)
 {
 	SEARCH_LIST_SOURCE *s = NULL;
 
@@ -50,23 +50,23 @@ search_list_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_SEARCH_LIST;
-	o->release  = (object_release_fn) search_list_source_release;
+	o->release  = (object_release_fn) search_list_release;
 
 	return s;
 }
 
-int
+static int
 search_list_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 search_list_connect (void)
 {
 	SEARCH_LIST_SOURCE *is = NULL;
 
-	is = search_list_source_create();
+	is = search_list_create();
 	if (!is) {
 		return NULL;
 	}
@@ -123,7 +123,7 @@ search_list_connect (void)
 	return s;
 }
 
-int
+static int
 search_list_config_item (const char *name)
 {
 	if (!name) {
@@ -138,7 +138,7 @@ search_list_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 search_list_disconnect (void)
 {
 }

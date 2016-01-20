@@ -10,7 +10,7 @@
 #include "view.h"
 
 static int
-mbox_source_release (MBOX_SOURCE *s)
+mbox_release (MBOX_SOURCE *s)
 {
 	if (!s) {
 		return -1;
@@ -36,8 +36,8 @@ mbox_source_release (MBOX_SOURCE *s)
 	return rc;
 }
 
-MBOX_SOURCE *
-mbox_source_create (void)
+static MBOX_SOURCE *
+mbox_create (void)
 {
 	MBOX_SOURCE *s = NULL;
 
@@ -50,23 +50,23 @@ mbox_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_MBOX;
-	o->release  = (object_release_fn) mbox_source_release;
+	o->release  = (object_release_fn) mbox_release;
 
 	return s;
 }
 
-int
+static int
 mbox_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 mbox_connect (void)
 {
 	MBOX_SOURCE *ms = NULL;
 
-	ms = mbox_source_create();
+	ms = mbox_create();
 	if (!ms) {
 		return NULL;
 	}
@@ -108,7 +108,7 @@ mbox_connect (void)
 	return s;
 }
 
-int
+static int
 mbox_config_item (const char *name)
 {
 	if (!name) {
@@ -123,7 +123,7 @@ mbox_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 mbox_disconnect (void)
 {
 }

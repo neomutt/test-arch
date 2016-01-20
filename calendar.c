@@ -12,7 +12,7 @@
 #include "view.h"
 
 static int
-calendar_source_release (CALENDAR_SOURCE *s)
+calendar_release (CALENDAR_SOURCE *s)
 {
 	if (!s) {
 		return -1;
@@ -38,8 +38,8 @@ calendar_source_release (CALENDAR_SOURCE *s)
 	return rc;
 }
 
-CALENDAR_SOURCE *
-calendar_source_create (void)
+static CALENDAR_SOURCE *
+calendar_create (void)
 {
 	CALENDAR_SOURCE *s = NULL;
 
@@ -52,23 +52,23 @@ calendar_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_CALENDAR;
-	o->release  = (object_release_fn) calendar_source_release;
+	o->release  = (object_release_fn) calendar_release;
 
 	return s;
 }
 
-int
+static int
 calendar_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 calendar_connect (void)
 {
 	CALENDAR_SOURCE *is = NULL;
 
-	is = calendar_source_create();
+	is = calendar_create();
 	if (!is) {
 		return NULL;
 	}
@@ -111,7 +111,7 @@ calendar_connect (void)
 	return s;
 }
 
-int
+static int
 calendar_config_item (const char *name)
 {
 	if (!name) {
@@ -126,7 +126,7 @@ calendar_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 calendar_disconnect (void)
 {
 }

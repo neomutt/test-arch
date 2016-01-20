@@ -12,7 +12,7 @@
 #include "view.h"
 
 static int
-rss_source_release (RSS_SOURCE *s)
+rss_release (RSS_SOURCE *s)
 {
 	if (!s) {
 		return -1;
@@ -42,8 +42,8 @@ rss_source_release (RSS_SOURCE *s)
 	return rc;
 }
 
-RSS_SOURCE *
-rss_source_create (void)
+static RSS_SOURCE *
+rss_create (void)
 {
 	RSS_SOURCE *s = NULL;
 
@@ -56,23 +56,23 @@ rss_source_create (void)
 
 	o->refcount = 1;
 	o->type     = MAGIC_RSS;
-	o->release  = (object_release_fn) rss_source_release;
+	o->release  = (object_release_fn) rss_release;
 
 	return s;
 }
 
-int
+static int
 rss_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 rss_connect (void)
 {
 	RSS_SOURCE *rs = NULL;
 
-	rs = rss_source_create();
+	rs = rss_create();
 	if (!rs) {
 		return NULL;
 	}
@@ -151,7 +151,7 @@ rss_connect (void)
 	return s;
 }
 
-int
+static int
 rss_config_item (const char *name)
 {
 	if (!name) {
@@ -166,7 +166,7 @@ rss_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 rss_disconnect (void)
 {
 }

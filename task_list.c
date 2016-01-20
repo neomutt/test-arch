@@ -10,21 +10,69 @@
 #include "source.h"
 #include "view.h"
 
-int
+static int
+task_list_release (TASK_LIST_SOURCE *t)
+{
+	if (!t) {
+		return -1;
+	}
+
+	OBJECT *o = &t->source.object;
+	o->refcount--;
+	int rc = o->refcount;
+	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < t->source.num_folders; i++) {
+			object_release (t->source.folders[i]);
+		}
+
+		for (i = 0; i < t->source.num_items; i++) {
+			object_release (t->source.items[i]);
+		}
+
+		free (t->source.name);
+		free (t);
+	}
+
+	return rc;
+}
+
+static TASK_LIST_SOURCE *
+task_list_create (void)
+{
+	TASK_LIST_SOURCE *t = NULL;
+
+	t = calloc (1, sizeof (TASK_LIST_SOURCE));
+	if (!t) {
+		return NULL;
+	}
+
+	OBJECT *o = &t->source.object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_TASK_LIST;
+	o->release  = (object_release_fn) task_list_release;
+
+	return t;
+}
+
+static int
 task_list_init (void)
 {
 	return 1;
 }
 
-SOURCE *
+static SOURCE *
 task_list_connect (void)
 {
-	SOURCE *s = NULL;
+	TASK_LIST_SOURCE *ts = NULL;
 
-	s = source_create();
-	if (!s) {
+	ts = task_list_create();
+	if (!ts) {
 		return NULL;
 	}
+
+	SOURCE *s = &ts->source;
 
 	s->object.type = MAGIC_TASK_LIST;
 	s->name        = strdup ("task list");
@@ -95,7 +143,7 @@ task_list_connect (void)
 	return s;
 }
 
-int
+static int
 task_list_config_item (const char *name)
 {
 	if (!name) {
@@ -110,7 +158,7 @@ task_list_config_item (const char *name)
 	return 0;
 }
 
-void
+static void
 task_list_disconnect (void)
 {
 }
