@@ -29,7 +29,7 @@ nntp_connect (void)
 	}
 
 	s->object.type = MAGIC_NNTP;
-	s->name        = strdup ("nntp");
+	s->object.name = strdup ("nntp");
 
 	// Pretend to read something
 
@@ -42,9 +42,9 @@ nntp_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("alt.swedish.chef");
-	f2->name = strdup ("rec.arts.poems");
-	f3->name = strdup ("sci.fractals");
+	f1->object.name = strdup ("alt.swedish.chef");
+	f2->object.name = strdup ("rec.arts.poems");
+	f3->object.name = strdup ("sci.fractals");
 
 	EMAIL *e1 = email_create();
 	EMAIL *e2 = email_create();
@@ -59,13 +59,13 @@ nntp_connect (void)
 		return NULL;
 	}
 
-	e1->item.name = strdup ("bork");
-	e2->item.name = strdup ("bork");
-	e3->item.name = strdup ("bork");
-	e4->item.name = strdup ("daffodils");
-	e5->item.name = strdup ("elegy");
-	e6->item.name = strdup ("mandelbrot");
-	e7->item.name = strdup ("siepinski");
+	e1->item.object.name = strdup ("bork");
+	e2->item.object.name = strdup ("bork");
+	e3->item.object.name = strdup ("bork");
+	e4->item.object.name = strdup ("daffodils");
+	e5->item.object.name = strdup ("elegy");
+	e6->item.object.name = strdup ("mandelbrot");
+	e7->item.object.name = strdup ("siepinski");
 
 	folder_add_child (f1, e1);
 	folder_add_child (f1, e2);

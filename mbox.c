@@ -29,7 +29,7 @@ mbox_release (MBOX_SOURCE *s)
 			object_release (s->source.items[i]);
 		}
 
-		free (s->source.name);
+		free (o->name);
 		free (s);
 	}
 
@@ -75,7 +75,7 @@ mbox_connect (void)
 	SOURCE *s = &ms->source;
 
 	s->object.type = MAGIC_MBOX;
-	s->name        = strdup ("mbox");
+	s->object.name = strdup ("mbox");
 
 	FOLDER *f1 = folder_create();
 	if (!f1) {
@@ -83,7 +83,7 @@ mbox_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("music");
+	f1->object.name = strdup ("music");
 
 	const char *names[] = { "acdc", "beatles", "cream", "doors", NULL };
 
@@ -96,7 +96,7 @@ mbox_connect (void)
 			printf ("imap_connect: email_create failed\n");
 			return NULL;
 		}
-		e->item.name = strdup (names[i]);
+		e->item.object.name = strdup (names[i]);
 
 		folder_add_child (f1, e);
 		object_release (e);

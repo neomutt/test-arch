@@ -29,7 +29,7 @@ imap_release (IMAP_SOURCE *s)
 			object_release (s->source.items[i]);
 		}
 
-		free (s->source.name);
+		free (s->source.object.name);
 		free (s);
 	}
 
@@ -75,7 +75,7 @@ imap_connect (void)
 	SOURCE *s = &is->source;
 
 	s->object.type = MAGIC_IMAP;
-	s->name        = strdup ("imap");
+	s->object.name = strdup ("imap");
 
 	FOLDER *f1 = folder_create();
 	FOLDER *f2 = folder_create();
@@ -86,9 +86,9 @@ imap_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("fruit");
-	f2->name = strdup ("cars");
-	f3->name = strdup ("girls");
+	f1->object.name = strdup ("fruit");
+	f2->object.name = strdup ("cars");
+	f3->object.name = strdup ("girls");
 
 	const char *names[] = { "apple", "banana", "cherry", "audi", "bentley", "anna", "bella", NULL };
 
@@ -101,7 +101,7 @@ imap_connect (void)
 			printf ("imap_connect: email_create failed\n");
 			return NULL;
 		}
-		e->item.name = strdup (names[i]);
+		e->item.object.name = strdup (names[i]);
 
 		if (i < 3) {
 			folder_add_child (f1, e);

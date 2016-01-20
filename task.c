@@ -15,7 +15,7 @@ task_release (TASK *t)
 	o->refcount--;
 	int rc = o->refcount;
 	if (o->refcount < 1) {
-		free (t->item.name);
+		free (t->item.object.name);
 		free (t);
 	}
 

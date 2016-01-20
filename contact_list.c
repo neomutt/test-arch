@@ -30,7 +30,7 @@ contact_list_release (CONTACT_LIST_SOURCE *s)
 			object_release (s->source.items[i]);
 		}
 
-		free (s->source.name);
+		free (o->name);
 		free (s);
 	}
 
@@ -76,7 +76,7 @@ contact_list_connect (void)
 	SOURCE *s = &cs->source;
 
 	s->object.type = MAGIC_CONTACT_LIST;
-	s->name        = strdup ("contact list");
+	s->object.name = strdup ("contact list");
 
 	const char *names[] = { "avon",   "bedford", "cornwall", "devon dog",         "essex echidna",     "ferrari", "gloucestershire goat", "horse",  "igloo", NULL   };
 	const C_TAGS tags[] = { C_COUNTY, C_COUNTY,  C_COUNTY,   C_COUNTY | C_ANIMAL, C_COUNTY | C_ANIMAL, C_CAR,     C_COUNTY | C_ANIMAL,    C_ANIMAL, C_NONE,  C_NONE };
@@ -90,8 +90,8 @@ contact_list_connect (void)
 			printf ("contact_list_connect: contact_create failed\n");
 			return NULL;
 		}
-		contacts[i]->item.name = strdup (names[i]);
-		contacts[i]->tags      = tags[i];
+		contacts[i]->item.object.name = strdup (names[i]);
+		contacts[i]->tags             = tags[i];
 
 		source_add_child (s, contacts[i]);	// Source owns all contacts
 	}
@@ -108,10 +108,10 @@ contact_list_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("county");
-	f2->name = strdup ("animal");
-	f3->name = strdup ("county + animal");
-	f4->name = strdup ("untagged");
+	f1->object.name = strdup ("county");
+	f2->object.name = strdup ("animal");
+	f3->object.name = strdup ("county + animal");
+	f4->object.name = strdup ("untagged");
 
 	for (i = 0; contacts[i]; i++) {
 		if (contacts[i]->tags & C_COUNTY) {

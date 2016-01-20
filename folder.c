@@ -26,7 +26,7 @@ folder_release (FOLDER *f)
 			object_release (f->items[i]);
 		}
 
-		free (f->name);
+		free (o->name);
 		free (f);
 	}
 
@@ -40,7 +40,7 @@ folder_display (FOLDER *f, int indent)
 		return;
 	}
 
-	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->name);
+	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->object.name);
 
 	if ((f->num_items == 0) && (f->num_folders == 0)) {
 		printf ("%*s\033[1;36m[empty]\033[m\n", (indent + 1) * 8, "");

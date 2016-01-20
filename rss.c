@@ -35,7 +35,7 @@ rss_release (RSS_SOURCE *s)
 			object_release (s->feeds[i]);
 		}
 
-		free (s->source.name);
+		free (o->name);
 		free (s);
 	}
 
@@ -81,7 +81,7 @@ rss_connect (void)
 	SOURCE *s = &rs->source;
 
 	s->object.type = MAGIC_RSS;
-	s->name        = strdup ("rss");
+	s->object.name = strdup ("rss");
 
 	const char *feeds[] = { "slashdot.org", "arstechnica.co.uk", "bbc.co.uk", NULL };
 
@@ -93,7 +93,7 @@ rss_connect (void)
 			printf ("rss_connect: folder_create failed\n");
 			return NULL;
 		}
-		rs->feeds[i]->name = strdup (feeds[i]);
+		rs->feeds[i]->object.name = strdup (feeds[i]);
 
 		source_add_child (s, rs->feeds[i]);	// Source owns all feeds
 
@@ -111,7 +111,7 @@ rss_connect (void)
 			return NULL;
 		}
 
-		a->item.name = strdup (names[i]);
+		a->item.object.name = strdup (names[i]);
 
 		if (i < 3) {
 			folder_add_child (rs->feeds[0], a);
@@ -132,8 +132,8 @@ rss_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("tech");
-	f2->name = strdup ("news");
+	f1->object.name = strdup ("tech");
+	f2->object.name = strdup ("news");
 
 	for (i = 0; rs->feeds[i]; i++) {
 		if (i < 2) {

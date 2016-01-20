@@ -14,7 +14,7 @@ item_release (ITEM *i)
 	o->refcount--;
 	int rc = o->refcount;
 	if (o->refcount < 1) {
-		free (i->name);
+		free (o->name);
 		free (i);
 	}
 
@@ -28,7 +28,7 @@ item_display (ITEM *i, int indent)
 		return;
 	}
 
-	printf ("%*s\033[1;36m%s\033[m\n", indent * 8, "", i->name);
+	printf ("%*s\033[1;36m%s\033[m\n", indent * 8, "", i->object.name);
 }
 
 ITEM *

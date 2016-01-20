@@ -15,7 +15,7 @@ email_release (EMAIL *e)
 	o->refcount--;
 	int rc = o->refcount;
 	if (o->refcount < 1) {
-		free (e->item.name);
+		free (o->name);
 		free (e->from);
 		free (e->to);
 		free (e->subject);

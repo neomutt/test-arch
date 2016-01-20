@@ -30,7 +30,7 @@ task_list_release (TASK_LIST_SOURCE *t)
 			object_release (t->source.items[i]);
 		}
 
-		free (t->source.name);
+		free (t->source.object.name);
 		free (t);
 	}
 
@@ -76,7 +76,7 @@ task_list_connect (void)
 	SOURCE *s = &ts->source;
 
 	s->object.type = MAGIC_TASK_LIST;
-	s->name        = strdup ("task list");
+	s->object.name = strdup ("task list");
 
 	const char *names[] = { "ironing", "read book",          "plan holiday",       "play football", "get a suntan", NULL   };
 	const T_TAGS tags[] = { T_INSIDE,  T_INSIDE | T_OUTSIDE, T_INSIDE | T_OUTSIDE, T_OUTSIDE,       T_OUTSIDE,      T_NONE };
@@ -90,8 +90,8 @@ task_list_connect (void)
 			printf ("task_list_connect: item_create failed\n");
 			return NULL;
 		}
-		tasks[i]->item.name = strdup (names[i]);
-		tasks[i]->tags      = tags[i];
+		tasks[i]->item.object.name = strdup (names[i]);
+		tasks[i]->tags             = tags[i];
 
 		source_add_child (s, tasks[i]);	// Source owns all tasks
 	}
@@ -107,9 +107,9 @@ task_list_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("inside");
-	f2->name = strdup ("outside");
-	f3->name = strdup ("untagged");
+	f1->object.name = strdup ("inside");
+	f2->object.name = strdup ("outside");
+	f3->object.name = strdup ("untagged");
 
 	for (i = 0; tasks[i]; i++) {
 		if (tasks[i]->tags & T_INSIDE) {

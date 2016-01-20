@@ -7,7 +7,6 @@
 
 typedef struct item_t {
 	OBJECT object;
-	char *name;
 } ITEM;
 
 ITEM * item_create (void);

@@ -9,7 +9,6 @@ typedef struct source_t SOURCE;
 
 typedef struct view_t {
 	OBJECT object;
-	char *name;
 	int num_sources;
 	SOURCE *sources[10];
 } VIEW;

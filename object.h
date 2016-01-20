@@ -7,6 +7,7 @@ typedef void (*object_display_fn) (void *obj, int indent);
 typedef struct object_t {
 	int type;
 	int refcount;
+	char *name;
 	object_release_fn release;
 	object_display_fn display;
 } OBJECT;

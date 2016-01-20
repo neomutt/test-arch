@@ -21,7 +21,7 @@ view_release (VIEW *v)
 			object_release (v->sources[i]);
 		}
 
-		free (v->name);
+		free (o->name);
 		free (v);
 	}
 
@@ -35,7 +35,7 @@ view_display (VIEW *v, int indent)
 		return;
 	}
 
-	printf ("%*s\033[1;31m%s\033[m\n", indent * 8, "", v->name);
+	printf ("%*s\033[1;31m%s\033[m\n", indent * 8, "", v->object.name);
 
 	if (v->num_sources == 0) {
 		printf ("%*s\033[1;33m[empty]\033[m\n", (indent + 1) * 8, "");

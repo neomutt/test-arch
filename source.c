@@ -26,7 +26,7 @@ source_release (SOURCE *src)
 			object_release (src->items[i]);
 		}
 
-		free (src->name);
+		free (o->name);
 		free (src);
 	}
 
@@ -40,7 +40,7 @@ source_display (SOURCE *src, int indent)
 		return;
 	}
 
-	printf ("%*s\033[1;33m%s\033[m\n", indent * 8, "", src->name);
+	printf ("%*s\033[1;33m%s\033[m\n", indent * 8, "", src->object.name);
 
 	if (src->num_folders == 0) {
 		printf ("%*s\033[1;32m[empty]\033[m\n", (indent + 1) * 8, "");

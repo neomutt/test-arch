@@ -10,7 +10,6 @@ typedef struct folder_t FOLDER;
 
 typedef struct source_t {
 	OBJECT object;
-	char *name;
 	int num_folders;
 	FOLDER *folders[10];
 	int num_items;

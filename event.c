@@ -15,7 +15,7 @@ event_release (EVENT *e)
 	o->refcount--;
 	int rc = o->refcount;
 	if (o->refcount < 1) {
-		free (e->item.name);
+		free (e->item.object.name);
 		free (e);
 	}
 
@@ -31,7 +31,7 @@ event_display (ITEM *i, int indent)
 
 	EVENT *e = (EVENT*) i;
 
-	printf ("%*s\033[1;36m%2d %s\033[m\n", indent * 8, "", e->day, i->name);
+	printf ("%*s\033[1;36m%2d %s\033[m\n", indent * 8, "", e->day, i->object.name);
 }
 
 EVENT *

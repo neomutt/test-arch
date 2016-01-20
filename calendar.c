@@ -31,7 +31,7 @@ calendar_release (CALENDAR_SOURCE *s)
 			object_release (s->source.items[i]);
 		}
 
-		free (s->source.name);
+		free (o->name);
 		free (s);
 	}
 
@@ -77,21 +77,21 @@ calendar_connect (void)
 	SOURCE *s = &is->source;
 
 	s->object.type = MAGIC_CALENDAR;
-	s->name        = strdup ("calendar");
+	s->object.name = strdup ("calendar");
 
 	MONTH *m1 = month_create();
 
-	m1->folder.name = strdup ("personal");
-	m1->year        = 2016;
-	m1->month       = 1;
+	m1->folder.object.name = strdup ("personal");
+	m1->year               = 2016;
+	m1->month              = 1;
 
 	EVENT *e1 = event_create();
 	EVENT *e2 = event_create();
 	EVENT *e3 = event_create();
 
-	e1->item.name = strdup ("Meet Jim");
-	e2->item.name = strdup ("Bob's birthday");
-	e3->item.name = strdup ("Dave in town");
+	e1->item.object.name = strdup ("Meet Jim");
+	e2->item.object.name = strdup ("Bob's birthday");
+	e3->item.object.name = strdup ("Dave in town");
 
 	e1->day = 7;
 	e2->day = 12;

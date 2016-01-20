@@ -36,12 +36,12 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	v1->name = strdup ("mail");
-	v2->name = strdup ("contacts");
-	v3->name = strdup ("tasks");
-	v4->name = strdup ("news");
-	v5->name = strdup ("calendar");
-	v6->name = strdup ("search");
+	v1->object.name = strdup ("mail");
+	v2->object.name = strdup ("contacts");
+	v3->object.name = strdup ("tasks");
+	v4->object.name = strdup ("news");
+	v5->object.name = strdup ("calendar");
+	v6->object.name = strdup ("search");
 
 	for (i = 0; plugins[i]; i++) {
 		SOURCE *s = plugins[i]->connect();

@@ -30,7 +30,7 @@ month_release (MONTH *f)
 			object_release (f->folder.items[i]);
 		}
 
-		free (f->folder.name);
+		free (f->folder.object.name);
 		free (f);
 	}
 
@@ -50,7 +50,7 @@ month_display (FOLDER *f, int indent)
 
 	MONTH *m = (MONTH*) f;
 
-	printf ("%s\033[1;32m%s\033[m\n", istr + 1, f->name);
+	printf ("%s\033[1;32m%s\033[m\n", istr + 1, f->object.name);
 
 	printf ("%s\033[1;36;7m  %s %d  \033[m\n", istr, months[m->month - 1], m->year);
 

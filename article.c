@@ -15,7 +15,7 @@ article_release (ARTICLE *a)
 	o->refcount--;
 	int rc = o->refcount;
 	if (o->refcount < 1) {
-		free (a->item.name);
+		free (a->item.object.name);
 		free (a);
 	}
 

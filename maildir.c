@@ -29,7 +29,7 @@ maildir_release (MAILDIR_SOURCE *s)
 			object_release (s->source.items[i]);
 		}
 
-		free (s->source.name);
+		free (o->name);
 		free (s);
 	}
 
@@ -75,7 +75,7 @@ maildir_connect (void)
 	SOURCE *s = &ms->source;
 
 	s->object.type = MAGIC_MAILDIR;
-	s->name        = strdup ("maildir");
+	s->object.name = strdup ("maildir");
 
 	FOLDER *f1 = folder_create();
 	FOLDER *f2 = folder_create();
@@ -86,9 +86,9 @@ maildir_connect (void)
 		return NULL;
 	}
 
-	f1->name = strdup ("boys");
-	f2->name = strdup ("trees");
-	f3->name = strdup ("fish");
+	f1->object.name = strdup ("boys");
+	f2->object.name = strdup ("trees");
+	f3->object.name = strdup ("fish");
 
 	const char *names[] = { "adam", "barry", "charlie", "ash", "beech", "angel", "beluga", NULL };
 
@@ -101,7 +101,7 @@ maildir_connect (void)
 			printf ("imap_connect: email_create failed\n");
 			return NULL;
 		}
-		e->item.name = strdup (names[i]);
+		e->item.object.name = strdup (names[i]);
 
 		if (i < 3) {
 			folder_add_child (f1, e);

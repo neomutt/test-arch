@@ -15,7 +15,7 @@ contact_release (CONTACT *c)
 	o->refcount--;
 	int rc = o->refcount;
 	if (o->refcount < 1) {
-		free (c->item.name);
+		free (o->name);
 		free (c);
 	}
 
