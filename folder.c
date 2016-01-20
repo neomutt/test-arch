@@ -48,7 +48,8 @@ folder_display (FOLDER *f, int indent)
 		int i;
 
 		for (i = 0; i < f->num_items; i++) {
-			item_display (f->items[i], indent + 1);
+			ITEM *it = f->items[i];
+			it->display (it, indent + 1);
 		}
 
 		for (i = 0; i < f->num_folders; i++) {

@@ -24,26 +24,26 @@ digraph inherit {
 
 	object       [ fillcolor="#ffffff" ];
 
-	view         [ fillcolor="#ff4040" ];
+	view         [ fillcolor="#ff8080" ];
 
-	source       [ fillcolor="#ffff40" ];
-	contact_list [ fillcolor="#ffff40" ];
-	calendar     [ fillcolor="#ffff40" ];
-	imap         [ fillcolor="#ffff40" ];
-	maildir      [ fillcolor="#ffff40" ];
-	mbox         [ fillcolor="#ffff40" ];
-	rss          [ fillcolor="#ffff40" ];
-	task_list    [ fillcolor="#ffff40" ];
+	source       [ fillcolor="#ffff80" ];
+	contact_list [ fillcolor="#ffff80" ];
+	calendar     [ fillcolor="#ffff80" ];
+	imap         [ fillcolor="#ffff80" ];
+	maildir      [ fillcolor="#ffff80" ];
+	mbox         [ fillcolor="#ffff80" ];
+	rss          [ fillcolor="#ffff80" ];
+	task_list    [ fillcolor="#ffff80" ];
 
-	folder       [ fillcolor="#40ff40" ];
-	month        [ fillcolor="#40ff40" ];
+	folder       [ fillcolor="#80ff80" ];
+	month        [ fillcolor="#80ff80" ];
 
-	item         [ fillcolor="#40ffff" ];
-	article      [ fillcolor="#40ffff" ];
-	contact      [ fillcolor="#40ffff" ];
-	email        [ fillcolor="#40ffff" ];
-	event        [ fillcolor="#40ffff" ];
-	task         [ fillcolor="#40ffff" ];
+	item         [ fillcolor="#80ffff" ];
+	article      [ fillcolor="#80ffff" ];
+	contact      [ fillcolor="#80ffff" ];
+	email        [ fillcolor="#80ffff" ];
+	event        [ fillcolor="#80ffff" ];
+	task         [ fillcolor="#80ffff" ];
 
 	view         -> object;
 	source       -> object;

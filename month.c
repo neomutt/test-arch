@@ -75,10 +75,11 @@ month_display (FOLDER *f, int indent)
 			printf ("\n%s", istr);
 		}
 	}
-	printf ("\n\033[m");
+	printf ("\n\033[m\n");
 
 	for (i = 0; i < f->num_items; i++) {
-		item_display (f->items[i], indent + 1);
+		ITEM *it = f->items[i];
+		it->display (it, indent + 1);
 	}
 }
 

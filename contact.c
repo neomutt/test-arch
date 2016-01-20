@@ -34,9 +34,10 @@ contact_create (void)
 
 	OBJECT *o = &c->item.object;
 
-	o->refcount = 1;
-	o->type     = MAGIC_CONTACT;
-	o->release  = (object_release_fn) contact_release;
+	o->refcount     = 1;
+	o->type         = MAGIC_CONTACT;
+	o->release      = (object_release_fn) contact_release;
+	c->item.display = (item_display_fn)   item_display;
 
 	return c;
 }

@@ -90,7 +90,8 @@ source_display (SOURCE *src, int indent)
 		int i;
 
 		for (i = 0; i < src->num_items; i++) {
-			item_display (src->items[i], indent + 1);
+			ITEM *it = src->items[i];
+			it->display (it, indent + 1);
 		}
 
 		for (i = 0; i < src->num_folders; i++) {

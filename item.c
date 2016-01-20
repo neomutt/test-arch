@@ -21,6 +21,16 @@ item_release (ITEM *i)
 	return rc;
 }
 
+void
+item_display (ITEM *i, int indent)
+{
+	if (!i) {
+		return;
+	}
+
+	printf ("%*s\033[1;36m%s\033[m\n", indent * 8, "", i->name);
+}
+
 ITEM *
 item_create (void)
 {
@@ -35,17 +45,8 @@ item_create (void)
 	o->refcount = 1;
 	o->type     = MAGIC_ITEM;
 	o->release  = (object_release_fn) item_release;
+	i->display  = (item_display_fn)   item_display;
 
 	return i;
-}
-
-void
-item_display (ITEM *i, int indent)
-{
-	if (!i) {
-		return;
-	}
-
-	printf ("%*s\033[1;36m%s\033[m\n", indent * 8, "", i->name);
 }
 

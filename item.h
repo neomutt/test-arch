@@ -5,9 +5,14 @@
 
 #define MAGIC_ITEM 4
 
+typedef struct item_t ITEM;
+
+typedef void (*item_display_fn) (ITEM *f, int indent);
+
 typedef struct item_t {
 	OBJECT object;
 	char *name;
+	item_display_fn display;
 } ITEM;
 
 ITEM * item_create (void);
