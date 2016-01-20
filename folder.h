@@ -5,12 +5,13 @@
 
 #define MAGIC_FOLDER 3
 
-typedef struct item_t ITEM;
+typedef struct item_t   ITEM;
+typedef struct folder_t FOLDER;
 
 typedef struct folder_t {
 	OBJECT object;
 	int num_folders;
-	struct folder_t *folders[10];
+	FOLDER *folders[10];
 	int num_items;
 	ITEM *items[10];
 } FOLDER;

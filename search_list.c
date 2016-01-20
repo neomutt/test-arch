@@ -29,6 +29,10 @@ search_list_release (SEARCH_LIST_SOURCE *s)
 			object_release (s->source.items[i]);
 		}
 
+		for (i = 0; i < s->source.num_sources; i++) {
+			object_release (s->source.sources[i]);
+		}
+
 		free (s->source.object.name);
 		free (s);
 	}

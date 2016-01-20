@@ -14,6 +14,8 @@ typedef struct source_t {
 	FOLDER *folders[10];
 	int num_items;
 	ITEM *items[10];
+	int num_sources;
+	ITEM *sources[10];
 } SOURCE;
 
 SOURCE * source_create (void);

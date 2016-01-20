@@ -17,12 +17,10 @@ folder_release (FOLDER *f)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < f->num_folders; i++) {
-			// printf ("freeing folder %p\n", (void*) f->folders[i]);
 			folder_release (f->folders[i]);
 		}
 
 		for (i = 0; i < f->num_items; i++) {
-			// printf ("freeing item %p\n", (void*) f->items[i]);
 			object_release (f->items[i]);
 		}
 

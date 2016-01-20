@@ -4,6 +4,7 @@
 #include "config.h"
 #include "plugin.h"
 #include "view.h"
+#include "source.h"
 
 int
 main (int argc, char *argv[])
@@ -36,30 +37,44 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	v1->object.name = strdup ("mail");
-	v2->object.name = strdup ("contacts");
-	v3->object.name = strdup ("tasks");
-	v4->object.name = strdup ("news");
-	v5->object.name = strdup ("calendar");
-	v6->object.name = strdup ("search");
+	v1->object.name = strdup ("search");
+	v2->object.name = strdup ("mail");
+	v3->object.name = strdup ("contacts");
+	v4->object.name = strdup ("tasks");
+	v5->object.name = strdup ("news");
+	v6->object.name = strdup ("calendar");
+
+	SOURCE *search = NULL;
 
 	for (i = 0; plugins[i]; i++) {
 		SOURCE *s = plugins[i]->connect();
 		if (!s) {
 			printf ("plugin %s::connect() failed\n", plugins[i]->name);
 		}
-		if (i < 3) {
-			view_add_child (v1, s);
-		} else if (i < 4) {
-			view_add_child (v2, s);
-		} else if (i < 5) {
-			view_add_child (v3, s);
-		} else if (i < 7) {
-			view_add_child (v4, s);
-		} else if (i < 8) {
-			view_add_child (v5, s);
-		} else {
-			view_add_child (v6, s);
+		switch (i) {
+			case 0:
+				view_add_child (v1, s);
+				search = s;
+				break;
+			case 1:
+			case 2:
+			case 3:
+				view_add_child (v2, s);
+				source_add_child (search, s);
+				break;
+			case 4:
+				view_add_child (v3, s);
+				break;
+			case 5:
+				view_add_child (v4, s);
+				break;
+			case 6:
+			case 7:
+				view_add_child (v5, s);
+				break;
+			default:
+				view_add_child (v6, s);
+				break;
 		}
 		object_release (s);
 	}

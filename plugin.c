@@ -12,6 +12,7 @@
 #include "search_list.h"
 
 PLUGIN *plugins[] = {
+	&search_list_plugin,
 	&imap_plugin,
 	&maildir_plugin,
 	&mbox_plugin,
@@ -20,7 +21,6 @@ PLUGIN *plugins[] = {
 	&nntp_plugin,
 	&rss_plugin,
 	&calendar_plugin,
-	&search_list_plugin,
 	NULL
 };
 

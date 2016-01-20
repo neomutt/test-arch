@@ -17,13 +17,15 @@ source_release (SOURCE *src)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < src->num_folders; i++) {
-			// printf ("freeing folder %p\n", (void*) src->folders[i]);
 			object_release (src->folders[i]);
 		}
 
 		for (i = 0; i < src->num_items; i++) {
-			// printf ("freeing item %p\n", (void*) src->items[i]);
 			object_release (src->items[i]);
+		}
+
+		for (i = 0; i < src->num_sources; i++) {
+			object_release (src->sources[i]);
 		}
 
 		free (o->name);
@@ -92,6 +94,11 @@ source_add_child (SOURCE *src, void *child)
 		object_addref (child);
 		src->items[src->num_items] = child;
 		src->num_items++;
+	} else if ((obj->type & 0xff) == MAGIC_SOURCE) {
+		// We're adding a mail source
+		object_addref (child);
+		src->sources[src->num_sources] = child;
+		src->num_sources++;
 	} else {
 		printf ("can't add object:0x%04x to a source\n", obj->type);
 		return 0;

@@ -39,7 +39,6 @@ object_release (void *obj)
 	return rc;
 }
 
-
 void
 object_display (void *obj, int indent)
 {

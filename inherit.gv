@@ -4,7 +4,7 @@ digraph inherit {
 		bgcolor="black"
 		color="white"
 		nodesep="0.1"
-		ranksep="0.5"
+		// ranksep="0.5"
 	];
 
 	node [
@@ -47,10 +47,10 @@ digraph inherit {
 	task         [ fillcolor="#80ffff" ];
 
 	view         -> object;
-	source       -> object;
 	folder       -> object;
 	item         -> object;
 
+	source       -> folder;
 	month        -> folder;
 
 	contact_list -> source;
@@ -67,5 +67,7 @@ digraph inherit {
 	email        -> item;
 	event        -> item;
 	task         -> item;
+
+	{ rank=same source folder };
 }
 
