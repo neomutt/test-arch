@@ -11,6 +11,8 @@ extern PLUGIN month_plugin;
 
 typedef struct month_t {
 	FOLDER folder;
+	int year;
+	int month;
 } MONTH;
 
 MONTH * month_create (void);

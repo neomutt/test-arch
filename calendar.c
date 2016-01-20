@@ -81,22 +81,28 @@ calendar_connect (void)
 	MONTH *m1 = month_create();
 
 	m1->folder.name = strdup ("personal");
+	m1->year        = 2016;
+	m1->month       = 1;
 
-	// EVENT *e1 = event_create();
-	// EVENT *e2 = event_create();
-	// EVENT *e3 = event_create();
+	EVENT *e1 = event_create();
+	EVENT *e2 = event_create();
+	EVENT *e3 = event_create();
 
-	// e1->item.name = strdup ("Meet Jim");
-	// e2->item.name = strdup ("Bob's birthday");
-	// e3->item.name = strdup ("Dave in town");
+	e1->item.name = strdup ("Meet Jim");
+	e2->item.name = strdup ("Bob's birthday");
+	e3->item.name = strdup ("Dave in town");
 
-	// month_add_child (m1, e1);
-	// month_add_child (m1, e2);
-	// month_add_child (m1, e3);
+	e1->day = 7;
+	e2->day = 12;
+	e3->day = 23;
 
-	// object_release (e1);
-	// object_release (e2);
-	// object_release (e3);
+	month_add_child (m1, e1);
+	month_add_child (m1, e2);
+	month_add_child (m1, e3);
+
+	object_release (e1);
+	object_release (e2);
+	object_release (e3);
 
 	source_add_child (s, &m1->folder);
 

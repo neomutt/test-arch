@@ -7,6 +7,7 @@
 
 typedef struct event_t {
 	ITEM item;
+	int day;
 } EVENT;
 
 EVENT * event_create (void);
