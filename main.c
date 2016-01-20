@@ -29,7 +29,8 @@ main (int argc, char *argv[])
 	VIEW *v2 = view_create();
 	VIEW *v3 = view_create();
 	VIEW *v4 = view_create();
-	if (!v1 || !v2 || !v3 || !v4) {
+	VIEW *v5 = view_create();
+	if (!v1 || !v2 || !v3 || !v4 || !v5) {
 		printf ("view_create failed\n");
 		return 1;
 	}
@@ -38,6 +39,7 @@ main (int argc, char *argv[])
 	v2->name = strdup ("contacts");
 	v3->name = strdup ("tasks");
 	v4->name = strdup ("news");
+	v5->name = strdup ("calendar");
 
 	for (i = 0; plugins[i]; i++) {
 		SOURCE *s = plugins[i]->connect();
@@ -50,21 +52,25 @@ main (int argc, char *argv[])
 			view_add_child (v2, s);
 		} else if (i < 5) {
 			view_add_child (v3, s);
-		} else {
+		} else if (i < 7) {
 			view_add_child (v4, s);
+		} else {
+			view_add_child (v5, s);
 		}
 		object_release (s);
 	}
 
-	view_display (v1, 0);
-	view_display (v2, 0);
-	view_display (v3, 0);
-	view_display (v4, 0);
+	// view_display (v1, 0);
+	// view_display (v2, 0);
+	// view_display (v3, 0);
+	// view_display (v4, 0);
+	view_display (v5, 0);
 
 	object_release (v1);
 	object_release (v2);
 	object_release (v3);
 	object_release (v4);
+	object_release (v5);
 	config_free();
 
 	return 0;

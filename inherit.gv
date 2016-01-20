@@ -1,6 +1,6 @@
 digraph inherit {
 	graph [
-		rankdir="BT"
+		rankdir="RL"
 		bgcolor="black"
 		color="white"
 		nodesep="0.1"
@@ -30,6 +30,7 @@ digraph inherit {
 	item         [ fillcolor="#40ffff" ];
 
 	contact_list [ fillcolor="#ffff40" ];
+	calendar     [ fillcolor="#ffff40" ];
 	imap         [ fillcolor="#ffff40" ];
 	maildir      [ fillcolor="#ffff40" ];
 	mbox         [ fillcolor="#ffff40" ];
@@ -39,6 +40,7 @@ digraph inherit {
 	article      [ fillcolor="#40ffff" ];
 	contact      [ fillcolor="#40ffff" ];
 	email        [ fillcolor="#40ffff" ];
+	event        [ fillcolor="#40ffff" ];
 	task         [ fillcolor="#40ffff" ];
 
 	view         -> object;
@@ -47,6 +49,7 @@ digraph inherit {
 	item         -> object;
 
 	contact_list -> source;
+	calendar     -> source;
 	imap         -> source;
 	maildir      -> source;
 	mbox         -> source;
@@ -56,6 +59,7 @@ digraph inherit {
 	article      -> item;
 	contact      -> item;
 	email        -> item;
+	event        -> item;
 	task         -> item;
 }
 

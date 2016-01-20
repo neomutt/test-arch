@@ -8,6 +8,7 @@
 #include "task_list.h"
 #include "nntp.h"
 #include "rss.h"
+#include "calendar.h"
 
 PLUGIN *plugins[] = {
 	&imap_plugin,
@@ -17,6 +18,7 @@ PLUGIN *plugins[] = {
 	&task_list_plugin,
 	&nntp_plugin,
 	&rss_plugin,
+	&calendar_plugin,
 	NULL
 };
 
