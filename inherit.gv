@@ -33,6 +33,7 @@ digraph inherit {
 	maildir      [ fillcolor="#ffff80" ];
 	mbox         [ fillcolor="#ffff80" ];
 	rss          [ fillcolor="#ffff80" ];
+	search_list  [ fillcolor="#ffff80" ];
 	task_list    [ fillcolor="#ffff80" ];
 
 	folder       [ fillcolor="#80ff80" ];
@@ -58,6 +59,7 @@ digraph inherit {
 	maildir      -> source;
 	mbox         -> source;
 	rss          -> source;
+	search_list  -> source;
 	task_list    -> source;
 
 	article      -> item;

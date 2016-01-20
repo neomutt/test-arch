@@ -9,6 +9,7 @@
 #include "nntp.h"
 #include "rss.h"
 #include "calendar.h"
+#include "search_list.h"
 
 PLUGIN *plugins[] = {
 	&imap_plugin,
@@ -19,6 +20,7 @@ PLUGIN *plugins[] = {
 	&nntp_plugin,
 	&rss_plugin,
 	&calendar_plugin,
+	&search_list_plugin,
 	NULL
 };
 
