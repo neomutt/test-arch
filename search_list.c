@@ -9,6 +9,97 @@
 #include "source.h"
 #include "view.h"
 
+static void
+check_email (ITEM *item, FOLDER *rcpt, int rule)
+{
+	if (!item || !rcpt) {
+		return;
+	}
+
+	const char *name = item->object.name;
+	// printf ("Check, %d %s\n", rule, name);
+
+	int match = 0;
+	int len;
+	int i;
+
+	switch (rule) {
+		case 1:
+			if (name[0] == 'b') {
+				match = 1;
+			}
+			break;
+		case 2:
+			len = strlen (name);
+			if (name[len - 1] == 'y') {
+				match = 1;
+			}
+			break;
+		case 3:
+			len = strlen (name);
+			for (i = 1; i < len; i++) {
+				if (name[i - 1] == name[i]) {
+					match = 1;
+					break;
+				}
+			}
+			break;
+	}
+
+	if (match) {
+		folder_add_child (rcpt, item);
+	}
+}
+
+static void
+descend_folders (FOLDER *search, FOLDER *rcpt, int rule)
+{
+	if (!search || !rcpt) {
+		return;
+	}
+
+	if (rule) {}
+
+	int i;
+	for (i = 0; search->folders[i]; i++) {
+		// printf ("Folder: %s\n", search->folders[i]->object.name);
+		descend_folders (search->folders[i], rcpt, rule);
+	}
+
+	for (i = 0; search->items[i]; i++) {
+		ITEM *item = search->items[i];
+		// printf ("Item: %s\n", item->object.name);
+		check_email (item, rcpt, rule);
+	}
+}
+
+static void
+find_all_mail (SOURCE **sources, FOLDER *rcpt, int rule)
+{
+	if (!sources || !rcpt) {
+		return;
+	}
+
+	if (rule) {}
+
+	int s;
+	for (s = 0; sources[s]; s++) {
+		int f;
+		for (f = 0; sources[s]->folders[f]; f++) {
+			// printf ("Folder0: %s\n", sources[s]->folders[f]->object.name);
+			descend_folders (sources[s]->folders[f], rcpt, rule);
+		}
+
+		int i;
+		for (i = 0; sources[s]->items[i]; i++) {
+			ITEM *item = sources[s]->items[i];
+			// printf ("Item0: %s\n", item->object.name);
+			check_email (item, rcpt, rule);
+		}
+	}
+}
+
+
 static int
 search_list_release (SEARCH_LIST_SOURCE *s)
 {
@@ -102,32 +193,13 @@ search_list_connect (SOURCE *s)
 		return NULL;
 	}
 
-	f1->object.name = strdup ("fruit");
-	f2->object.name = strdup ("cars");
-	f3->object.name = strdup ("girls");
+	f1->object.name = strdup ("^b");
+	f2->object.name = strdup ("y$");
+	f3->object.name = strdup ("(.){2}");
 
-	const char *names[] = { "apple", "banana", "cherry", "audi", "bentley", "anna", "bella", NULL };
-
-	int i;
-	EMAIL *e;
-
-	for (i = 0; names[i]; i++) {
-		e = email_create();
-		if (!e) {
-			printf ("search_list_connect: email_create failed\n");
-			return NULL;
-		}
-		e->item.object.name = strdup (names[i]);
-
-		if (i < 3) {
-			folder_add_child (f1, e);
-		} else if (i < 5) {
-			folder_add_child (f2, e);
-		} else {
-			folder_add_child (f3, e);
-		}
-		object_release (e);
-	}
+	find_all_mail (s->sources, f1, 1);
+	find_all_mail (s->sources, f2, 2);
+	find_all_mail (s->sources, f3, 3);
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);

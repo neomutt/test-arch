@@ -7,6 +7,7 @@
 #define MAGIC_SOURCE 2
 
 typedef struct folder_t FOLDER;
+typedef struct source_t SOURCE;
 
 typedef struct source_t {
 	OBJECT object;
@@ -15,7 +16,7 @@ typedef struct source_t {
 	int num_items;
 	ITEM *items[10];
 	int num_sources;
-	ITEM *sources[10];
+	SOURCE *sources[10];
 } SOURCE;
 
 SOURCE * source_create (void);
