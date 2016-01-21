@@ -10,58 +10,43 @@
 #include "source.h"
 #include "view.h"
 
-static int
-contact_list_release (CONTACT_LIST_SOURCE *s)
+void
+contact_list_release (CONTACT_LIST_SOURCE *c)
 {
-	if (!s) {
-		return -1;
+	if (!c) {
+		return;
 	}
 
-	OBJECT *o = &s->source.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < s->source.num_folders; i++) {
-			object_release (s->source.folders[i]);
-		}
+	// Nothing CONTACT_LIST_SOURCE-specific to release
 
-		for (i = 0; i < s->source.num_items; i++) {
-			object_release (s->source.items[i]);
-		}
-
-		free (o->name);
-		free (s);
-	}
-
-	return rc;
+	source_release (&c->source);	// Release parent
 }
 
-static CONTACT_LIST_SOURCE *
-contact_list_create (void)
+CONTACT_LIST_SOURCE *
+contact_list_create (CONTACT_LIST_SOURCE *c)
 {
-	CONTACT_LIST_SOURCE *s = NULL;
-
-	s = calloc (1, sizeof (CONTACT_LIST_SOURCE));
-	if (!s) {
-		return NULL;
+	if (!c) {
+		c = calloc (1, sizeof (CONTACT_LIST_SOURCE));
+		if (!c) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &s->source.object;
+	source_create (&c->source);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &c->source.container.object;
+
 	o->type     = MAGIC_CONTACT_LIST;
 	o->release  = (object_release_fn) contact_list_release;
-	o->display  = (object_display_fn) source_display;
 
-	return s;
+	return c;
 }
 
 
 static SOURCE *
 contact_list_init (void)
 {
-	CONTACT_LIST_SOURCE *cs = contact_list_create();
+	CONTACT_LIST_SOURCE *cs = contact_list_create (NULL);
 	if (!cs) {
 		return NULL;
 	}
@@ -87,8 +72,8 @@ contact_list_config_item (const char *name)
 static void
 contact_list_connect (SOURCE *s)
 {
-	s->object.type = MAGIC_CONTACT_LIST;
-	s->object.name = strdup ("contact list");
+	s->container.object.type = MAGIC_CONTACT_LIST;
+	s->container.object.name = strdup ("contact list");
 
 	const char *names[] = { "avon",   "bedford", "cornwall", "devon dog",         "essex echidna",     "ferrari", "gloucestershire goat", "horse",  "igloo", NULL   };
 	const C_TAGS tags[] = { C_COUNTY, C_COUNTY,  C_COUNTY,   C_COUNTY | C_ANIMAL, C_COUNTY | C_ANIMAL, C_CAR,     C_COUNTY | C_ANIMAL,    C_ANIMAL, C_NONE,  C_NONE };
@@ -97,7 +82,7 @@ contact_list_connect (SOURCE *s)
 	int i;
 
 	for (i = 0; names[i]; i++) {
-		contacts[i] = contact_create();
+		contacts[i] = contact_create (NULL);
 		if (!contacts[i]) {
 			printf ("contact_list_connect: contact_create failed\n");
 			return NULL;
@@ -110,20 +95,20 @@ contact_list_connect (SOURCE *s)
 
 	contacts[i] = NULL;
 
-	FOLDER *f1 = folder_create();
-	FOLDER *f2 = folder_create();
-	FOLDER *f3 = folder_create();
-	FOLDER *f4 = folder_create();
+	FOLDER *f1 = folder_create (NULL);
+	FOLDER *f2 = folder_create (NULL);
+	FOLDER *f3 = folder_create (NULL);
+	FOLDER *f4 = folder_create (NULL);
 
 	if (!f1 || !f2 || !f3 || !f4) {
 		printf ("contact_list_connect: folder_create failed\n");
 		return NULL;
 	}
 
-	f1->object.name = strdup ("county");
-	f2->object.name = strdup ("animal");
-	f3->object.name = strdup ("county + animal");
-	f4->object.name = strdup ("untagged");
+	f1->container.object.name = strdup ("county");
+	f2->container.object.name = strdup ("animal");
+	f3->container.object.name = strdup ("county + animal");
+	f4->container.object.name = strdup ("untagged");
 
 	for (i = 0; contacts[i]; i++) {
 		if (contacts[i]->tags & C_COUNTY) {
@@ -150,7 +135,7 @@ contact_list_connect (SOURCE *s)
 	}
 
 	for (i = 0; contacts[i]; i++) {
-		object_release (contacts[i]);
+		release (contacts[i]);
 	}
 
 	source_add_child (s, f1);
@@ -158,10 +143,10 @@ contact_list_connect (SOURCE *s)
 	source_add_child (s, f3);
 	source_add_child (s, f4);
 
-	object_release (f1);
-	object_release (f2);
-	object_release (f3);
-	object_release (f4);
+	release (f1);
+	release (f2);
+	release (f3);
+	release (f4);
 }
 
 static void

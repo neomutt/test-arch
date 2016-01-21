@@ -3,22 +3,16 @@
 
 #include "item.h"
 
-static int
+void
 item_release (ITEM *i)
 {
 	if (!i) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &i->object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		free (o->name);
-		free (i);
-	}
+	// Nothing ITEM-specific to release
 
-	return rc;
+	object_release (&i->object);	// Release parent
 }
 
 void
@@ -32,18 +26,20 @@ item_display (ITEM *i, int indent)
 }
 
 ITEM *
-item_create (void)
+item_create (ITEM *i)
 {
-	ITEM *i = NULL;
-
-	i = calloc (1, sizeof (ITEM));
 	if (!i) {
-		return NULL;
+		i = calloc (1, sizeof (ITEM));
+		if (!i) {
+			return NULL;
+		}
 	}
 
 	OBJECT *o = &i->object;
-	o->refcount = 1;
-	o->type     = MAGIC_ITEM;
+
+	object_create (o);	// Construct parent
+
+	o->type     = MAGIC_OBJECT;
 	o->release  = (object_release_fn) item_release;
 	o->display  = (object_display_fn) item_display;
 

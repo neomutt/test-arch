@@ -17,6 +17,7 @@ typedef struct contact_t {
 	int tags;
 } CONTACT;
 
-CONTACT * contact_create (void);
+CONTACT * contact_create  (CONTACT *c);
+void      contact_release (CONTACT *c);
 
 #endif // _M_CONTACT_H_

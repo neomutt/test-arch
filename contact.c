@@ -4,40 +4,34 @@
 
 #include "contact.h"
 
-static int
+void
 contact_release (CONTACT *c)
 {
 	if (!c) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &c->item.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		free (o->name);
-		free (c);
-	}
+	// Nothing CONTACT-specific to release
 
-	return rc;
+	item_release (&c->item);	// Release parent
 }
 
 CONTACT *
-contact_create (void)
+contact_create (CONTACT *c)
 {
-	CONTACT *c = NULL;
-
-	c = calloc (1, sizeof (CONTACT));
 	if (!c) {
-		return NULL;
+		c = calloc (1, sizeof (CONTACT));
+		if (!c) {
+			return NULL;
+		}
 	}
+
+	item_create (&c->item);	// Construct parent
 
 	OBJECT *o = &c->item.object;
 
-	o->refcount = 1;
 	o->type     = MAGIC_CONTACT;
 	o->release  = (object_release_fn) contact_release;
-	o->display  = (object_display_fn) item_display;
 
 	return c;
 }

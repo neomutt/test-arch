@@ -9,6 +9,7 @@ typedef struct article_t {
 	ITEM item;
 } ARTICLE;
 
-ARTICLE * article_create (void);
+ARTICLE * article_create  (ARTICLE *a);
+void      article_release (ARTICLE *a);
 
 #endif // _ARTICLE_H_

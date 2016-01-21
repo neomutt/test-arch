@@ -3,7 +3,7 @@
 
 #include "source.h"
 
-#define MAGIC_IMAP ((2 << 8) + MAGIC_SOURCE)
+#define MAGIC_IMAP ((3 << 8) + MAGIC_SOURCE)
 
 typedef struct plugin_t PLUGIN;
 
@@ -12,5 +12,8 @@ extern PLUGIN imap_plugin;
 typedef struct imap_source_t {
 	SOURCE source;
 } IMAP_SOURCE;
+
+IMAP_SOURCE * imap_create  (IMAP_SOURCE *i);
+void          imap_release (IMAP_SOURCE *i);
 
 #endif // _M_IMAP_H_

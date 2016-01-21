@@ -10,49 +10,34 @@
 #include "source.h"
 #include "view.h"
 
-static int
+void
 task_list_release (TASK_LIST_SOURCE *t)
 {
 	if (!t) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &t->source.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < t->source.num_folders; i++) {
-			object_release (t->source.folders[i]);
-		}
+	// Nothing TASK_LIST_SOURCE-specific to release
 
-		for (i = 0; i < t->source.num_items; i++) {
-			object_release (t->source.items[i]);
-		}
-
-		free (t->source.object.name);
-		free (t);
-	}
-
-	return rc;
+	source_release (&t->source);	// Release parent
 }
 
-static TASK_LIST_SOURCE *
-task_list_create (void)
+TASK_LIST_SOURCE *
+task_list_create (TASK_LIST_SOURCE *t)
 {
-	TASK_LIST_SOURCE *t = NULL;
-
-	t = calloc (1, sizeof (TASK_LIST_SOURCE));
 	if (!t) {
-		return NULL;
+		t = calloc (1, sizeof (TASK_LIST_SOURCE));
+		if (!t) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &t->source.object;
+	source_create (&t->source);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &t->source.container.object;
+
 	o->type     = MAGIC_TASK_LIST;
 	o->release  = (object_release_fn) task_list_release;
-	o->display  = (object_display_fn) source_display;
 
 	return t;
 }
@@ -61,7 +46,7 @@ task_list_create (void)
 static SOURCE *
 task_list_init (void)
 {
-	TASK_LIST_SOURCE *ts = task_list_create();
+	TASK_LIST_SOURCE *ts = task_list_create (NULL);
 	if (!ts) {
 		return NULL;
 	}
@@ -87,8 +72,8 @@ task_list_config_item (const char *name)
 static void
 task_list_connect (SOURCE *s)
 {
-	s->object.type = MAGIC_TASK_LIST;
-	s->object.name = strdup ("task list");
+	s->container.object.type = MAGIC_TASK_LIST;
+	s->container.object.name = strdup ("task list");
 
 	const char *names[] = { "ironing", "read book",          "plan holiday",       "play football", "get a suntan", NULL   };
 	const T_TAGS tags[] = { T_INSIDE,  T_INSIDE | T_OUTSIDE, T_INSIDE | T_OUTSIDE, T_OUTSIDE,       T_OUTSIDE,      T_NONE };
@@ -97,7 +82,7 @@ task_list_connect (SOURCE *s)
 	int i;
 
 	for (i = 0; names[i]; i++) {
-		tasks[i] = task_create();
+		tasks[i] = task_create (NULL);
 		if (!tasks[i]) {
 			printf ("task_list_connect: item_create failed\n");
 			return NULL;
@@ -110,18 +95,18 @@ task_list_connect (SOURCE *s)
 
 	tasks[i] = NULL;
 
-	FOLDER *f1 = folder_create();
-	FOLDER *f2 = folder_create();
-	FOLDER *f3 = folder_create();
+	FOLDER *f1 = folder_create (NULL);
+	FOLDER *f2 = folder_create (NULL);
+	FOLDER *f3 = folder_create (NULL);
 
 	if (!f1 || !f2 || !f3) {
 		printf ("task_list_connect: folder_create failed\n");
 		return NULL;
 	}
 
-	f1->object.name = strdup ("inside");
-	f2->object.name = strdup ("outside");
-	f3->object.name = strdup ("untagged");
+	f1->container.object.name = strdup ("inside");
+	f2->container.object.name = strdup ("outside");
+	f3->container.object.name = strdup ("untagged");
 
 	for (i = 0; tasks[i]; i++) {
 		if (tasks[i]->tags & T_INSIDE) {
@@ -142,16 +127,16 @@ task_list_connect (SOURCE *s)
 	}
 
 	for (i = 0; tasks[i]; i++) {
-		object_release (tasks[i]);
+		release (tasks[i]);
 	}
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);
 	source_add_child (s, f3);
 
-	object_release (f1);
-	object_release (f2);
-	object_release (f3);
+	release (f1);
+	release (f2);
+	release (f3);
 }
 
 static void

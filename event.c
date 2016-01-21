@@ -4,22 +4,16 @@
 
 #include "event.h"
 
-static int
+void
 event_release (EVENT *e)
 {
 	if (!e) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &e->item.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		free (e->item.object.name);
-		free (e);
-	}
+	// Nothing EVENT-specific to release
 
-	return rc;
+	item_release (&e->item);	// Release parent
 }
 
 void
@@ -35,18 +29,19 @@ event_display (ITEM *i, int indent)
 }
 
 EVENT *
-event_create (void)
+event_create (EVENT *e)
 {
-	EVENT *e = NULL;
-
-	e = calloc (1, sizeof (EVENT));
 	if (!e) {
-		return NULL;
+		e = calloc (1, sizeof (EVENT));
+		if (!e) {
+			return NULL;
+		}
 	}
+
+	item_create (&e->item);	// Construct parent
 
 	OBJECT *o = &e->item.object;
 
-	o->refcount = 1;
 	o->type     = MAGIC_EVENT;
 	o->release  = (object_release_fn) event_release;
 	o->display  = (object_display_fn) event_display;

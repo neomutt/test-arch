@@ -23,12 +23,13 @@ digraph inherit {
 
 
 	object       [ fillcolor="#ffffff" ];
+	container    [ fillcolor="#ffffff" ];
 
 	view         [ fillcolor="#ff8080" ];
 
 	source       [ fillcolor="#ffff80" ];
-	contact_list [ fillcolor="#ffff80" ];
 	calendar     [ fillcolor="#ffff80" ];
+	contact_list [ fillcolor="#ffff80" ];
 	imap         [ fillcolor="#ffff80" ];
 	maildir      [ fillcolor="#ffff80" ];
 	mbox         [ fillcolor="#ffff80" ];
@@ -47,15 +48,18 @@ digraph inherit {
 	event        [ fillcolor="#80ffff" ];
 	task         [ fillcolor="#80ffff" ];
 
-	view         -> object;
-	folder       -> object;
+	container    -> object;
+
+	view         -> container;
+	folder       -> container;
+	source       -> container;
+
 	item         -> object;
 
-	source       -> folder;
 	month        -> folder;
 
-	contact_list -> source;
 	calendar     -> source;
+	contact_list -> source;
 	imap         -> source;
 	maildir      -> source;
 	mbox         -> source;
@@ -71,5 +75,6 @@ digraph inherit {
 	task         -> item;
 
 	{ rank=same source folder };
+	{ rank=same view source folder item };
 }
 

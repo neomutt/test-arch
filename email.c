@@ -4,43 +4,36 @@
 
 #include "email.h"
 
-static int
+void
 email_release (EMAIL *e)
 {
 	if (!e) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &e->item.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		free (o->name);
-		free (e->from);
-		free (e->to);
-		free (e->subject);
-		free (e);
-	}
+	free (e->from);
+	free (e->to);
+	free (e->subject);
 
-	return rc;
+	item_release (&e->item);	// Release parent
 }
 
 EMAIL *
-email_create (void)
+email_create (EMAIL *e)
 {
-	EMAIL *e = NULL;
-
-	e = calloc (1, sizeof (EMAIL));
 	if (!e) {
-		return NULL;
+		e = calloc (1, sizeof (EMAIL));
+		if (!e) {
+			return NULL;
+		}
 	}
+
+	item_create (&e->item);	// Construct parent
 
 	OBJECT *o = &e->item.object;
 
-	o->refcount = 1;
 	o->type     = MAGIC_EMAIL;
 	o->release  = (object_release_fn) email_release;
-	o->display  = (object_display_fn) item_display;
 
 	return e;
 }

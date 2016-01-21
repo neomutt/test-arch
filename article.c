@@ -4,42 +4,35 @@
 
 #include "article.h"
 
-static int
+void
 article_release (ARTICLE *a)
 {
 	if (!a) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &a->item.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		free (a->item.object.name);
-		free (a);
-	}
+	// Nothing ARTICLE-specific to release
 
-	return rc;
+	item_release (&a->item);	// Release parent
 }
 
 ARTICLE *
-article_create (void)
+article_create (ARTICLE *a)
 {
-	ARTICLE *a = NULL;
-
-	a = calloc (1, sizeof (ARTICLE));
 	if (!a) {
-		return NULL;
+		a = calloc (1, sizeof (ARTICLE));
+		if (!a) {
+			return NULL;
+		}
 	}
+
+	item_create (&a->item);	// Construct parent
 
 	OBJECT *o = &a->item.object;
 
-	o->refcount = 1;
 	o->type     = MAGIC_ARTICLE;
 	o->release  = (object_release_fn) article_release;
-	o->display  = (object_display_fn) item_display;
 
 	return a;
 }
-
 

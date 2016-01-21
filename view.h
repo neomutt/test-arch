@@ -1,19 +1,18 @@
 #ifndef _VIEW_H_
 #define _VIEW_H_
 
-#include "object.h"
+#include "container.h"
 
-#define MAGIC_VIEW 1
+#define MAGIC_VIEW 3
 
 typedef struct source_t SOURCE;
 
 typedef struct view_t {
-	OBJECT object;
-	int num_sources;
-	SOURCE *sources[10];
+	CONTAINER container;
 } VIEW;
 
-VIEW * view_create (void);
-int view_add_child (VIEW *v, void *child);
+VIEW * view_create    (VIEW *v);
+int    view_add_child (VIEW *v, void *child);
+void   view_display   (VIEW *v, int indent);
 
 #endif // _VIEW_H_

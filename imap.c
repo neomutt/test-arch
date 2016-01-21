@@ -9,58 +9,43 @@
 #include "source.h"
 #include "view.h"
 
-static int
-imap_release (IMAP_SOURCE *s)
+void
+imap_release (IMAP_SOURCE *i)
 {
-	if (!s) {
-		return -1;
+	if (!i) {
+		return;
 	}
 
-	OBJECT *o = &s->source.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < s->source.num_folders; i++) {
-			object_release (s->source.folders[i]);
-		}
+	// Nothing IMAP_SOURCE-specific to release
 
-		for (i = 0; i < s->source.num_items; i++) {
-			object_release (s->source.items[i]);
-		}
-
-		free (s->source.object.name);
-		free (s);
-	}
-
-	return rc;
+	source_release (&i->source);	// Release parent
 }
 
-static IMAP_SOURCE *
-imap_create (void)
+IMAP_SOURCE *
+imap_create (IMAP_SOURCE *i)
 {
-	IMAP_SOURCE *s = NULL;
-
-	s = calloc (1, sizeof (IMAP_SOURCE));
-	if (!s) {
-		return NULL;
+	if (!i) {
+		i = calloc (1, sizeof (IMAP_SOURCE));
+		if (!i) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &s->source.object;
+	source_create (&i->source);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &i->source.container.object;
+
 	o->type     = MAGIC_IMAP;
 	o->release  = (object_release_fn) imap_release;
-	o->display  = (object_display_fn) source_display;
 
-	return s;
+	return i;
 }
 
 
 static SOURCE *
 imap_init (void)
 {
-	IMAP_SOURCE *is = imap_create();
+	IMAP_SOURCE *is = imap_create (NULL);
 	if (!is) {
 		return NULL;
 	}
@@ -86,21 +71,21 @@ imap_config_item (const char *name)
 static void
 imap_connect (SOURCE *s)
 {
-	s->object.type = MAGIC_IMAP;
-	s->object.name = strdup ("imap");
+	s->container.object.type = MAGIC_IMAP;
+	s->container.object.name = strdup ("imap");
 
-	FOLDER *f1 = folder_create();
-	FOLDER *f2 = folder_create();
-	FOLDER *f3 = folder_create();
+	FOLDER *f1 = folder_create (NULL);
+	FOLDER *f2 = folder_create (NULL);
+	FOLDER *f3 = folder_create (NULL);
 
 	if (!f1 || !f2 || !f3) {
 		printf ("imap_connect: folder_create failed\n");
 		return NULL;
 	}
 
-	f1->object.name = strdup ("fruit");
-	f2->object.name = strdup ("cars");
-	f3->object.name = strdup ("girls");
+	f1->container.object.name = strdup ("fruit");
+	f2->container.object.name = strdup ("cars");
+	f3->container.object.name = strdup ("girls");
 
 	const char *names[] = { "apple", "banana", "cherry", "audi", "bentley", "anna", "bella", NULL };
 
@@ -108,7 +93,7 @@ imap_connect (SOURCE *s)
 	EMAIL *e;
 
 	for (i = 0; names[i]; i++) {
-		e = email_create();
+		e = email_create (NULL);
 		if (!e) {
 			printf ("imap_connect: email_create failed\n");
 			return NULL;
@@ -122,16 +107,16 @@ imap_connect (SOURCE *s)
 		} else {
 			folder_add_child (f3, e);
 		}
-		object_release (e);
+		release (e);
 	}
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);
 	source_add_child (s, f3);
 
-	object_release (f1);
-	object_release (f2);
-	object_release (f3);
+	release (f1);
+	release (f2);
+	release (f3);
 }
 
 static void

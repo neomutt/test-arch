@@ -9,58 +9,43 @@
 #include "source.h"
 #include "view.h"
 
-static int
-nntp_release (NNTP_SOURCE *s)
+void
+nntp_release (NNTP_SOURCE *n)
 {
-	if (!s) {
-		return -1;
+	if (!n) {
+		return;
 	}
 
-	OBJECT *o = &s->source.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < s->source.num_folders; i++) {
-			object_release (s->source.folders[i]);
-		}
+	// Nothing CALENDAR_SOURCE-specific to release
 
-		for (i = 0; i < s->source.num_items; i++) {
-			object_release (s->source.items[i]);
-		}
-
-		free (s->source.object.name);
-		free (s);
-	}
-
-	return rc;
+	source_release (&n->source);	// Release parent
 }
 
-static NNTP_SOURCE *
-nntp_create (void)
+NNTP_SOURCE *
+nntp_create (NNTP_SOURCE *n)
 {
-	NNTP_SOURCE *s = NULL;
-
-	s = calloc (1, sizeof (NNTP_SOURCE));
-	if (!s) {
-		return NULL;
+	if (!n) {
+		n = calloc (1, sizeof (NNTP_SOURCE));
+		if (!n) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &s->source.object;
+	source_create (&n->source);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &n->source.container.object;
+
 	o->type     = MAGIC_NNTP;
 	o->release  = (object_release_fn) nntp_release;
-	o->display  = (object_display_fn) source_display;
 
-	return s;
+	return n;
 }
 
 
 static SOURCE *
 nntp_init (void)
 {
-	NNTP_SOURCE *ns = nntp_create();
+	NNTP_SOURCE *ns = nntp_create (NULL);
 	if (!ns) {
 		return NULL;
 	}
@@ -86,31 +71,31 @@ nntp_config_item (const char *name)
 static void
 nntp_connect (SOURCE *s)
 {
-	s->object.type = MAGIC_NNTP;
-	s->object.name = strdup ("nntp");
+	s->container.object.type = MAGIC_NNTP;
+	s->container.object.name = strdup ("nntp");
 
 	// Pretend to read something
 
-	FOLDER *f1 = folder_create();
-	FOLDER *f2 = folder_create();
-	FOLDER *f3 = folder_create();
+	FOLDER *f1 = folder_create (NULL);
+	FOLDER *f2 = folder_create (NULL);
+	FOLDER *f3 = folder_create (NULL);
 
 	if (!f1 || !f2 || !f3) {
 		printf ("nntp_connect: folder_create failed\n");
 		return NULL;
 	}
 
-	f1->object.name = strdup ("alt.swedish.chef");
-	f2->object.name = strdup ("rec.arts.poems");
-	f3->object.name = strdup ("sci.fractals");
+	f1->container.object.name = strdup ("alt.swedish.chef");
+	f2->container.object.name = strdup ("rec.arts.poems");
+	f3->container.object.name = strdup ("sci.fractals");
 
-	EMAIL *e1 = email_create();
-	EMAIL *e2 = email_create();
-	EMAIL *e3 = email_create();
-	EMAIL *e4 = email_create();
-	EMAIL *e5 = email_create();
-	EMAIL *e6 = email_create();
-	EMAIL *e7 = email_create();
+	EMAIL *e1 = email_create (NULL);
+	EMAIL *e2 = email_create (NULL);
+	EMAIL *e3 = email_create (NULL);
+	EMAIL *e4 = email_create (NULL);
+	EMAIL *e5 = email_create (NULL);
+	EMAIL *e6 = email_create (NULL);
+	EMAIL *e7 = email_create (NULL);
 
 	if (!e1 || !e2 || !e3 || !e4 || !e5 || !e6 || !e7) {
 		printf ("nntp_connect: email_create failed\n");
@@ -133,21 +118,21 @@ nntp_connect (SOURCE *s)
 	folder_add_child (f3, e6);
 	folder_add_child (f3, e7);
 
-	object_release (e1);
-	object_release (e2);
-	object_release (e3);
-	object_release (e4);
-	object_release (e5);
-	object_release (e6);
-	object_release (e7);
+	release (e1);
+	release (e2);
+	release (e3);
+	release (e4);
+	release (e5);
+	release (e6);
+	release (e7);
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);
 	source_add_child (s, f3);
 
-	object_release (f1);
-	object_release (f2);
-	object_release (f3);
+	release (f1);
+	release (f2);
+	release (f3);
 }
 
 static void

@@ -9,58 +9,43 @@
 #include "source.h"
 #include "view.h"
 
-static int
-mbox_release (MBOX_SOURCE *s)
+void
+mbox_release (MBOX_SOURCE *m)
 {
-	if (!s) {
-		return -1;
+	if (!m) {
+		return;
 	}
 
-	OBJECT *o = &s->source.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < s->source.num_folders; i++) {
-			object_release (s->source.folders[i]);
-		}
+	// Nothing MBOX_SOURCE-specific to release
 
-		for (i = 0; i < s->source.num_items; i++) {
-			object_release (s->source.items[i]);
-		}
-
-		free (o->name);
-		free (s);
-	}
-
-	return rc;
+	source_release (&m->source);	// Release parent
 }
 
-static MBOX_SOURCE *
-mbox_create (void)
+MBOX_SOURCE *
+mbox_create (MBOX_SOURCE *m)
 {
-	MBOX_SOURCE *s = NULL;
-
-	s = calloc (1, sizeof (MBOX_SOURCE));
-	if (!s) {
-		return NULL;
+	if (!m) {
+		m = calloc (1, sizeof (MBOX_SOURCE));
+		if (!m) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &s->source.object;
+	source_create (&m->source);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &m->source.container.object;
+
 	o->type     = MAGIC_MBOX;
 	o->release  = (object_release_fn) mbox_release;
-	o->display  = (object_display_fn) source_display;
 
-	return s;
+	return m;
 }
 
 
 static SOURCE *
 mbox_init (void)
 {
-	MBOX_SOURCE *ms = mbox_create();
+	MBOX_SOURCE *ms = mbox_create (NULL);
 	if (!ms) {
 		return NULL;
 	}
@@ -86,16 +71,16 @@ mbox_config_item (const char *name)
 static void
 mbox_connect (SOURCE *s)
 {
-	s->object.type = MAGIC_MBOX;
-	s->object.name = strdup ("mbox");
+	s->container.object.type = MAGIC_MBOX;
+	s->container.object.name = strdup ("mbox");
 
-	FOLDER *f1 = folder_create();
+	FOLDER *f1 = folder_create (NULL);
 	if (!f1) {
 		printf ("mbox_connect: folder_create failed\n");
 		return NULL;
 	}
 
-	f1->object.name = strdup ("music");
+	f1->container.object.name = strdup ("music");
 
 	const char *names[] = { "acdc", "beatles", "cream", "doors", NULL };
 
@@ -103,7 +88,7 @@ mbox_connect (SOURCE *s)
 	EMAIL *e;
 
 	for (i = 0; names[i]; i++) {
-		e = email_create();
+		e = email_create (NULL);
 		if (!e) {
 			printf ("imap_connect: email_create failed\n");
 			return NULL;
@@ -111,12 +96,12 @@ mbox_connect (SOURCE *s)
 		e->item.object.name = strdup (names[i]);
 
 		folder_add_child (f1, e);
-		object_release (e);
+		release (e);
 	}
 
 	source_add_child (s, f1);
 
-	object_release (f1);
+	release (f1);
 }
 
 static void

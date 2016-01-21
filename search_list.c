@@ -61,9 +61,9 @@ descend_folders (FOLDER *search, FOLDER *rcpt, int rule)
 	if (rule) {}
 
 	int i;
-	for (i = 0; search->folders[i]; i++) {
+	for (i = 0; search->container.children[i]; i++) {
 		// printf ("Folder: %s\n", search->folders[i]->object.name);
-		descend_folders (search->folders[i], rcpt, rule);
+		descend_folders ((FOLDER*) search->container.children[i], rcpt, rule);
 	}
 
 	for (i = 0; search->items[i]; i++) {
@@ -85,9 +85,9 @@ find_all_mail (SOURCE **sources, FOLDER *rcpt, int rule)
 	int s;
 	for (s = 0; sources[s]; s++) {
 		int f;
-		for (f = 0; sources[s]->folders[f]; f++) {
+		for (f = 0; sources[s]->container.children[f]; f++) {
 			// printf ("Folder0: %s\n", sources[s]->folders[f]->object.name);
-			descend_folders (sources[s]->folders[f], rcpt, rule);
+			descend_folders ((FOLDER*) sources[s]->container.children[f], rcpt, rule);
 		}
 
 		int i;
@@ -100,53 +100,60 @@ find_all_mail (SOURCE **sources, FOLDER *rcpt, int rule)
 }
 
 
-static int
+void
 search_list_release (SEARCH_LIST_SOURCE *s)
 {
 	if (!s) {
+		return;
+	}
+
+	int i;
+	for (i = 0; s->sources[i]; i++) {
+		release (s->sources[i]);
+	}
+
+	source_release (&s->source);	// Release parent
+}
+
+int
+search_list_add_child (SEARCH_LIST_SOURCE *s, void *child)
+{
+	if (!s || !child) {
 		return -1;
 	}
 
-	OBJECT *o = &s->source.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < s->source.num_folders; i++) {
-			object_release (s->source.folders[i]);
-		}
-
-		for (i = 0; i < s->source.num_items; i++) {
-			object_release (s->source.items[i]);
-		}
-
-		for (i = 0; i < s->source.num_sources; i++) {
-			object_release (s->source.sources[i]);
-		}
-
-		free (s->source.object.name);
-		free (s);
+	OBJECT *obj = child;
+	if ((obj->type & 0xff) == MAGIC_SOURCE) {
+		object_addref (child);
+		s->sources[s->num_sources] = child;
+		s->num_sources++;
+	} else {
+		source_add_child (&s->source, child);
 	}
 
-	return rc;
+	return 0;
 }
 
-static SEARCH_LIST_SOURCE *
-search_list_create (void)
+SEARCH_LIST_SOURCE *
+search_list_create (SEARCH_LIST_SOURCE *s)
 {
-	SEARCH_LIST_SOURCE *s = NULL;
-
-	s = calloc (1, sizeof (SEARCH_LIST_SOURCE));
 	if (!s) {
-		return NULL;
+		s = calloc (1, sizeof (SEARCH_LIST_SOURCE));
+		if (!s) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &s->source.object;
+	source_create (&s->source);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &s->source.container.object;
+
 	o->type     = MAGIC_SEARCH_LIST;
 	o->release  = (object_release_fn) search_list_release;
-	o->display  = (object_display_fn) source_display;
+
+	CONTAINER *c = &s->source.container;
+
+	c->add_child = (container_add_child_fn) search_list_add_child;
 
 	return s;
 }
@@ -155,7 +162,7 @@ search_list_create (void)
 static SOURCE *
 search_list_init (void)
 {
-	SEARCH_LIST_SOURCE *is = search_list_create();
+	SEARCH_LIST_SOURCE *is = search_list_create (NULL);
 	if (!is) {
 		return NULL;
 	}
@@ -181,33 +188,35 @@ search_list_config_item (const char *name)
 static void
 search_list_connect (SOURCE *s)
 {
-	s->object.type = MAGIC_SEARCH_LIST;
-	s->object.name = strdup ("search_list");
+	s->container.object.type = MAGIC_SEARCH_LIST;
+	s->container.object.name = strdup ("search_list");
 
-	FOLDER *f1 = folder_create();
-	FOLDER *f2 = folder_create();
-	FOLDER *f3 = folder_create();
+	FOLDER *f1 = folder_create (NULL);
+	FOLDER *f2 = folder_create (NULL);
+	FOLDER *f3 = folder_create (NULL);
 
 	if (!f1 || !f2 || !f3) {
 		printf ("search_list_connect: folder_create failed\n");
 		return NULL;
 	}
 
-	f1->object.name = strdup ("^b");
-	f2->object.name = strdup ("y$");
-	f3->object.name = strdup ("(.){2}");
+	f1->container.object.name = strdup ("^b");
+	f2->container.object.name = strdup ("y$");
+	f3->container.object.name = strdup ("(.){2}");
 
-	find_all_mail (s->sources, f1, 1);
-	find_all_mail (s->sources, f2, 2);
-	find_all_mail (s->sources, f3, 3);
+	SEARCH_LIST_SOURCE *sl = (SEARCH_LIST_SOURCE*) s;
+
+	find_all_mail (sl->sources, f1, 1);
+	find_all_mail (sl->sources, f2, 2);
+	find_all_mail (sl->sources, f3, 3);
 
 	source_add_child (s, f1);
 	source_add_child (s, f2);
 	source_add_child (s, f3);
 
-	object_release (f1);
-	object_release (f2);
-	object_release (f3);
+	release (f1);
+	release (f2);
+	release (f3);
 }
 
 static void

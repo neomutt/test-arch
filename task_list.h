@@ -3,7 +3,7 @@
 
 #include "source.h"
 
-#define MAGIC_TASK_LIST ((6 << 8) + MAGIC_SOURCE)
+#define MAGIC_TASK_LIST ((9 << 8) + MAGIC_SOURCE)
 
 typedef struct plugin_t PLUGIN;
 
@@ -12,5 +12,8 @@ extern PLUGIN task_list_plugin;
 typedef struct task_list_source_t {
 	SOURCE source;
 } TASK_LIST_SOURCE;
+
+TASK_LIST_SOURCE * task_list_create  (TASK_LIST_SOURCE *t);
+void               task_list_release (TASK_LIST_SOURCE *t);
 
 #endif // _M_TASK_LIST_H_

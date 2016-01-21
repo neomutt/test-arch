@@ -4,40 +4,34 @@
 
 #include "task.h"
 
-static int
+void
 task_release (TASK *t)
 {
 	if (!t) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &t->item.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		free (t->item.object.name);
-		free (t);
-	}
+	// Nothing TASK-specific to release
 
-	return rc;
+	item_release (&t->item);	// Release parent
 }
 
 TASK *
-task_create (void)
+task_create (TASK *t)
 {
-	TASK *t = NULL;
-
-	t = calloc (1, sizeof (TASK));
 	if (!t) {
-		return NULL;
+		t = calloc (1, sizeof (TASK));
+		if (!t) {
+			return NULL;
+		}
 	}
+
+	item_create (&t->item);	// Construct parent
 
 	OBJECT *o = &t->item.object;
 
-	o->refcount = 1;
 	o->type     = MAGIC_TASK;
 	o->release  = (object_release_fn) task_release;
-	o->display  = (object_display_fn) item_display;
 
 	return t;
 }

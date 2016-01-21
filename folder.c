@@ -4,71 +4,56 @@
 #include "folder.h"
 #include "item.h"
 
-static int
+void
 folder_release (FOLDER *f)
 {
 	if (!f) {
-		return -1;
+		return;
 	}
 
-	OBJECT *o = &f->object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < f->num_folders; i++) {
-			folder_release (f->folders[i]);
-		}
-
-		for (i = 0; i < f->num_items; i++) {
-			object_release (f->items[i]);
-		}
-
-		free (o->name);
-		free (f);
+	int i;
+	for (i = 0; i < f->num_items; i++) {
+		release (f->items[i]);
 	}
 
-	return rc;
+	container_release (&f->container);	// Release parent
 }
 
-static void
+void
 folder_display (FOLDER *f, int indent)
 {
 	if (!f) {
 		return;
 	}
 
-	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->object.name);
+	printf ("%*s\033[1;32m%s\033[m\n", indent * 8, "", f->container.object.name);
 
-	if ((f->num_items == 0) && (f->num_folders == 0)) {
+	if ((f->num_items == 0) && (f->container.num_children == 0)) {
 		printf ("%*s\033[1;36m[empty]\033[m\n", (indent + 1) * 8, "");
 	} else {
+		container_display (&f->container, indent + 1);
+
 		int i;
-
 		for (i = 0; i < f->num_items; i++) {
-			OBJECT *o = &f->items[i]->object;
-			o->display (o, indent + 1);
-		}
-
-		for (i = 0; i < f->num_folders; i++) {
-			folder_display (f->folders[i], indent + 1);
+			object_display (&f->items[i]->object, indent + 1);
 		}
 	}
 }
 
 FOLDER *
-folder_create (void)
+folder_create (FOLDER *f)
 {
-	FOLDER *f = NULL;
-
-	f = calloc (1, sizeof (FOLDER));
 	if (!f) {
-		return NULL;
+		f = calloc (1, sizeof (FOLDER));
+		if (!f) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &f->object;
+	container_create (&f->container);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &f->container.object;
+
 	o->type     = MAGIC_FOLDER;
 	o->release  = (object_release_fn) folder_release;
 	o->display  = (object_display_fn) folder_display;
@@ -86,8 +71,8 @@ folder_add_child (FOLDER *f, void *child)
 	OBJECT *obj = child;
 	if ((obj->type & 0xff) == MAGIC_FOLDER) {
 		object_addref (child);
-		f->folders[f->num_folders] = child;
-		f->num_folders++;
+		f->container.children[f->container.num_children] = child;
+		f->container.num_children++;
 	} else if ((obj->type & 0xff) == MAGIC_ITEM) {
 		object_addref (child);
 		f->items[f->num_items] = child;

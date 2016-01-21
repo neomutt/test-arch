@@ -31,23 +31,23 @@ main (int argc, char *argv[])
 		config_read_file (argv[1], plugins);
 	}
 
-	VIEW *v1 = view_create();
-	VIEW *v2 = view_create();
-	VIEW *v3 = view_create();
-	VIEW *v4 = view_create();
-	VIEW *v5 = view_create();
-	VIEW *v6 = view_create();
+	VIEW *v1 = view_create (NULL);
+	VIEW *v2 = view_create (NULL);
+	VIEW *v3 = view_create (NULL);
+	VIEW *v4 = view_create (NULL);
+	VIEW *v5 = view_create (NULL);
+	VIEW *v6 = view_create (NULL);
 	if (!v1 || !v2 || !v3 || !v4 || !v5 || !v6) {
 		printf ("view_create failed\n");
 		return 1;
 	}
 
-	v1->object.name = strdup ("mail");
-	v2->object.name = strdup ("search");
-	v3->object.name = strdup ("contacts");
-	v4->object.name = strdup ("tasks");
-	v5->object.name = strdup ("news");
-	v6->object.name = strdup ("calendar");
+	v1->container.object.name = strdup ("mail");
+	v2->container.object.name = strdup ("search");
+	v3->container.object.name = strdup ("contacts");
+	v4->container.object.name = strdup ("tasks");
+	v5->container.object.name = strdup ("news");
+	v6->container.object.name = strdup ("calendar");
 
 	SOURCE *search = sources[3];
 
@@ -63,7 +63,7 @@ main (int argc, char *argv[])
 			case 1:
 			case 2:
 				view_add_child (v1, s);
-				source_add_child (search, s);
+				container_add_child (&search->container, s);
 				break;
 			case 3:
 				view_add_child (v2, s);
@@ -82,22 +82,22 @@ main (int argc, char *argv[])
 				view_add_child (v6, s);
 				break;
 		}
-		object_release (s);
+		release (s);
 	}
 
-	object_display (v1, 0);
-	object_display (v2, 0);
-	object_display (v3, 0);
-	object_display (v4, 0);
-	object_display (v5, 0);
-	object_display (v6, 0);
+	object_display (&v1->container.object, 0);
+	object_display (&v2->container.object, 0);
+	object_display (&v3->container.object, 0);
+	object_display (&v4->container.object, 0);
+	object_display (&v5->container.object, 0);
+	object_display (&v6->container.object, 0);
 
-	object_release (v1);
-	object_release (v2);
-	object_release (v3);
-	object_release (v4);
-	object_release (v5);
-	object_release (v6);
+	release (v1);
+	release (v2);
+	release (v3);
+	release (v4);
+	release (v5);
+	release (v6);
 	config_free();
 
 	return 0;

@@ -3,7 +3,7 @@
 
 #include "item.h"
 
-#define MAGIC_TASK ((4 << 8) + MAGIC_ITEM)
+#define MAGIC_TASK ((5 << 8) + MAGIC_ITEM)
 
 typedef enum {
 	T_NONE    = 0,
@@ -16,6 +16,7 @@ typedef struct task_t {
 	int tags;
 } TASK;
 
-TASK * task_create (void);
+TASK * task_create  (TASK *t);
+void   task_release (TASK *t);
 
 #endif // _M_TASK_H_

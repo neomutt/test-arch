@@ -4,53 +4,80 @@
 #include "object.h"
 
 int
-object_addref (void *obj)
+object_addref (OBJECT *o)
 {
-	if (!obj) {
+	if (!o) {
 		return -1;
 	}
 
-	OBJECT *o = (OBJECT*) obj;
 	o->refcount++;
 
 	return o->refcount;
 }
 
+void
+object_release (OBJECT *o)
+{
+	if (!o) {
+		return;
+	}
+
+	free (o->name);
+	free (o);
+}
+
+void
+object_display (OBJECT *o, int indent)
+{
+	if (!o) {
+		return;
+	}
+
+	if (o->display && (o->display != (object_display_fn) object_display)) {
+		o->display (o, indent);
+	} else {
+		printf ("OBJECT: 0x%04x %p %s\n", o->type, (void*) o, o->name);
+	}
+}
+
+OBJECT *
+object_create (OBJECT *o)
+{
+	if (!o) {
+		o = calloc (1, sizeof (OBJECT));
+		if (!o) {
+			return NULL;
+		}
+	}
+
+	o->refcount = 1;
+	o->type     = MAGIC_OBJECT;
+	o->release  = (object_release_fn) object_release;
+	o->display  = (object_display_fn) object_display;
+
+	return o;
+}
+
+
 int
-object_release (void *obj)
+release (void *obj)
 {
 	if (!obj) {
 		return -1;
 	}
 
-	int rc;
-	OBJECT *o = (OBJECT*) obj;
+	OBJECT *o = obj;
+
+	o->refcount--;
+	if (o->refcount > 0) {
+		return o->refcount;
+	}
 
 	if (o->release) {
-		rc = (*o->release) (o);
+		(*o->release) (o);
 	} else {
-		o->refcount--;
-		rc = o->refcount;
-		if (o->refcount < 1) {
-			free (o);
-		}
+		object_release (o);
 	}
 
-	return rc;
+	return 0;
 }
-
-void
-object_display (void *obj, int indent)
-{
-	if (!obj) {
-		return;
-	}
-
-	OBJECT *o = obj;
-	if (o->display) {
-		o->display (o, indent);
-	} else {
-		printf ("OBJECT: 0x%04x - %p\n", o->type, obj);
-	}
-}
-

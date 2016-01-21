@@ -3,13 +3,14 @@
 
 #include "object.h"
 
-#define MAGIC_ITEM 4
+#define MAGIC_ITEM 6
 
 typedef struct item_t {
 	OBJECT object;
 } ITEM;
 
-ITEM * item_create (void);
-void item_display (ITEM *i, int indent);
+ITEM * item_create  (ITEM *i);
+void   item_release (ITEM *i);
+void   item_display (ITEM *i, int indent);
 
 #endif // _ITEM_H_

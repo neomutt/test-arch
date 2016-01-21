@@ -11,62 +11,43 @@
 #include "task.h"
 #include "view.h"
 
-static int
-rss_release (RSS_SOURCE *s)
+void
+rss_release (RSS_SOURCE *r)
 {
-	if (!s) {
-		return -1;
+	if (!r) {
+		return;
 	}
 
-	OBJECT *o = &s->source.object;
-	o->refcount--;
-	int rc = o->refcount;
-	if (o->refcount < 1) {
-		int i;
-		for (i = 0; i < s->source.num_folders; i++) {
-			object_release (s->source.folders[i]);
-		}
+	// Nothing RSS_SOURCE-specific to release
 
-		for (i = 0; i < s->source.num_items; i++) {
-			object_release (s->source.items[i]);
-		}
-
-		for (i = 0; i < s->num_feeds; i++) {
-			object_release (s->feeds[i]);
-		}
-
-		free (o->name);
-		free (s);
-	}
-
-	return rc;
+	source_release (&r->source);	// Release parent
 }
 
-static RSS_SOURCE *
-rss_create (void)
+RSS_SOURCE *
+rss_create (RSS_SOURCE *r)
 {
-	RSS_SOURCE *s = NULL;
-
-	s = calloc (1, sizeof (RSS_SOURCE));
-	if (!s) {
-		return NULL;
+	if (!r) {
+		r = calloc (1, sizeof (RSS_SOURCE));
+		if (!r) {
+			return NULL;
+		}
 	}
 
-	OBJECT *o = &s->source.object;
+	source_create (&r->source);	// Construct parent
 
-	o->refcount = 1;
+	OBJECT *o = &r->source.container.object;
+
 	o->type     = MAGIC_RSS;
 	o->release  = (object_release_fn) rss_release;
-	o->display  = (object_display_fn) source_display;
 
-	return s;
+	return r;
 }
 
 
 static SOURCE *
 rss_init (void)
 {
-	RSS_SOURCE *rs = rss_create();
+	RSS_SOURCE *rs = rss_create (NULL);
 	if (!rs) {
 		return NULL;
 	}
@@ -94,24 +75,24 @@ rss_connect (SOURCE *s)
 {
 	RSS_SOURCE *rs = (RSS_SOURCE*) s;
 
-	s->object.type = MAGIC_RSS;
-	s->object.name = strdup ("rss");
+	s->container.object.type = MAGIC_RSS;
+	s->container.object.name = strdup ("rss");
 
 	const char *feeds[] = { "slashdot.org", "arstechnica.co.uk", "bbc.co.uk", NULL };
 
 	int i;
 
 	for (i = 0; feeds[i]; i++) {
-		rs->feeds[i] = folder_create();
+		rs->feeds[i] = folder_create (NULL);
 		if (!rs->feeds[i]) {
 			printf ("rss_connect: folder_create failed\n");
 			return NULL;
 		}
-		rs->feeds[i]->object.name = strdup (feeds[i]);
+		rs->feeds[i]->container.object.name = strdup (feeds[i]);
 
 		source_add_child (s, rs->feeds[i]);	// Source owns all feeds
 
-		object_release (rs->feeds[i]);
+		release (rs->feeds[i]);
 	}
 
 	rs->feeds[i] = NULL;
@@ -119,7 +100,7 @@ rss_connect (SOURCE *s)
 	const char *names[] = { "new battery tech", "privacy concerns", "faster processor", "electric vehicle", "eff defends", "old woman", "bad weather", NULL };
 
 	for (i = 0; names[i]; i++) {
-		ARTICLE *a = article_create();
+		ARTICLE *a = article_create (NULL);
 		if (!a) {
 			printf ("rss_connect: article_create failed\n");
 			return NULL;
@@ -135,19 +116,19 @@ rss_connect (SOURCE *s)
 			folder_add_child (rs->feeds[2], a);
 		}
 
-		object_release (a);
+		release (a);
 	}
 
-	FOLDER *f1 = folder_create();
-	FOLDER *f2 = folder_create();
+	FOLDER *f1 = folder_create (NULL);
+	FOLDER *f2 = folder_create (NULL);
 
 	if (!f1 || !f2) {
 		printf ("rss_connect: folder_create failed\n");
 		return NULL;
 	}
 
-	f1->object.name = strdup ("tech");
-	f2->object.name = strdup ("news");
+	f1->container.object.name = strdup ("tech");
+	f2->container.object.name = strdup ("news");
 
 	for (i = 0; rs->feeds[i]; i++) {
 		if (i < 2) {
@@ -160,8 +141,8 @@ rss_connect (SOURCE *s)
 	source_add_child (s, f1);
 	source_add_child (s, f2);
 
-	object_release (f1);
-	object_release (f2);
+	release (f1);
+	release (f2);
 }
 
 static void

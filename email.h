@@ -12,6 +12,7 @@ typedef struct email_t {
 	char *subject;
 } EMAIL;
 
-EMAIL * email_create (void);
+EMAIL * email_create  (EMAIL *e);
+void    email_release (EMAIL *e);
 
 #endif // _EMAIL_H_

@@ -3,7 +3,7 @@
 
 #include "source.h"
 
-#define MAGIC_CALENDAR ((7 << 8) + MAGIC_SOURCE)
+#define MAGIC_CALENDAR ((1 << 8) + MAGIC_SOURCE)
 
 typedef struct plugin_t PLUGIN;
 
@@ -12,5 +12,8 @@ extern PLUGIN calendar_plugin;
 typedef struct calendar_source_t {
 	SOURCE source;
 } CALENDAR_SOURCE;
+
+CALENDAR_SOURCE * calendar_create  (CALENDAR_SOURCE *c);
+void              calendar_release (CALENDAR_SOURCE *c);
 
 #endif // _M_CALENDAR_H_

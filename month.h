@@ -15,7 +15,9 @@ typedef struct month_t {
 	int month;
 } MONTH;
 
-MONTH * month_create (void);
-int month_add_child (MONTH *m, void *child);
+MONTH * month_create    (MONTH *m);
+void    month_release   (MONTH *m);
+int     month_add_child (MONTH *m, void *child);
+void    month_display   (MONTH *m, int indent);
 
 #endif // _M_MONTH_H_
