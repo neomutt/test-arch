@@ -56,24 +56,36 @@ imap_create (void)
 	return s;
 }
 
-static int
-imap_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-imap_connect (void)
+imap_init (void)
 {
-	IMAP_SOURCE *is = NULL;
-
-	is = imap_create();
+	IMAP_SOURCE *is = imap_create();
 	if (!is) {
 		return NULL;
 	}
 
-	SOURCE *s = &is->source;
+	return &is->source;
+}
 
+static int
+imap_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'e') && (name[0] <= 'h')) {
+		// printf ("imap config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+imap_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_IMAP;
 	s->object.name = strdup ("imap");
 
@@ -120,37 +132,23 @@ imap_connect (void)
 	object_release (f1);
 	object_release (f2);
 	object_release (f3);
-
-	return s;
-}
-
-static int
-imap_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'e') && (name[0] <= 'h')) {
-		// printf ("imap config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-imap_disconnect (void)
+imap_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN imap_plugin = {
 	MAGIC_IMAP,
 	"imap",
 	imap_init,
+	imap_config_item,
 	imap_connect,
-	imap_disconnect,
-	imap_config_item
+	imap_disconnect
 };
-
 

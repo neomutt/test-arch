@@ -60,24 +60,36 @@ search_list_create (void)
 	return s;
 }
 
-static int
-search_list_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-search_list_connect (void)
+search_list_init (void)
 {
-	SEARCH_LIST_SOURCE *is = NULL;
-
-	is = search_list_create();
+	SEARCH_LIST_SOURCE *is = search_list_create();
 	if (!is) {
 		return NULL;
 	}
 
-	SOURCE *s = &is->source;
+	return &is->source;
+}
 
+static int
+search_list_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'e') && (name[0] <= 'h')) {
+		// printf ("search_list config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+search_list_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_SEARCH_LIST;
 	s->object.name = strdup ("search_list");
 
@@ -124,37 +136,23 @@ search_list_connect (void)
 	object_release (f1);
 	object_release (f2);
 	object_release (f3);
-
-	return s;
-}
-
-static int
-search_list_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'e') && (name[0] <= 'h')) {
-		// printf ("search_list config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-search_list_disconnect (void)
+search_list_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN search_list_plugin = {
 	MAGIC_SEARCH_LIST,
 	"search_list",
 	search_list_init,
+	search_list_config_item,
 	search_list_connect,
-	search_list_disconnect,
-	search_list_config_item
+	search_list_disconnect
 };
-
 

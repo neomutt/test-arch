@@ -62,23 +62,37 @@ rss_create (void)
 	return s;
 }
 
-static int
-rss_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-rss_connect (void)
+rss_init (void)
 {
-	RSS_SOURCE *rs = NULL;
-
-	rs = rss_create();
+	RSS_SOURCE *rs = rss_create();
 	if (!rs) {
 		return NULL;
 	}
 
-	SOURCE *s = &rs->source;
+	return &rs->source;
+}
+
+static int
+rss_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'q') && (name[0] <= 't')) {
+		// printf ("rss config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+rss_connect (SOURCE *s)
+{
+	RSS_SOURCE *rs = (RSS_SOURCE*) s;
 
 	s->object.type = MAGIC_RSS;
 	s->object.name = strdup ("rss");
@@ -148,36 +162,23 @@ rss_connect (void)
 
 	object_release (f1);
 	object_release (f2);
-
-	return s;
-}
-
-static int
-rss_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'q') && (name[0] <= 't')) {
-		// printf ("rss config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-rss_disconnect (void)
+rss_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN rss_plugin = {
 	MAGIC_TASK,
 	"task",
 	rss_init,
+	rss_config_item,
 	rss_connect,
-	rss_disconnect,
-	rss_config_item
+	rss_disconnect
 };
 

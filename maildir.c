@@ -56,24 +56,36 @@ maildir_create (void)
 	return s;
 }
 
-static int
-maildir_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-maildir_connect (void)
+maildir_init (void)
 {
-	MAILDIR_SOURCE *ms = NULL;
-
-	ms = maildir_create();
+	MAILDIR_SOURCE *ms = maildir_create();
 	if (!ms) {
 		return NULL;
 	}
 
-	SOURCE *s = &ms->source;
+	return &ms->source;
+}
 
+static int
+maildir_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'i') && (name[0] <= 'l')) {
+		// printf ("maildir config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+maildir_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_MAILDIR;
 	s->object.name = strdup ("maildir");
 
@@ -122,36 +134,23 @@ maildir_connect (void)
 	source_add_child (s, f1);
 
 	object_release (f1);
-
-	return s;
-}
-
-static int
-maildir_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'i') && (name[0] <= 'l')) {
-		// printf ("maildir config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-maildir_disconnect (void)
+maildir_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN maildir_plugin = {
 	MAGIC_MAILDIR,
 	"maildir",
 	maildir_init,
+	maildir_config_item,
 	maildir_connect,
-	maildir_disconnect,
-	maildir_config_item
+	maildir_disconnect
 };
 

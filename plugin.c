@@ -12,10 +12,10 @@
 #include "search_list.h"
 
 PLUGIN *plugins[] = {
-	&search_list_plugin,
 	&imap_plugin,
 	&maildir_plugin,
 	&mbox_plugin,
+	&search_list_plugin,
 	&contact_list_plugin,
 	&task_list_plugin,
 	&nntp_plugin,

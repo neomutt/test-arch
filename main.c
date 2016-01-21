@@ -16,11 +16,16 @@ main (int argc, char *argv[])
 
 	int i;
 
+	SOURCE *sources[10];
+
 	for (i = 0; plugins[i]; i++) {
-		if (plugins[i]->init() == 0) {
+		sources[i] = plugins[i]->init();
+		if (sources[i] == NULL) {
 			printf ("plugin %s::init() failed\n", plugins[i]->name);
+			return 1;
 		}
 	}
+	sources[i] = NULL;
 
 	for (argc--; argc > 0; argc--, argv++) {
 		config_read_file (argv[1], plugins);
@@ -37,30 +42,31 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	v1->object.name = strdup ("search");
-	v2->object.name = strdup ("mail");
+	v1->object.name = strdup ("mail");
+	v2->object.name = strdup ("search");
 	v3->object.name = strdup ("contacts");
 	v4->object.name = strdup ("tasks");
 	v5->object.name = strdup ("news");
 	v6->object.name = strdup ("calendar");
 
-	SOURCE *search = NULL;
+	SOURCE *search = sources[3];
 
 	for (i = 0; plugins[i]; i++) {
-		SOURCE *s = plugins[i]->connect();
-		if (!s) {
-			printf ("plugin %s::connect() failed\n", plugins[i]->name);
-		}
+		SOURCE *s = sources[i];
+
+		plugins[i]->connect (s);
+		// if (!s) {
+		// 	printf ("plugin %s::connect() failed\n", plugins[i]->name);
+		// }
 		switch (i) {
 			case 0:
-				view_add_child (v1, s);
-				search = s;
-				break;
 			case 1:
 			case 2:
+				view_add_child (v1, s);
+				source_add_child (search, s);
+				break;
 			case 3:
 				view_add_child (v2, s);
-				source_add_child (search, s);
 				break;
 			case 4:
 				view_add_child (v3, s);

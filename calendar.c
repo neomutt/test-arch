@@ -58,24 +58,36 @@ calendar_create (void)
 	return s;
 }
 
-static int
-calendar_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-calendar_connect (void)
+calendar_init (void)
 {
-	CALENDAR_SOURCE *is = NULL;
-
-	is = calendar_create();
+	CALENDAR_SOURCE *is = calendar_create();
 	if (!is) {
 		return NULL;
 	}
 
-	SOURCE *s = &is->source;
+	return &is->source;
+}
 
+static int
+calendar_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'e') && (name[0] <= 'h')) {
+		// printf ("calendar config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+calendar_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_CALENDAR;
 	s->object.name = strdup ("calendar");
 
@@ -108,37 +120,23 @@ calendar_connect (void)
 	source_add_child (s, &m1->folder);
 
 	object_release (m1);
-
-	return s;
-}
-
-static int
-calendar_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'e') && (name[0] <= 'h')) {
-		// printf ("calendar config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-calendar_disconnect (void)
+calendar_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN calendar_plugin = {
 	MAGIC_CALENDAR,
 	"calendar",
 	calendar_init,
+	calendar_config_item,
 	calendar_connect,
-	calendar_disconnect,
-	calendar_config_item
+	calendar_disconnect
 };
-
 

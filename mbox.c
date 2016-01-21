@@ -56,24 +56,36 @@ mbox_create (void)
 	return s;
 }
 
-static int
-mbox_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-mbox_connect (void)
+mbox_init (void)
 {
-	MBOX_SOURCE *ms = NULL;
-
-	ms = mbox_create();
+	MBOX_SOURCE *ms = mbox_create();
 	if (!ms) {
 		return NULL;
 	}
 
-	SOURCE *s = &ms->source;
+	return &ms->source;
+}
 
+static int
+mbox_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'm') && (name[0] <= 'p')) {
+		// printf ("mbox config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+mbox_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_MBOX;
 	s->object.name = strdup ("mbox");
 
@@ -105,36 +117,23 @@ mbox_connect (void)
 	source_add_child (s, f1);
 
 	object_release (f1);
-
-	return s;
-}
-
-static int
-mbox_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'm') && (name[0] <= 'p')) {
-		// printf ("mbox config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-mbox_disconnect (void)
+mbox_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN mbox_plugin = {
 	MAGIC_MBOX,
 	"mbox",
 	mbox_init,
+	mbox_config_item,
 	mbox_connect,
-	mbox_disconnect,
-	mbox_config_item
+	mbox_disconnect
 };
 

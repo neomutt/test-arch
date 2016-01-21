@@ -57,24 +57,36 @@ contact_list_create (void)
 	return s;
 }
 
-static int
-contact_list_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-contact_list_connect (void)
+contact_list_init (void)
 {
-	CONTACT_LIST_SOURCE *cs = NULL;
-
-	cs = contact_list_create();
+	CONTACT_LIST_SOURCE *cs = contact_list_create();
 	if (!cs) {
 		return NULL;
 	}
 
-	SOURCE *s = &cs->source;
+	return &cs->source;
+}
 
+static int
+contact_list_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'a') && (name[0] <= 'd')) {
+		// printf ("contact config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+contact_list_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_CONTACT_LIST;
 	s->object.name = strdup ("contact list");
 
@@ -150,36 +162,23 @@ contact_list_connect (void)
 	object_release (f2);
 	object_release (f3);
 	object_release (f4);
-
-	return s;
-}
-
-static int
-contact_list_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'a') && (name[0] <= 'd')) {
-		// printf ("contact config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-contact_list_disconnect (void)
+contact_list_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN contact_list_plugin = {
 	MAGIC_CONTACT,
 	"contact",
 	contact_list_init,
+	contact_list_config_item,
 	contact_list_connect,
-	contact_list_disconnect,
-	contact_list_config_item
+	contact_list_disconnect
 };
 

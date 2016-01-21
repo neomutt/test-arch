@@ -57,24 +57,36 @@ task_list_create (void)
 	return t;
 }
 
-static int
-task_list_init (void)
-{
-	return 1;
-}
 
 static SOURCE *
-task_list_connect (void)
+task_list_init (void)
 {
-	TASK_LIST_SOURCE *ts = NULL;
-
-	ts = task_list_create();
+	TASK_LIST_SOURCE *ts = task_list_create();
 	if (!ts) {
 		return NULL;
 	}
 
-	SOURCE *s = &ts->source;
+	return &ts->source;
+}
 
+static int
+task_list_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'u') && (name[0] <= 'x')) {
+		// printf ("task config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+task_list_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_TASK_LIST;
 	s->object.name = strdup ("task list");
 
@@ -140,36 +152,23 @@ task_list_connect (void)
 	object_release (f1);
 	object_release (f2);
 	object_release (f3);
-
-	return s;
-}
-
-static int
-task_list_config_item (const char *name)
-{
-	if (!name) {
-		return 0;
-	}
-
-	if ((name[0] >= 'u') && (name[0] <= 'x')) {
-		// printf ("task config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
 static void
-task_list_disconnect (void)
+task_list_disconnect (SOURCE *src)
 {
+	if (!src) {
+		return;
+	}
 }
+
 
 PLUGIN task_list_plugin = {
 	MAGIC_TASK,
 	"task",
 	task_list_init,
+	task_list_config_item,
 	task_list_connect,
-	task_list_disconnect,
-	task_list_config_item
+	task_list_disconnect
 };
 

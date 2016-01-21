@@ -9,25 +9,83 @@
 #include "source.h"
 #include "view.h"
 
-// static char *config[10];
-
-int
-nntp_init (void)
+static int
+nntp_release (NNTP_SOURCE *s)
 {
-	// printf ("nntp init\n");
-	return 1;
+	if (!s) {
+		return -1;
+	}
+
+	OBJECT *o = &s->source.object;
+	o->refcount--;
+	int rc = o->refcount;
+	if (o->refcount < 1) {
+		int i;
+		for (i = 0; i < s->source.num_folders; i++) {
+			object_release (s->source.folders[i]);
+		}
+
+		for (i = 0; i < s->source.num_items; i++) {
+			object_release (s->source.items[i]);
+		}
+
+		free (s->source.object.name);
+		free (s);
+	}
+
+	return rc;
 }
 
-SOURCE *
-nntp_connect (void)
+static NNTP_SOURCE *
+nntp_create (void)
 {
-	SOURCE *s = NULL;
+	NNTP_SOURCE *s = NULL;
 
-	s = source_create();
+	s = calloc (1, sizeof (NNTP_SOURCE));
 	if (!s) {
 		return NULL;
 	}
 
+	OBJECT *o = &s->source.object;
+
+	o->refcount = 1;
+	o->type     = MAGIC_NNTP;
+	o->release  = (object_release_fn) nntp_release;
+	o->display  = (object_display_fn) source_display;
+
+	return s;
+}
+
+
+static SOURCE *
+nntp_init (void)
+{
+	NNTP_SOURCE *ns = nntp_create();
+	if (!ns) {
+		return NULL;
+	}
+
+	return &ns->source;
+}
+
+static int
+nntp_config_item (const char *name)
+{
+	if (!name) {
+		return 0;
+	}
+
+	if ((name[0] >= 'a') && (name[0] <= 'e')) {
+		// printf ("nntp config: %s\n", name);
+		return 1;
+	}
+
+	return 0;
+}
+
+static void
+nntp_connect (SOURCE *s)
+{
 	s->object.type = MAGIC_NNTP;
 	s->object.name = strdup ("nntp");
 
@@ -90,37 +148,23 @@ nntp_connect (void)
 	object_release (f1);
 	object_release (f2);
 	object_release (f3);
-
-	return s;
 }
 
-int
-nntp_config_item (const char *name)
+static void
+nntp_disconnect (SOURCE *src)
 {
-	if (!name) {
-		return 0;
+	if (!src) {
+		return;
 	}
-
-	if ((name[0] >= 'a') && (name[0] <= 'e')) {
-		// printf ("nntp config: %s\n", name);
-		return 1;
-	}
-
-	return 0;
 }
 
-void
-nntp_disconnect (void)
-{
-}
 
 PLUGIN nntp_plugin = {
 	MAGIC_NNTP,
 	"nntp",
 	nntp_init,
+	nntp_config_item,
 	nntp_connect,
-	nntp_disconnect,
-	nntp_config_item
+	nntp_disconnect
 };
-
 
