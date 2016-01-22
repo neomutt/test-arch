@@ -39,10 +39,7 @@ view_display (VIEW *v, int indent)
 	if (v->container.num_children == 0) {
 		printf ("%*s\033[1;33m[empty]\033[m\n", (indent + 1) * 8, "");
 	} else {
-		int i;
-		for (i = 0; i < v->container.num_children; i++) {
-			object_display (&v->container.children[i]->object, indent + 1);
-		}
+		container_display (&v->container, indent + 1);
 	}
 }
 
@@ -65,25 +62,5 @@ view_create (VIEW *v)
 	o->display  = (object_display_fn) view_display;
 
 	return v;
-}
-
-int
-view_add_child (VIEW *v, void *child)
-{
-	if (!v || !child) {
-		return 0;
-	}
-
-	OBJECT *obj = child;
-	if ((obj->type & 0xff) != MAGIC_SOURCE) {
-		printf ("can't add object:0x%04x to a view\n", obj->type);
-		return 0;
-	}
-
-	object_addref (child);
-	v->container.children[v->container.num_children] = child;
-	v->container.num_children++;
-
-	return 1;
 }
 

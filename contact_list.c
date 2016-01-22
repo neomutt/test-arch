@@ -90,7 +90,7 @@ contact_list_connect (SOURCE *s)
 		contacts[i]->item.object.name = strdup (names[i]);
 		contacts[i]->tags             = tags[i];
 
-		source_add_child (s, contacts[i]);	// Source owns all contacts
+		add_child (s, contacts[i]);	// Source owns all contacts
 	}
 
 	contacts[i] = NULL;
@@ -112,25 +112,25 @@ contact_list_connect (SOURCE *s)
 
 	for (i = 0; contacts[i]; i++) {
 		if (contacts[i]->tags & C_COUNTY) {
-			folder_add_child (f1, contacts[i]);
+			add_child (f1, contacts[i]);
 		}
 	}
 
 	for (i = 0; contacts[i]; i++) {
 		if (contacts[i]->tags & C_ANIMAL) {
-			folder_add_child (f2, contacts[i]);
+			add_child (f2, contacts[i]);
 		}
 	}
 
 	for (i = 0; contacts[i]; i++) {
 		if ((contacts[i]->tags & C_COUNTY) && (contacts[i]->tags & C_ANIMAL)) {
-			folder_add_child (f3, contacts[i]);
+			add_child (f3, contacts[i]);
 		}
 	}
 
 	for (i = 0; contacts[i]; i++) {
 		if (contacts[i]->tags == C_NONE) {
-			folder_add_child (f4, contacts[i]);
+			add_child (f4, contacts[i]);
 		}
 	}
 
@@ -138,10 +138,10 @@ contact_list_connect (SOURCE *s)
 		release (contacts[i]);
 	}
 
-	source_add_child (s, f1);
-	source_add_child (s, f2);
-	source_add_child (s, f3);
-	source_add_child (s, f4);
+	add_child (s, f1);
+	add_child (s, f2);
+	add_child (s, f3);
+	add_child (s, f4);
 
 	release (f1);
 	release (f2);

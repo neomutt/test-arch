@@ -110,13 +110,13 @@ nntp_connect (SOURCE *s)
 	e6->item.object.name = strdup ("mandelbrot");
 	e7->item.object.name = strdup ("siepinski");
 
-	folder_add_child (f1, e1);
-	folder_add_child (f1, e2);
-	folder_add_child (f1, e3);
-	folder_add_child (f2, e4);
-	folder_add_child (f2, e5);
-	folder_add_child (f3, e6);
-	folder_add_child (f3, e7);
+	add_child (f1, e1);
+	add_child (f1, e2);
+	add_child (f1, e3);
+	add_child (f2, e4);
+	add_child (f2, e5);
+	add_child (f3, e6);
+	add_child (f3, e7);
 
 	release (e1);
 	release (e2);
@@ -126,9 +126,9 @@ nntp_connect (SOURCE *s)
 	release (e6);
 	release (e7);
 
-	source_add_child (s, f1);
-	source_add_child (s, f2);
-	source_add_child (s, f3);
+	add_child (s, f1);
+	add_child (s, f2);
+	add_child (s, f3);
 
 	release (f1);
 	release (f2);

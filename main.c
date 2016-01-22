@@ -55,42 +55,39 @@ main (int argc, char *argv[])
 		SOURCE *s = sources[i];
 
 		plugins[i]->connect (s);
-		// if (!s) {
-		// 	printf ("plugin %s::connect() failed\n", plugins[i]->name);
-		// }
 		switch (i) {
 			case 0:
 			case 1:
 			case 2:
-				view_add_child (v1, s);
-				container_add_child (&search->container, s);
+				add_child (v1, s);
+				// add_child (search, s);
 				break;
 			case 3:
-				view_add_child (v2, s);
+				add_child (v2, s);
 				break;
 			case 4:
-				view_add_child (v3, s);
+				add_child (v3, s);
 				break;
 			case 5:
-				view_add_child (v4, s);
+				add_child (v4, s);
 				break;
 			case 6:
 			case 7:
-				view_add_child (v5, s);
+				add_child (v5, s);
 				break;
 			default:
-				view_add_child (v6, s);
+				add_child (v6, s);
 				break;
 		}
 		release (s);
 	}
 
-	object_display (&v1->container.object, 0);
-	object_display (&v2->container.object, 0);
-	object_display (&v3->container.object, 0);
-	object_display (&v4->container.object, 0);
-	object_display (&v5->container.object, 0);
-	object_display (&v6->container.object, 0);
+	display (v1, 0);
+	display (v2, 0);
+	display (v3, 0);
+	display (v4, 0);
+	display (v5, 0);
+	display (v6, 0);
 
 	release (v1);
 	release (v2);

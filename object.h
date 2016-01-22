@@ -19,6 +19,7 @@ int      object_addref  (OBJECT *obj);
 void     object_release (OBJECT *obj);
 void     object_display (OBJECT *obj, int indent);
 
-int release (void *obj);
+int  release (void *obj);
+void display (void *obj, int indent);
 
 #endif // _OBJECT_H_

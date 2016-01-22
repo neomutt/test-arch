@@ -69,17 +69,12 @@ folder_add_child (FOLDER *f, void *child)
 	}
 
 	OBJECT *obj = child;
-	if ((obj->type & 0xff) == MAGIC_FOLDER) {
-		object_addref (child);
-		f->container.children[f->container.num_children] = child;
-		f->container.num_children++;
-	} else if ((obj->type & 0xff) == MAGIC_ITEM) {
+	if ((obj->type & 0xff) == MAGIC_ITEM) {
 		object_addref (child);
 		f->items[f->num_items] = child;
 		f->num_items++;
 	} else {
-		printf ("can't add object:0x%04x to a folder\n", obj->type);
-		return 0;
+		container_add_child (&f->container, child);
 	}
 
 	return 1;

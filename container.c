@@ -29,7 +29,7 @@ container_display (CONTAINER *c, int indent)
 	for (i = 0; i < c->num_children; i++) {
 		CONTAINER *child = c->children[i];
 
-		object_display (&child->object, indent);
+		display (child, indent);
 	}
 }
 
@@ -61,11 +61,27 @@ container_add_child (CONTAINER *c, void *child)
 		return -1;
 	}
 
-	if (c->add_child && (c->add_child != (container_add_child_fn) container_add_child)) {
-		c->add_child (c, child);
-	} else {
-		printf ("container_add_child\n");
-	}
+	object_addref (child);
+	c->children[c->num_children] = child;
+	c->num_children++;
 
 	return 1;
+}
+
+
+int
+add_child (void *parent, void *child)
+{
+	if (!parent || !child) {
+		return -1;
+	}
+
+	CONTAINER *c = parent;
+	if (c->add_child) {
+		c->add_child (c, child);
+	} else {
+		container_add_child (c, child);
+	}
+
+	return 0;
 }

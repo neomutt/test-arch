@@ -101,18 +101,18 @@ imap_connect (SOURCE *s)
 		e->item.object.name = strdup (names[i]);
 
 		if (i < 3) {
-			folder_add_child (f1, e);
+			add_child (f1, e);
 		} else if (i < 5) {
-			folder_add_child (f2, e);
+			add_child (f2, e);
 		} else {
-			folder_add_child (f3, e);
+			add_child (f3, e);
 		}
 		release (e);
 	}
 
-	source_add_child (s, f1);
-	source_add_child (s, f2);
-	source_add_child (s, f3);
+	add_child (s, f1);
+	add_child (s, f2);
+	add_child (s, f3);
 
 	release (f1);
 	release (f2);

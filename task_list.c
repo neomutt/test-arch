@@ -90,7 +90,7 @@ task_list_connect (SOURCE *s)
 		tasks[i]->item.object.name = strdup (names[i]);
 		tasks[i]->tags             = tags[i];
 
-		source_add_child (s, tasks[i]);	// Source owns all tasks
+		add_child (s, tasks[i]);	// Source owns all tasks
 	}
 
 	tasks[i] = NULL;
@@ -110,19 +110,19 @@ task_list_connect (SOURCE *s)
 
 	for (i = 0; tasks[i]; i++) {
 		if (tasks[i]->tags & T_INSIDE) {
-			folder_add_child (f1, tasks[i]);
+			add_child (f1, tasks[i]);
 		}
 	}
 
 	for (i = 0; tasks[i]; i++) {
 		if (tasks[i]->tags & T_OUTSIDE) {
-			folder_add_child (f2, tasks[i]);
+			add_child (f2, tasks[i]);
 		}
 	}
 
 	for (i = 0; tasks[i]; i++) {
 		if (tasks[i]->tags == T_NONE) {
-			folder_add_child (f3, tasks[i]);
+			add_child (f3, tasks[i]);
 		}
 	}
 
@@ -130,9 +130,9 @@ task_list_connect (SOURCE *s)
 		release (tasks[i]);
 	}
 
-	source_add_child (s, f1);
-	source_add_child (s, f2);
-	source_add_child (s, f3);
+	add_child (s, f1);
+	add_child (s, f2);
+	add_child (s, f3);
 
 	release (f1);
 	release (f2);

@@ -87,25 +87,3 @@ month_create (MONTH *m)
 	return m;
 }
 
-int
-month_add_child (MONTH *m, void *child)
-{
-	if (!m || !child) {
-		return 0;
-	}
-
-	OBJECT *obj = child;
-	if (obj->type != MAGIC_EVENT) {
-		printf ("can't add object:0x%04x to a month\n", obj->type);
-		return 0;
-	}
-
-	FOLDER *f = &m->folder;
-
-	object_addref (child);
-	f->items[f->num_items] = child;
-	f->num_items++;
-
-	return 1;
-}
-

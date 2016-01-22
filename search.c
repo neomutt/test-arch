@@ -46,7 +46,7 @@ check_email (ITEM *item, FOLDER *rcpt, int rule)
 	}
 
 	if (match) {
-		folder_add_child (rcpt, item);
+		add_child (rcpt, item);
 	}
 }
 
@@ -123,7 +123,7 @@ search_add_child (SEARCH *s, void *child)
 		s->sources[s->num_sources] = child;
 		s->num_sources++;
 	} else {
-		source_add_child (&s->source, child);
+		container_add_child (&s->source.container, child);
 	}
 
 	return 0;
@@ -205,9 +205,9 @@ search_connect (SOURCE *s)
 	find_all_mail (sl->sources, f2, 2);
 	find_all_mail (sl->sources, f3, 3);
 
-	source_add_child (s, f1);
-	source_add_child (s, f2);
-	source_add_child (s, f3);
+	add_child (s, f1);
+	add_child (s, f2);
+	add_child (s, f3);
 
 	release (f1);
 	release (f2);

@@ -101,22 +101,22 @@ maildir_connect (SOURCE *s)
 		e->item.object.name = strdup (names[i]);
 
 		if (i < 3) {
-			folder_add_child (f1, e);
+			add_child (f1, e);
 		} else if (i < 5) {
-			folder_add_child (f2, e);
+			add_child (f2, e);
 		} else {
-			folder_add_child (f3, e);
+			add_child (f3, e);
 		}
 		release (e);
 	}
 
-	folder_add_child (f1, f2);
-	folder_add_child (f1, f3);
+	add_child (f1, f2);
+	add_child (f1, f3);
 
 	release (f2);
 	release (f3);
 
-	source_add_child (s, f1);
+	add_child (s, f1);
 
 	release (f1);
 }

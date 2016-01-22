@@ -94,15 +94,15 @@ calendar_connect (SOURCE *s)
 	e2->day = 12;
 	e3->day = 23;
 
-	month_add_child (m1, e1);
-	month_add_child (m1, e2);
-	month_add_child (m1, e3);
+	add_child (m1, e1);
+	add_child (m1, e2);
+	add_child (m1, e3);
 
 	release (e1);
 	release (e2);
 	release (e3);
 
-	source_add_child (s, &m1->folder);
+	add_child (s, &m1->folder);
 
 	release (m1);
 }

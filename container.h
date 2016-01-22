@@ -21,4 +21,6 @@ void        container_release   (CONTAINER *c);
 int         container_add_child (CONTAINER *c, void *child);
 void        container_display   (CONTAINER *c, int indent);
 
+int add_child (void *parent, void *child);
+
 #endif // _CONTAINER_H_

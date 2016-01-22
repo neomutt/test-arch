@@ -90,7 +90,7 @@ rss_connect (SOURCE *s)
 		}
 		rs->feeds[i]->container.object.name = strdup (feeds[i]);
 
-		source_add_child (s, rs->feeds[i]);	// Source owns all feeds
+		add_child (s, rs->feeds[i]);	// Source owns all feeds
 
 		release (rs->feeds[i]);
 	}
@@ -109,11 +109,11 @@ rss_connect (SOURCE *s)
 		a->item.object.name = strdup (names[i]);
 
 		if (i < 3) {
-			folder_add_child (rs->feeds[0], a);
+			add_child (rs->feeds[0], a);
 		} else if (i < 5) {
-			folder_add_child (rs->feeds[1], a);
+			add_child (rs->feeds[1], a);
 		} else {
-			folder_add_child (rs->feeds[2], a);
+			add_child (rs->feeds[2], a);
 		}
 
 		release (a);
@@ -132,14 +132,14 @@ rss_connect (SOURCE *s)
 
 	for (i = 0; rs->feeds[i]; i++) {
 		if (i < 2) {
-			folder_add_child (f1, rs->feeds[i]);
+			add_child (f1, rs->feeds[i]);
 		} else {
-			folder_add_child (f2, rs->feeds[i]);
+			add_child (f2, rs->feeds[i]);
 		}
 	}
 
-	source_add_child (s, f1);
-	source_add_child (s, f2);
+	add_child (s, f1);
+	add_child (s, f2);
 
 	release (f1);
 	release (f2);

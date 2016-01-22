@@ -33,11 +33,7 @@ object_display (OBJECT *o, int indent)
 		return;
 	}
 
-	if (o->display && (o->display != (object_display_fn) object_display)) {
-		o->display (o, indent);
-	} else {
-		printf ("OBJECT: 0x%04x %p %s\n", o->type, (void*) o, o->name);
-	}
+	printf ("%*sOBJECT: 0x%04x %p %s\n", indent * 8, "", o->type, (void*) o, o->name);
 }
 
 OBJECT *
@@ -81,3 +77,20 @@ release (void *obj)
 
 	return 0;
 }
+
+void
+display (void *obj, int indent)
+{
+	if (!obj) {
+		return;
+	}
+
+	OBJECT *o = obj;
+
+	if (o->display) {
+		o->display (o, indent);
+	} else {
+		object_display (o, indent);
+	}
+}
+

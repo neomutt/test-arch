@@ -95,11 +95,11 @@ mbox_connect (SOURCE *s)
 		}
 		e->item.object.name = strdup (names[i]);
 
-		folder_add_child (f1, e);
+		add_child (f1, e);
 		release (e);
 	}
 
-	source_add_child (s, f1);
+	add_child (s, f1);
 
 	release (f1);
 }
