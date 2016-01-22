@@ -35,8 +35,9 @@ maildir_create (MAILDIR *m)
 
 	OBJECT *o = &m->source.container.object;
 
-	o->type     = MAGIC_MAILDIR;
-	o->release  = (object_release_fn) maildir_release;
+	o->type    = MAGIC_MAILDIR;
+	o->name    = strdup ("maildir");
+	o->release = (object_release_fn) maildir_release;
 
 	return m;
 }
@@ -71,9 +72,6 @@ maildir_config_item (const char *name)
 static void
 maildir_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_MAILDIR;
-	s->container.object.name = strdup ("maildir");
-
 	FOLDER *f1 = folder_create (NULL);
 	FOLDER *f2 = folder_create (NULL);
 	FOLDER *f3 = folder_create (NULL);

@@ -35,8 +35,9 @@ mbox_create (MBOX *m)
 
 	OBJECT *o = &m->source.container.object;
 
-	o->type     = MAGIC_MBOX;
-	o->release  = (object_release_fn) mbox_release;
+	o->type    = MAGIC_MBOX;
+	o->name    = strdup ("mbox");
+	o->release = (object_release_fn) mbox_release;
 
 	return m;
 }
@@ -71,9 +72,6 @@ mbox_config_item (const char *name)
 static void
 mbox_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_MBOX;
-	s->container.object.name = strdup ("mbox");
-
 	FOLDER *f1 = folder_create (NULL);
 	if (!f1) {
 		printf ("mbox_connect: folder_create failed\n");

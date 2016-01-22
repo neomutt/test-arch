@@ -35,8 +35,9 @@ imap_create (IMAP *i)
 
 	OBJECT *o = &i->source.container.object;
 
-	o->type     = MAGIC_IMAP;
-	o->release  = (object_release_fn) imap_release;
+	o->type    = MAGIC_IMAP;
+	o->name    = strdup ("imap");
+	o->release = (object_release_fn) imap_release;
 
 	return i;
 }
@@ -71,9 +72,6 @@ imap_config_item (const char *name)
 static void
 imap_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_IMAP;
-	s->container.object.name = strdup ("imap");
-
 	FOLDER *f1 = folder_create (NULL);
 	FOLDER *f2 = folder_create (NULL);
 	FOLDER *f3 = folder_create (NULL);

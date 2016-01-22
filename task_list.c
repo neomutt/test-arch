@@ -36,8 +36,9 @@ task_list_create (TASK_LIST *t)
 
 	OBJECT *o = &t->source.container.object;
 
-	o->type     = MAGIC_TASK_LIST;
-	o->release  = (object_release_fn) task_list_release;
+	o->type    = MAGIC_TASK_LIST;
+	o->name    = strdup ("task list");
+	o->release = (object_release_fn) task_list_release;
 
 	return t;
 }
@@ -72,9 +73,6 @@ task_list_config_item (const char *name)
 static void
 task_list_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_TASK_LIST;
-	s->container.object.name = strdup ("task list");
-
 	const char *names[] = { "ironing", "read book",          "plan holiday",       "play football", "get a suntan", NULL   };
 	const T_TAGS tags[] = { T_INSIDE,  T_INSIDE | T_OUTSIDE, T_INSIDE | T_OUTSIDE, T_OUTSIDE,       T_OUTSIDE,      T_NONE };
 	TASK *tasks[10];

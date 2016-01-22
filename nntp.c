@@ -35,8 +35,9 @@ nntp_create (NNTP *n)
 
 	OBJECT *o = &n->source.container.object;
 
-	o->type     = MAGIC_NNTP;
-	o->release  = (object_release_fn) nntp_release;
+	o->type    = MAGIC_NNTP;
+	o->name    = strdup ("nntp");
+	o->release = (object_release_fn) nntp_release;
 
 	return n;
 }
@@ -71,11 +72,6 @@ nntp_config_item (const char *name)
 static void
 nntp_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_NNTP;
-	s->container.object.name = strdup ("nntp");
-
-	// Pretend to read something
-
 	FOLDER *f1 = folder_create (NULL);
 	FOLDER *f2 = folder_create (NULL);
 	FOLDER *f3 = folder_create (NULL);

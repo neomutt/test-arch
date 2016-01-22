@@ -57,11 +57,16 @@ descend_folders (FOLDER *search, FOLDER *rcpt, int rule)
 		return;
 	}
 
-	if (rule) {}
-
 	int i;
 	for (i = 0; search->container.children[i]; i++) {
-		descend_folders ((FOLDER*) search->container.children[i], rcpt, rule);
+		OBJECT *o = (OBJECT*) search->container.children[i];
+		if ((o->type & 0xFF) == MAGIC_FOLDER) {
+			descend_folders ((FOLDER*) search->container.children[i], rcpt, rule);
+		} else {
+			ITEM *item = (ITEM*) search->container.children[i];
+			check_email (item, rcpt, rule);
+		}
+
 	}
 
 	for (i = 0; search->items[i]; i++) {
@@ -76,8 +81,6 @@ find_all_mail (SOURCE **sources, FOLDER *rcpt, int rule)
 	if (!sources || !rcpt) {
 		return;
 	}
-
-	if (rule) {}
 
 	int s;
 	for (s = 0; sources[s]; s++) {
@@ -118,12 +121,12 @@ search_add_child (SEARCH *s, void *child)
 	}
 
 	OBJECT *obj = child;
-	if ((obj->type & 0xff) == MAGIC_SOURCE) {
+	if ((obj->type & 0xFF) == MAGIC_SOURCE) {
 		object_addref (child);
 		s->sources[s->num_sources] = child;
 		s->num_sources++;
 	} else {
-		container_add_child (&s->source.container, child);
+		source_add_child (&s->source, child);
 	}
 
 	return 0;
@@ -143,8 +146,9 @@ search_create (SEARCH *s)
 
 	OBJECT *o = &s->source.container.object;
 
-	o->type     = MAGIC_SEARCH;
-	o->release  = (object_release_fn) search_release;
+	o->type    = MAGIC_SEARCH;
+	o->name    = strdup ("search");
+	o->release = (object_release_fn) search_release;
 
 	CONTAINER *c = &s->source.container;
 
@@ -183,9 +187,6 @@ search_config_item (const char *name)
 static void
 search_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_SEARCH;
-	s->container.object.name = strdup ("search");
-
 	FOLDER *f1 = folder_create (NULL);
 	FOLDER *f2 = folder_create (NULL);
 	FOLDER *f3 = folder_create (NULL);

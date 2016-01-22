@@ -37,8 +37,9 @@ rss_create (RSS *r)
 
 	OBJECT *o = &r->source.container.object;
 
-	o->type     = MAGIC_RSS;
-	o->release  = (object_release_fn) rss_release;
+	o->type    = MAGIC_RSS;
+	o->name    = strdup ("rss");
+	o->release = (object_release_fn) rss_release;
 
 	return r;
 }
@@ -74,9 +75,6 @@ static void
 rss_connect (SOURCE *s)
 {
 	RSS *rs = (RSS*) s;
-
-	s->container.object.type = MAGIC_RSS;
-	s->container.object.name = strdup ("rss");
 
 	const char *feeds[] = { "slashdot.org", "arstechnica.co.uk", "bbc.co.uk", NULL };
 

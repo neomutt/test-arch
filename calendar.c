@@ -37,8 +37,9 @@ calendar_create (CALENDAR *c)
 
 	OBJECT *o = &c->source.container.object;
 
-	o->type     = MAGIC_CALENDAR;
-	o->release  = (object_release_fn) calendar_release;
+	o->type    = MAGIC_CALENDAR;
+	o->name    = strdup ("calendar");
+	o->release = (object_release_fn) calendar_release;
 
 	return c;
 }
@@ -73,9 +74,6 @@ calendar_config_item (const char *name)
 static void
 calendar_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_CALENDAR;
-	s->container.object.name = strdup ("calendar");
-
 	MONTH *m1 = month_create (NULL);
 
 	m1->folder.container.object.name = strdup ("personal");

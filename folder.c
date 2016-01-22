@@ -35,9 +35,28 @@ folder_display (FOLDER *f, int indent)
 
 		int i;
 		for (i = 0; i < f->num_items; i++) {
-			object_display (&f->items[i]->object, indent + 1);
+			display (f->items[i], indent + 1);
 		}
 	}
+}
+
+int
+folder_add_child (FOLDER *f, void *child)
+{
+	if (!f || !child) {
+		return 0;
+	}
+
+	OBJECT *obj = child;
+	if ((obj->type & 0xFF) == MAGIC_ITEM) {
+		object_addref (child);
+		f->items[f->num_items] = child;
+		f->num_items++;
+	} else {
+		container_add_child (&f->container, child);
+	}
+
+	return 1;
 }
 
 FOLDER *
@@ -58,25 +77,10 @@ folder_create (FOLDER *f)
 	o->release  = (object_release_fn) folder_release;
 	o->display  = (object_display_fn) folder_display;
 
+	CONTAINER *c = &f->container;
+
+	c->add_child = (container_add_child_fn) folder_add_child;
+
 	return f;
-}
-
-int
-folder_add_child (FOLDER *f, void *child)
-{
-	if (!f || !child) {
-		return 0;
-	}
-
-	OBJECT *obj = child;
-	if ((obj->type & 0xff) == MAGIC_ITEM) {
-		object_addref (child);
-		f->items[f->num_items] = child;
-		f->num_items++;
-	} else {
-		container_add_child (&f->container, child);
-	}
-
-	return 1;
 }
 

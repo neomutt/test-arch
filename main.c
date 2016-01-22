@@ -60,7 +60,7 @@ main (int argc, char *argv[])
 			case 1:
 			case 2:
 				add_child (v1, s);
-				// add_child (search, s);
+				add_child (search, s);
 				break;
 			case 3:
 				add_child (v2, s);

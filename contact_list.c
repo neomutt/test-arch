@@ -36,8 +36,9 @@ contact_list_create (CONTACT_LIST *c)
 
 	OBJECT *o = &c->source.container.object;
 
-	o->type     = MAGIC_CONTACT_LIST;
-	o->release  = (object_release_fn) contact_list_release;
+	o->type    = MAGIC_CONTACT_LIST;
+	o->name    = strdup ("contact list");
+	o->release = (object_release_fn) contact_list_release;
 
 	return c;
 }
@@ -72,9 +73,6 @@ contact_list_config_item (const char *name)
 static void
 contact_list_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_CONTACT_LIST;
-	s->container.object.name = strdup ("contact list");
-
 	const char *names[] = { "avon",   "bedford", "cornwall", "devon dog",         "essex echidna",     "ferrari", "gloucestershire goat", "horse",  "igloo", NULL   };
 	const C_TAGS tags[] = { C_COUNTY, C_COUNTY,  C_COUNTY,   C_COUNTY | C_ANIMAL, C_COUNTY | C_ANIMAL, C_CAR,     C_COUNTY | C_ANIMAL,    C_ANIMAL, C_NONE,  C_NONE };
 	CONTACT *contacts[10];
