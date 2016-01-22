@@ -12,22 +12,22 @@
 #include "view.h"
 
 void
-calendar_release (CALENDAR_SOURCE *c)
+calendar_release (CALENDAR *c)
 {
 	if (!c) {
 		return;
 	}
 
-	// Nothing CALENDAR_SOURCE-specific to release
+	// Nothing CALENDAR-specific to release
 
 	source_release (&c->source);	// Release parent
 }
 
-CALENDAR_SOURCE *
-calendar_create (CALENDAR_SOURCE *c)
+CALENDAR *
+calendar_create (CALENDAR *c)
 {
 	if (!c) {
-		c = calloc (1, sizeof (CALENDAR_SOURCE));
+		c = calloc (1, sizeof (CALENDAR));
 		if (!c) {
 			return NULL;
 		}
@@ -47,7 +47,7 @@ calendar_create (CALENDAR_SOURCE *c)
 static SOURCE *
 calendar_init (void)
 {
-	CALENDAR_SOURCE *is = calendar_create (NULL);
+	CALENDAR *is = calendar_create (NULL);
 	if (!is) {
 		return NULL;
 	}

@@ -12,22 +12,22 @@
 #include "view.h"
 
 void
-rss_release (RSS_SOURCE *r)
+rss_release (RSS *r)
 {
 	if (!r) {
 		return;
 	}
 
-	// Nothing RSS_SOURCE-specific to release
+	// Nothing RSS-specific to release
 
 	source_release (&r->source);	// Release parent
 }
 
-RSS_SOURCE *
-rss_create (RSS_SOURCE *r)
+RSS *
+rss_create (RSS *r)
 {
 	if (!r) {
-		r = calloc (1, sizeof (RSS_SOURCE));
+		r = calloc (1, sizeof (RSS));
 		if (!r) {
 			return NULL;
 		}
@@ -47,7 +47,7 @@ rss_create (RSS_SOURCE *r)
 static SOURCE *
 rss_init (void)
 {
-	RSS_SOURCE *rs = rss_create (NULL);
+	RSS *rs = rss_create (NULL);
 	if (!rs) {
 		return NULL;
 	}
@@ -73,7 +73,7 @@ rss_config_item (const char *name)
 static void
 rss_connect (SOURCE *s)
 {
-	RSS_SOURCE *rs = (RSS_SOURCE*) s;
+	RSS *rs = (RSS*) s;
 
 	s->container.object.type = MAGIC_RSS;
 	s->container.object.name = strdup ("rss");

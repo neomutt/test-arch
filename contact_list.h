@@ -11,9 +11,9 @@ extern PLUGIN contact_list_plugin;
 
 typedef struct contact_list_source_t {
 	SOURCE source;
-} CONTACT_LIST_SOURCE;
+} CONTACT_LIST;
 
-CONTACT_LIST_SOURCE * contact_list_create  (CONTACT_LIST_SOURCE *c);
-void                  contact_list_release (CONTACT_LIST_SOURCE *c);
+CONTACT_LIST * contact_list_create  (CONTACT_LIST *c);
+void           contact_list_release (CONTACT_LIST *c);
 
 #endif // _M_CONTACT_LIST_H_

@@ -11,22 +11,22 @@
 #include "view.h"
 
 void
-task_list_release (TASK_LIST_SOURCE *t)
+task_list_release (TASK_LIST *t)
 {
 	if (!t) {
 		return;
 	}
 
-	// Nothing TASK_LIST_SOURCE-specific to release
+	// Nothing TASK_LIST-specific to release
 
 	source_release (&t->source);	// Release parent
 }
 
-TASK_LIST_SOURCE *
-task_list_create (TASK_LIST_SOURCE *t)
+TASK_LIST *
+task_list_create (TASK_LIST *t)
 {
 	if (!t) {
-		t = calloc (1, sizeof (TASK_LIST_SOURCE));
+		t = calloc (1, sizeof (TASK_LIST));
 		if (!t) {
 			return NULL;
 		}
@@ -46,7 +46,7 @@ task_list_create (TASK_LIST_SOURCE *t)
 static SOURCE *
 task_list_init (void)
 {
-	TASK_LIST_SOURCE *ts = task_list_create (NULL);
+	TASK_LIST *ts = task_list_create (NULL);
 	if (!ts) {
 		return NULL;
 	}

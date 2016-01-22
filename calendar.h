@@ -11,9 +11,9 @@ extern PLUGIN calendar_plugin;
 
 typedef struct calendar_source_t {
 	SOURCE source;
-} CALENDAR_SOURCE;
+} CALENDAR;
 
-CALENDAR_SOURCE * calendar_create  (CALENDAR_SOURCE *c);
-void              calendar_release (CALENDAR_SOURCE *c);
+CALENDAR * calendar_create  (CALENDAR *c);
+void       calendar_release (CALENDAR *c);
 
 #endif // _M_CALENDAR_H_

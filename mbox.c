@@ -10,22 +10,22 @@
 #include "view.h"
 
 void
-mbox_release (MBOX_SOURCE *m)
+mbox_release (MBOX *m)
 {
 	if (!m) {
 		return;
 	}
 
-	// Nothing MBOX_SOURCE-specific to release
+	// Nothing MBOX-specific to release
 
 	source_release (&m->source);	// Release parent
 }
 
-MBOX_SOURCE *
-mbox_create (MBOX_SOURCE *m)
+MBOX *
+mbox_create (MBOX *m)
 {
 	if (!m) {
-		m = calloc (1, sizeof (MBOX_SOURCE));
+		m = calloc (1, sizeof (MBOX));
 		if (!m) {
 			return NULL;
 		}
@@ -45,7 +45,7 @@ mbox_create (MBOX_SOURCE *m)
 static SOURCE *
 mbox_init (void)
 {
-	MBOX_SOURCE *ms = mbox_create (NULL);
+	MBOX *ms = mbox_create (NULL);
 	if (!ms) {
 		return NULL;
 	}

@@ -14,9 +14,9 @@ typedef struct rss_source_t {
 	SOURCE source;
 	int num_feeds;
 	FOLDER *feeds[10];
-} RSS_SOURCE;
+} RSS;
 
-RSS_SOURCE * rss_create  (RSS_SOURCE *r);
-void         rss_release (RSS_SOURCE *r);
+RSS * rss_create  (RSS *r);
+void  rss_release (RSS *r);
 
 #endif // _M_RSS_H_

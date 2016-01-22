@@ -11,22 +11,22 @@
 #include "view.h"
 
 void
-contact_list_release (CONTACT_LIST_SOURCE *c)
+contact_list_release (CONTACT_LIST *c)
 {
 	if (!c) {
 		return;
 	}
 
-	// Nothing CONTACT_LIST_SOURCE-specific to release
+	// Nothing CONTACT_LIST-specific to release
 
 	source_release (&c->source);	// Release parent
 }
 
-CONTACT_LIST_SOURCE *
-contact_list_create (CONTACT_LIST_SOURCE *c)
+CONTACT_LIST *
+contact_list_create (CONTACT_LIST *c)
 {
 	if (!c) {
-		c = calloc (1, sizeof (CONTACT_LIST_SOURCE));
+		c = calloc (1, sizeof (CONTACT_LIST));
 		if (!c) {
 			return NULL;
 		}
@@ -46,7 +46,7 @@ contact_list_create (CONTACT_LIST_SOURCE *c)
 static SOURCE *
 contact_list_init (void)
 {
-	CONTACT_LIST_SOURCE *cs = contact_list_create (NULL);
+	CONTACT_LIST *cs = contact_list_create (NULL);
 	if (!cs) {
 		return NULL;
 	}

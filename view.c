@@ -17,7 +17,6 @@ view_release (VIEW *v)
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < v->container.num_children; i++) {
-			// printf ("freeing source %p\n", (void*) v->sources[i]);
 			release (v->container.children[i]);
 		}
 

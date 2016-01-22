@@ -10,22 +10,22 @@
 #include "view.h"
 
 void
-maildir_release (MAILDIR_SOURCE *m)
+maildir_release (MAILDIR *m)
 {
 	if (!m) {
 		return;
 	}
 
-	// Nothing MAILDIR_SOURCE-specific to release
+	// Nothing MAILDIR-specific to release
 
 	source_release (&m->source);	// Release parent
 }
 
-MAILDIR_SOURCE *
-maildir_create (MAILDIR_SOURCE *m)
+MAILDIR *
+maildir_create (MAILDIR *m)
 {
 	if (!m) {
-		m = calloc (1, sizeof (MAILDIR_SOURCE));
+		m = calloc (1, sizeof (MAILDIR));
 		if (!m) {
 			return NULL;
 		}
@@ -45,7 +45,7 @@ maildir_create (MAILDIR_SOURCE *m)
 static SOURCE *
 maildir_init (void)
 {
-	MAILDIR_SOURCE *ms = maildir_create (NULL);
+	MAILDIR *ms = maildir_create (NULL);
 	if (!ms) {
 		return NULL;
 	}

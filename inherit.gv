@@ -35,7 +35,7 @@ digraph inherit {
 	mbox         [ fillcolor="#ffff80" ];
 	nntp         [ fillcolor="#ffff80" ];
 	rss          [ fillcolor="#ffff80" ];
-	search_list  [ fillcolor="#ffff80" ];
+	search       [ fillcolor="#ffff80" ];
 	task_list    [ fillcolor="#ffff80" ];
 
 	folder       [ fillcolor="#80ff80" ];
@@ -65,7 +65,7 @@ digraph inherit {
 	mbox         -> source;
 	nntp         -> source;
 	rss          -> source;
-	search_list  -> source;
+	search       -> source;
 	task_list    -> source;
 
 	article      -> item;

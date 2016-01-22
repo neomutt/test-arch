@@ -5,7 +5,7 @@
 #include "email.h"
 #include "folder.h"
 #include "plugin.h"
-#include "search_list.h"
+#include "search.h"
 #include "source.h"
 #include "view.h"
 
@@ -17,7 +17,6 @@ check_email (ITEM *item, FOLDER *rcpt, int rule)
 	}
 
 	const char *name = item->object.name;
-	// printf ("Check, %d %s\n", rule, name);
 
 	int match = 0;
 	int len;
@@ -62,13 +61,11 @@ descend_folders (FOLDER *search, FOLDER *rcpt, int rule)
 
 	int i;
 	for (i = 0; search->container.children[i]; i++) {
-		// printf ("Folder: %s\n", search->folders[i]->object.name);
 		descend_folders ((FOLDER*) search->container.children[i], rcpt, rule);
 	}
 
 	for (i = 0; search->items[i]; i++) {
 		ITEM *item = search->items[i];
-		// printf ("Item: %s\n", item->object.name);
 		check_email (item, rcpt, rule);
 	}
 }
@@ -86,14 +83,12 @@ find_all_mail (SOURCE **sources, FOLDER *rcpt, int rule)
 	for (s = 0; sources[s]; s++) {
 		int f;
 		for (f = 0; sources[s]->container.children[f]; f++) {
-			// printf ("Folder0: %s\n", sources[s]->folders[f]->object.name);
 			descend_folders ((FOLDER*) sources[s]->container.children[f], rcpt, rule);
 		}
 
 		int i;
 		for (i = 0; sources[s]->items[i]; i++) {
 			ITEM *item = sources[s]->items[i];
-			// printf ("Item0: %s\n", item->object.name);
 			check_email (item, rcpt, rule);
 		}
 	}
@@ -101,7 +96,7 @@ find_all_mail (SOURCE **sources, FOLDER *rcpt, int rule)
 
 
 void
-search_list_release (SEARCH_LIST_SOURCE *s)
+search_release (SEARCH *s)
 {
 	if (!s) {
 		return;
@@ -116,7 +111,7 @@ search_list_release (SEARCH_LIST_SOURCE *s)
 }
 
 int
-search_list_add_child (SEARCH_LIST_SOURCE *s, void *child)
+search_add_child (SEARCH *s, void *child)
 {
 	if (!s || !child) {
 		return -1;
@@ -134,11 +129,11 @@ search_list_add_child (SEARCH_LIST_SOURCE *s, void *child)
 	return 0;
 }
 
-SEARCH_LIST_SOURCE *
-search_list_create (SEARCH_LIST_SOURCE *s)
+SEARCH *
+search_create (SEARCH *s)
 {
 	if (!s) {
-		s = calloc (1, sizeof (SEARCH_LIST_SOURCE));
+		s = calloc (1, sizeof (SEARCH));
 		if (!s) {
 			return NULL;
 		}
@@ -148,21 +143,21 @@ search_list_create (SEARCH_LIST_SOURCE *s)
 
 	OBJECT *o = &s->source.container.object;
 
-	o->type     = MAGIC_SEARCH_LIST;
-	o->release  = (object_release_fn) search_list_release;
+	o->type     = MAGIC_SEARCH;
+	o->release  = (object_release_fn) search_release;
 
 	CONTAINER *c = &s->source.container;
 
-	c->add_child = (container_add_child_fn) search_list_add_child;
+	c->add_child = (container_add_child_fn) search_add_child;
 
 	return s;
 }
 
 
 static SOURCE *
-search_list_init (void)
+search_init (void)
 {
-	SEARCH_LIST_SOURCE *is = search_list_create (NULL);
+	SEARCH *is = search_create (NULL);
 	if (!is) {
 		return NULL;
 	}
@@ -171,14 +166,14 @@ search_list_init (void)
 }
 
 static int
-search_list_config_item (const char *name)
+search_config_item (const char *name)
 {
 	if (!name) {
 		return 0;
 	}
 
 	if ((name[0] >= 'e') && (name[0] <= 'h')) {
-		// printf ("search_list config: %s\n", name);
+		// printf ("search config: %s\n", name);
 		return 1;
 	}
 
@@ -186,17 +181,17 @@ search_list_config_item (const char *name)
 }
 
 static void
-search_list_connect (SOURCE *s)
+search_connect (SOURCE *s)
 {
-	s->container.object.type = MAGIC_SEARCH_LIST;
-	s->container.object.name = strdup ("search_list");
+	s->container.object.type = MAGIC_SEARCH;
+	s->container.object.name = strdup ("search");
 
 	FOLDER *f1 = folder_create (NULL);
 	FOLDER *f2 = folder_create (NULL);
 	FOLDER *f3 = folder_create (NULL);
 
 	if (!f1 || !f2 || !f3) {
-		printf ("search_list_connect: folder_create failed\n");
+		printf ("search_connect: folder_create failed\n");
 		return NULL;
 	}
 
@@ -204,7 +199,7 @@ search_list_connect (SOURCE *s)
 	f2->container.object.name = strdup ("y$");
 	f3->container.object.name = strdup ("(.){2}");
 
-	SEARCH_LIST_SOURCE *sl = (SEARCH_LIST_SOURCE*) s;
+	SEARCH *sl = (SEARCH*) s;
 
 	find_all_mail (sl->sources, f1, 1);
 	find_all_mail (sl->sources, f2, 2);
@@ -220,7 +215,7 @@ search_list_connect (SOURCE *s)
 }
 
 static void
-search_list_disconnect (SOURCE *src)
+search_disconnect (SOURCE *src)
 {
 	if (!src) {
 		return;
@@ -228,12 +223,12 @@ search_list_disconnect (SOURCE *src)
 }
 
 
-PLUGIN search_list_plugin = {
-	MAGIC_SEARCH_LIST,
-	"search_list",
-	search_list_init,
-	search_list_config_item,
-	search_list_connect,
-	search_list_disconnect
+PLUGIN search_plugin = {
+	MAGIC_SEARCH,
+	"search",
+	search_init,
+	search_config_item,
+	search_connect,
+	search_disconnect
 };
 

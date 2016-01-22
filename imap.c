@@ -10,22 +10,22 @@
 #include "view.h"
 
 void
-imap_release (IMAP_SOURCE *i)
+imap_release (IMAP *i)
 {
 	if (!i) {
 		return;
 	}
 
-	// Nothing IMAP_SOURCE-specific to release
+	// Nothing IMAP-specific to release
 
 	source_release (&i->source);	// Release parent
 }
 
-IMAP_SOURCE *
-imap_create (IMAP_SOURCE *i)
+IMAP *
+imap_create (IMAP *i)
 {
 	if (!i) {
-		i = calloc (1, sizeof (IMAP_SOURCE));
+		i = calloc (1, sizeof (IMAP));
 		if (!i) {
 			return NULL;
 		}
@@ -45,7 +45,7 @@ imap_create (IMAP_SOURCE *i)
 static SOURCE *
 imap_init (void)
 {
-	IMAP_SOURCE *is = imap_create (NULL);
+	IMAP *is = imap_create (NULL);
 	if (!is) {
 		return NULL;
 	}

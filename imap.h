@@ -11,9 +11,9 @@ extern PLUGIN imap_plugin;
 
 typedef struct imap_source_t {
 	SOURCE source;
-} IMAP_SOURCE;
+} IMAP;
 
-IMAP_SOURCE * imap_create  (IMAP_SOURCE *i);
-void          imap_release (IMAP_SOURCE *i);
+IMAP * imap_create  (IMAP *i);
+void   imap_release (IMAP *i);
 
 #endif // _M_IMAP_H_

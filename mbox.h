@@ -11,9 +11,9 @@ extern PLUGIN mbox_plugin;
 
 typedef struct mbox_source_t {
 	SOURCE source;
-} MBOX_SOURCE;
+} MBOX;
 
-MBOX_SOURCE * mbox_create  (MBOX_SOURCE *m);
-void          mbox_release (MBOX_SOURCE *m);
+MBOX * mbox_create  (MBOX *m);
+void   mbox_release (MBOX *m);
 
 #endif // _M_MBOX_H_

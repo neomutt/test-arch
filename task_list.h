@@ -11,9 +11,9 @@ extern PLUGIN task_list_plugin;
 
 typedef struct task_list_source_t {
 	SOURCE source;
-} TASK_LIST_SOURCE;
+} TASK_LIST;
 
-TASK_LIST_SOURCE * task_list_create  (TASK_LIST_SOURCE *t);
-void               task_list_release (TASK_LIST_SOURCE *t);
+TASK_LIST * task_list_create  (TASK_LIST *t);
+void        task_list_release (TASK_LIST *t);
 
 #endif // _M_TASK_LIST_H_

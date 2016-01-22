@@ -11,9 +11,9 @@ extern PLUGIN maildir_plugin;
 
 typedef struct maildir_source_t {
 	SOURCE source;
-} MAILDIR_SOURCE;
+} MAILDIR;
 
-MAILDIR_SOURCE * maildir_create  (MAILDIR_SOURCE *m);
-void             maildir_release (MAILDIR_SOURCE *m);
+MAILDIR * maildir_create  (MAILDIR *m);
+void      maildir_release (MAILDIR *m);
 
 #endif // _M_MAILDIR_H_

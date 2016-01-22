@@ -10,22 +10,22 @@
 #include "view.h"
 
 void
-nntp_release (NNTP_SOURCE *n)
+nntp_release (NNTP *n)
 {
 	if (!n) {
 		return;
 	}
 
-	// Nothing CALENDAR_SOURCE-specific to release
+	// Nothing NNTP-specific to release
 
 	source_release (&n->source);	// Release parent
 }
 
-NNTP_SOURCE *
-nntp_create (NNTP_SOURCE *n)
+NNTP *
+nntp_create (NNTP *n)
 {
 	if (!n) {
-		n = calloc (1, sizeof (NNTP_SOURCE));
+		n = calloc (1, sizeof (NNTP));
 		if (!n) {
 			return NULL;
 		}
@@ -45,7 +45,7 @@ nntp_create (NNTP_SOURCE *n)
 static SOURCE *
 nntp_init (void)
 {
-	NNTP_SOURCE *ns = nntp_create (NULL);
+	NNTP *ns = nntp_create (NULL);
 	if (!ns) {
 		return NULL;
 	}
