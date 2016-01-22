@@ -5,7 +5,7 @@
 #include "email.h"
 
 void
-email_release (EMAIL *e)
+email_destroy (EMAIL *e)
 {
 	if (!e) {
 		return;
@@ -15,7 +15,7 @@ email_release (EMAIL *e)
 	free (e->to);
 	free (e->subject);
 
-	item_release (&e->item);	// Release parent
+	item_destroy (&e->item);	// Destroy parent
 }
 
 EMAIL *
@@ -33,7 +33,7 @@ email_create (EMAIL *e)
 	OBJECT *o = &e->item.object;
 
 	o->type     = MAGIC_EMAIL;
-	o->release  = (object_release_fn) email_release;
+	o->destroy  = (object_destroy_fn) email_destroy;
 
 	return e;
 }

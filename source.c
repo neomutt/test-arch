@@ -6,7 +6,7 @@
 #include "folder.h"
 
 void
-source_release (SOURCE *s)
+source_destroy (SOURCE *s)
 {
 	if (!s) {
 		return;
@@ -17,7 +17,7 @@ source_release (SOURCE *s)
 		release (s->items[i]);
 	}
 
-	container_release (&s->container);	// Release parent
+	container_destroy (&s->container);	// Destroy parent
 }
 
 void
@@ -75,7 +75,7 @@ source_create (SOURCE *s)
 	OBJECT *o = &s->container.object;
 
 	o->type     = MAGIC_SOURCE;
-	o->release  = (object_release_fn) source_release;
+	o->destroy  = (object_destroy_fn) source_destroy;
 	o->display  = (object_display_fn) source_display;
 
 	CONTAINER *c = &s->container;

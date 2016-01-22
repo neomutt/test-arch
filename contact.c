@@ -5,7 +5,7 @@
 #include "contact.h"
 
 void
-contact_release (CONTACT *c)
+contact_destroy (CONTACT *c)
 {
 	if (!c) {
 		return;
@@ -13,7 +13,7 @@ contact_release (CONTACT *c)
 
 	// Nothing CONTACT-specific to release
 
-	item_release (&c->item);	// Release parent
+	item_destroy (&c->item);	// Destroy parent
 }
 
 CONTACT *
@@ -31,7 +31,7 @@ contact_create (CONTACT *c)
 	OBJECT *o = &c->item.object;
 
 	o->type     = MAGIC_CONTACT;
-	o->release  = (object_release_fn) contact_release;
+	o->destroy  = (object_destroy_fn) contact_destroy;
 
 	return c;
 }

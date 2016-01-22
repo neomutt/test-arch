@@ -18,6 +18,6 @@ typedef struct contact_t {
 } CONTACT;
 
 CONTACT * contact_create  (CONTACT *c);
-void      contact_release (CONTACT *c);
+void      contact_destroy (CONTACT *c);
 
 #endif // _M_CONTACT_H_

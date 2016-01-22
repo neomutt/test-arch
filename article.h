@@ -10,6 +10,6 @@ typedef struct article_t {
 } ARTICLE;
 
 ARTICLE * article_create  (ARTICLE *a);
-void      article_release (ARTICLE *a);
+void      article_destroy (ARTICLE *a);
 
 #endif // _ARTICLE_H_

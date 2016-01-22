@@ -5,7 +5,7 @@
 #include "article.h"
 
 void
-article_release (ARTICLE *a)
+article_destroy (ARTICLE *a)
 {
 	if (!a) {
 		return;
@@ -13,7 +13,7 @@ article_release (ARTICLE *a)
 
 	// Nothing ARTICLE-specific to release
 
-	item_release (&a->item);	// Release parent
+	item_destroy (&a->item);	// Destroy parent
 }
 
 ARTICLE *
@@ -31,7 +31,7 @@ article_create (ARTICLE *a)
 	OBJECT *o = &a->item.object;
 
 	o->type     = MAGIC_ARTICLE;
-	o->release  = (object_release_fn) article_release;
+	o->destroy  = (object_destroy_fn) article_destroy;
 
 	return a;
 }

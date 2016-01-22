@@ -5,7 +5,7 @@
 #include "task.h"
 
 void
-task_release (TASK *t)
+task_destroy (TASK *t)
 {
 	if (!t) {
 		return;
@@ -13,7 +13,7 @@ task_release (TASK *t)
 
 	// Nothing TASK-specific to release
 
-	item_release (&t->item);	// Release parent
+	item_destroy (&t->item);	// Destroy parent
 }
 
 TASK *
@@ -31,7 +31,7 @@ task_create (TASK *t)
 	OBJECT *o = &t->item.object;
 
 	o->type     = MAGIC_TASK;
-	o->release  = (object_release_fn) task_release;
+	o->destroy  = (object_destroy_fn) task_destroy;
 
 	return t;
 }

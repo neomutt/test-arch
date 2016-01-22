@@ -17,6 +17,6 @@ typedef struct task_t {
 } TASK;
 
 TASK * task_create  (TASK *t);
-void   task_release (TASK *t);
+void   task_destroy (TASK *t);
 
 #endif // _M_TASK_H_

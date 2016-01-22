@@ -5,7 +5,7 @@
 #include "item.h"
 
 void
-folder_release (FOLDER *f)
+folder_destroy (FOLDER *f)
 {
 	if (!f) {
 		return;
@@ -16,7 +16,7 @@ folder_release (FOLDER *f)
 		release (f->items[i]);
 	}
 
-	container_release (&f->container);	// Release parent
+	container_destroy (&f->container);	// Destroy parent
 }
 
 void
@@ -74,7 +74,7 @@ folder_create (FOLDER *f)
 	OBJECT *o = &f->container.object;
 
 	o->type     = MAGIC_FOLDER;
-	o->release  = (object_release_fn) folder_release;
+	o->destroy  = (object_destroy_fn) folder_destroy;
 	o->display  = (object_display_fn) folder_display;
 
 	CONTAINER *c = &f->container;

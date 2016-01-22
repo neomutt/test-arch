@@ -10,7 +10,7 @@ typedef struct item_t {
 } ITEM;
 
 ITEM * item_create  (ITEM *i);
-void   item_release (ITEM *i);
+void   item_destroy (ITEM *i);
 void   item_display (ITEM *i, int indent);
 
 #endif // _ITEM_H_

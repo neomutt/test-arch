@@ -17,7 +17,7 @@ typedef struct container_t {
 } CONTAINER;
 
 CONTAINER * container_create    (CONTAINER *c);
-void        container_release   (CONTAINER *c);
+void        container_destroy   (CONTAINER *c);
 int         container_add_child (CONTAINER *c, void *child);
 void        container_display   (CONTAINER *c, int indent);
 

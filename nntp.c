@@ -10,7 +10,7 @@
 #include "view.h"
 
 void
-nntp_release (NNTP *n)
+nntp_destroy (NNTP *n)
 {
 	if (!n) {
 		return;
@@ -18,7 +18,7 @@ nntp_release (NNTP *n)
 
 	// Nothing NNTP-specific to release
 
-	source_release (&n->source);	// Release parent
+	source_destroy (&n->source);	// Destroy parent
 }
 
 NNTP *
@@ -37,7 +37,7 @@ nntp_create (NNTP *n)
 
 	o->type    = MAGIC_NNTP;
 	o->name    = strdup ("nntp");
-	o->release = (object_release_fn) nntp_release;
+	o->destroy = (object_destroy_fn) nntp_destroy;
 
 	return n;
 }

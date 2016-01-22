@@ -10,7 +10,7 @@
 #include "view.h"
 
 void
-mbox_release (MBOX *m)
+mbox_destroy (MBOX *m)
 {
 	if (!m) {
 		return;
@@ -18,7 +18,7 @@ mbox_release (MBOX *m)
 
 	// Nothing MBOX-specific to release
 
-	source_release (&m->source);	// Release parent
+	source_destroy (&m->source);	// Destroy parent
 }
 
 MBOX *
@@ -37,7 +37,7 @@ mbox_create (MBOX *m)
 
 	o->type    = MAGIC_MBOX;
 	o->name    = strdup ("mbox");
-	o->release = (object_release_fn) mbox_release;
+	o->destroy = (object_destroy_fn) mbox_destroy;
 
 	return m;
 }

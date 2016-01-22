@@ -10,7 +10,7 @@
 #include "view.h"
 
 void
-imap_release (IMAP *i)
+imap_destroy (IMAP *i)
 {
 	if (!i) {
 		return;
@@ -18,7 +18,7 @@ imap_release (IMAP *i)
 
 	// Nothing IMAP-specific to release
 
-	source_release (&i->source);	// Release parent
+	source_destroy (&i->source);	// Destroy parent
 }
 
 IMAP *
@@ -37,7 +37,7 @@ imap_create (IMAP *i)
 
 	o->type    = MAGIC_IMAP;
 	o->name    = strdup ("imap");
-	o->release = (object_release_fn) imap_release;
+	o->destroy = (object_destroy_fn) imap_destroy;
 
 	return i;
 }

@@ -16,7 +16,7 @@ typedef struct search_source_t {
 } SEARCH;
 
 SEARCH * search_create    (SEARCH *s);
-void     search_release   (SEARCH *s);
+void     search_destroy   (SEARCH *s);
 int      search_add_child (SEARCH *s, void *child);
 
 #endif // _M_SEARCH_H_

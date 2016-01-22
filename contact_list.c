@@ -11,7 +11,7 @@
 #include "view.h"
 
 void
-contact_list_release (CONTACT_LIST *c)
+contact_list_destroy (CONTACT_LIST *c)
 {
 	if (!c) {
 		return;
@@ -19,7 +19,7 @@ contact_list_release (CONTACT_LIST *c)
 
 	// Nothing CONTACT_LIST-specific to release
 
-	source_release (&c->source);	// Release parent
+	source_destroy (&c->source);	// Destroy parent
 }
 
 CONTACT_LIST *
@@ -38,7 +38,7 @@ contact_list_create (CONTACT_LIST *c)
 
 	o->type    = MAGIC_CONTACT_LIST;
 	o->name    = strdup ("contact list");
-	o->release = (object_release_fn) contact_list_release;
+	o->destroy = (object_destroy_fn) contact_list_destroy;
 
 	return c;
 }

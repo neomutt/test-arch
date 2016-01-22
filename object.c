@@ -4,7 +4,7 @@
 #include "object.h"
 
 void
-object_release (OBJECT *o)
+object_destroy (OBJECT *o)
 {
 	if (!o) {
 		return;
@@ -36,7 +36,7 @@ object_create (OBJECT *o)
 
 	o->refcount = 1;
 	o->type     = MAGIC_OBJECT;
-	o->release  = (object_release_fn) object_release;
+	o->destroy  = (object_destroy_fn) object_destroy;
 	o->display  = (object_display_fn) object_display;
 
 	return o;
@@ -71,10 +71,10 @@ release (void *obj)
 		return o->refcount;
 	}
 
-	if (o->release) {
-		(*o->release) (o);
+	if (o->destroy) {
+		(*o->destroy) (o);
 	} else {
-		object_release (o);
+		object_destroy (o);
 	}
 
 	return 0;

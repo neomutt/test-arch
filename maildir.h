@@ -14,6 +14,6 @@ typedef struct maildir_source_t {
 } MAILDIR;
 
 MAILDIR * maildir_create  (MAILDIR *m);
-void      maildir_release (MAILDIR *m);
+void      maildir_destroy (MAILDIR *m);
 
 #endif // _M_MAILDIR_H_

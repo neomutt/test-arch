@@ -11,6 +11,6 @@ typedef struct event_t {
 } EVENT;
 
 EVENT * event_create  (EVENT *e);
-void    event_release (EVENT *e);
+void    event_destroy (EVENT *e);
 
 #endif // _EVENT_H_

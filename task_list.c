@@ -11,7 +11,7 @@
 #include "view.h"
 
 void
-task_list_release (TASK_LIST *t)
+task_list_destroy (TASK_LIST *t)
 {
 	if (!t) {
 		return;
@@ -19,7 +19,7 @@ task_list_release (TASK_LIST *t)
 
 	// Nothing TASK_LIST-specific to release
 
-	source_release (&t->source);	// Release parent
+	source_destroy (&t->source);	// Destroy parent
 }
 
 TASK_LIST *
@@ -38,7 +38,7 @@ task_list_create (TASK_LIST *t)
 
 	o->type    = MAGIC_TASK_LIST;
 	o->name    = strdup ("task list");
-	o->release = (object_release_fn) task_list_release;
+	o->destroy = (object_destroy_fn) task_list_destroy;
 
 	return t;
 }

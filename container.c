@@ -4,7 +4,7 @@
 #include "container.h"
 
 void
-container_release (CONTAINER *c)
+container_destroy (CONTAINER *c)
 {
 	if (!c) {
 		return;
@@ -15,7 +15,7 @@ container_release (CONTAINER *c)
 		release (c->children[i]);
 	}
 
-	object_release (&c->object);
+	object_destroy (&c->object);
 }
 
 void
@@ -48,7 +48,7 @@ container_create (CONTAINER *c)
 	object_create (o);	// Construct parent
 
 	o->type     = MAGIC_CONTAINER;
-	o->release  = (object_release_fn) container_release;
+	o->destroy  = (object_destroy_fn) container_destroy;
 	o->display  = (object_display_fn) container_display;
 
 	return c;

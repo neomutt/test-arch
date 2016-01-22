@@ -17,6 +17,6 @@ typedef struct rss_source_t {
 } RSS;
 
 RSS * rss_create  (RSS *r);
-void  rss_release (RSS *r);
+void  rss_destroy (RSS *r);
 
 #endif // _M_RSS_H_

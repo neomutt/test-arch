@@ -5,7 +5,7 @@
 #include "view.h"
 
 static int
-view_release (VIEW *v)
+view_destroy (VIEW *v)
 {
 	if (!v) {
 		return -1;
@@ -58,7 +58,7 @@ view_create (VIEW *v)
 	OBJECT *o = &v->container.object;
 
 	o->type     = MAGIC_VIEW;
-	o->release  = (object_release_fn) view_release;
+	o->destroy  = (object_destroy_fn) view_destroy;
 	o->display  = (object_display_fn) view_display;
 
 	return v;

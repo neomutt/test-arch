@@ -12,7 +12,7 @@
 #include "view.h"
 
 void
-rss_release (RSS *r)
+rss_destroy (RSS *r)
 {
 	if (!r) {
 		return;
@@ -20,7 +20,7 @@ rss_release (RSS *r)
 
 	// Nothing RSS-specific to release
 
-	source_release (&r->source);	// Release parent
+	source_destroy (&r->source);	// Destroy parent
 }
 
 RSS *
@@ -39,7 +39,7 @@ rss_create (RSS *r)
 
 	o->type    = MAGIC_RSS;
 	o->name    = strdup ("rss");
-	o->release = (object_release_fn) rss_release;
+	o->destroy = (object_destroy_fn) rss_destroy;
 
 	return r;
 }

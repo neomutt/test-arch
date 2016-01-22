@@ -12,7 +12,7 @@
 #include "view.h"
 
 void
-calendar_release (CALENDAR *c)
+calendar_destroy (CALENDAR *c)
 {
 	if (!c) {
 		return;
@@ -20,7 +20,7 @@ calendar_release (CALENDAR *c)
 
 	// Nothing CALENDAR-specific to release
 
-	source_release (&c->source);	// Release parent
+	source_destroy (&c->source);	// Destroy parent
 }
 
 CALENDAR *
@@ -39,7 +39,7 @@ calendar_create (CALENDAR *c)
 
 	o->type    = MAGIC_CALENDAR;
 	o->name    = strdup ("calendar");
-	o->release = (object_release_fn) calendar_release;
+	o->destroy = (object_destroy_fn) calendar_destroy;
 
 	return c;
 }

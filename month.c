@@ -11,7 +11,7 @@
 #include "view.h"
 
 void
-month_release (MONTH *m)
+month_destroy (MONTH *m)
 {
 	if (!m) {
 		return;
@@ -19,7 +19,7 @@ month_release (MONTH *m)
 
 	// Nothing MONTH-specific to release
 
-	folder_release (&m->folder);	// Release parent
+	folder_destroy (&m->folder);	// Destroy parent
 }
 
 void
@@ -81,7 +81,7 @@ month_create (MONTH *m)
 	OBJECT *o = &m->folder.container.object;
 
 	o->type     = MAGIC_MONTH;
-	o->release  = (object_release_fn) month_release;
+	o->destroy  = (object_destroy_fn) month_destroy;
 	o->display  = (object_display_fn) month_display;
 
 	return m;

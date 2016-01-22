@@ -5,7 +5,7 @@
 #include "event.h"
 
 void
-event_release (EVENT *e)
+event_destroy (EVENT *e)
 {
 	if (!e) {
 		return;
@@ -13,7 +13,7 @@ event_release (EVENT *e)
 
 	// Nothing EVENT-specific to release
 
-	item_release (&e->item);	// Release parent
+	item_destroy (&e->item);	// Destroy parent
 }
 
 void
@@ -43,7 +43,7 @@ event_create (EVENT *e)
 	OBJECT *o = &e->item.object;
 
 	o->type     = MAGIC_EVENT;
-	o->release  = (object_release_fn) event_release;
+	o->destroy  = (object_destroy_fn) event_destroy;
 	o->display  = (object_display_fn) event_display;
 
 	return e;

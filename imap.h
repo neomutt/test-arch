@@ -14,6 +14,6 @@ typedef struct imap_source_t {
 } IMAP;
 
 IMAP * imap_create  (IMAP *i);
-void   imap_release (IMAP *i);
+void   imap_destroy (IMAP *i);
 
 #endif // _M_IMAP_H_

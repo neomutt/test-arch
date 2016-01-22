@@ -13,6 +13,6 @@ typedef struct email_t {
 } EMAIL;
 
 EMAIL * email_create  (EMAIL *e);
-void    email_release (EMAIL *e);
+void    email_destroy (EMAIL *e);
 
 #endif // _EMAIL_H_

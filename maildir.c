@@ -10,7 +10,7 @@
 #include "view.h"
 
 void
-maildir_release (MAILDIR *m)
+maildir_destroy (MAILDIR *m)
 {
 	if (!m) {
 		return;
@@ -18,7 +18,7 @@ maildir_release (MAILDIR *m)
 
 	// Nothing MAILDIR-specific to release
 
-	source_release (&m->source);	// Release parent
+	source_destroy (&m->source);	// Destroy parent
 }
 
 MAILDIR *
@@ -37,7 +37,7 @@ maildir_create (MAILDIR *m)
 
 	o->type    = MAGIC_MAILDIR;
 	o->name    = strdup ("maildir");
-	o->release = (object_release_fn) maildir_release;
+	o->destroy = (object_destroy_fn) maildir_destroy;
 
 	return m;
 }

@@ -14,6 +14,6 @@ typedef struct contact_list_source_t {
 } CONTACT_LIST;
 
 CONTACT_LIST * contact_list_create  (CONTACT_LIST *c);
-void           contact_list_release (CONTACT_LIST *c);
+void           contact_list_destroy (CONTACT_LIST *c);
 
 #endif // _M_CONTACT_LIST_H_

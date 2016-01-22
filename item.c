@@ -4,7 +4,7 @@
 #include "item.h"
 
 void
-item_release (ITEM *i)
+item_destroy (ITEM *i)
 {
 	if (!i) {
 		return;
@@ -12,7 +12,7 @@ item_release (ITEM *i)
 
 	// Nothing ITEM-specific to release
 
-	object_release (&i->object);	// Release parent
+	object_destroy (&i->object);	// Destroy parent
 }
 
 void
@@ -40,7 +40,7 @@ item_create (ITEM *i)
 	object_create (o);	// Construct parent
 
 	o->type     = MAGIC_OBJECT;
-	o->release  = (object_release_fn) item_release;
+	o->destroy  = (object_destroy_fn) item_destroy;
 	o->display  = (object_display_fn) item_display;
 
 	return i;

@@ -15,7 +15,7 @@ typedef struct source_t {
 } SOURCE;
 
 SOURCE * source_create    (SOURCE *s);
-void     source_release   (SOURCE *s);
+void     source_destroy   (SOURCE *s);
 int      source_add_child (SOURCE *s, void *child);
 void     source_display   (SOURCE *s, int indent);
 

@@ -14,6 +14,6 @@ typedef struct mbox_source_t {
 } MBOX;
 
 MBOX * mbox_create  (MBOX *m);
-void   mbox_release (MBOX *m);
+void   mbox_destroy (MBOX *m);
 
 #endif // _M_MBOX_H_

@@ -3,19 +3,19 @@
 
 #define MAGIC_OBJECT 1
 
-typedef void (*object_release_fn) (void *obj);
+typedef void (*object_destroy_fn) (void *obj);
 typedef void (*object_display_fn) (void *obj, int indent);
 
 typedef struct object_t {
 	int type;
 	int refcount;
 	char *name;
-	object_release_fn release;
+	object_destroy_fn destroy;
 	object_display_fn display;
 } OBJECT;
 
 OBJECT * object_create  (OBJECT *obj);
-void     object_release (OBJECT *obj);
+void     object_destroy (OBJECT *obj);
 void     object_display (OBJECT *obj, int indent);
 
 int  addref  (void *obj);

@@ -99,7 +99,7 @@ find_all_mail (SOURCE **sources, FOLDER *rcpt, int rule)
 
 
 void
-search_release (SEARCH *s)
+search_destroy (SEARCH *s)
 {
 	if (!s) {
 		return;
@@ -110,7 +110,7 @@ search_release (SEARCH *s)
 		release (s->sources[i]);
 	}
 
-	source_release (&s->source);	// Release parent
+	source_destroy (&s->source);	// Destroy parent
 }
 
 int
@@ -148,7 +148,7 @@ search_create (SEARCH *s)
 
 	o->type    = MAGIC_SEARCH;
 	o->name    = strdup ("search");
-	o->release = (object_release_fn) search_release;
+	o->destroy = (object_destroy_fn) search_destroy;
 
 	CONTAINER *c = &s->source.container;
 

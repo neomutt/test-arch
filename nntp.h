@@ -14,6 +14,6 @@ typedef struct nntp_source_t {
 } NNTP;
 
 NNTP * nntp_create  (NNTP *n);
-void   nntp_release (NNTP *n);
+void   nntp_destroy (NNTP *n);
 
 #endif // _M_NNTP_H_

@@ -14,6 +14,6 @@ typedef struct calendar_source_t {
 } CALENDAR;
 
 CALENDAR * calendar_create  (CALENDAR *c);
-void       calendar_release (CALENDAR *c);
+void       calendar_destroy (CALENDAR *c);
 
 #endif // _M_CALENDAR_H_
