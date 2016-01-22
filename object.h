@@ -15,10 +15,10 @@ typedef struct object_t {
 } OBJECT;
 
 OBJECT * object_create  (OBJECT *obj);
-int      object_addref  (OBJECT *obj);
 void     object_release (OBJECT *obj);
 void     object_display (OBJECT *obj, int indent);
 
+int  addref  (void *obj);
 int  release (void *obj);
 void display (void *obj, int indent);
 

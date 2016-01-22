@@ -49,7 +49,7 @@ folder_add_child (FOLDER *f, void *child)
 
 	OBJECT *obj = child;
 	if ((obj->type & 0xFF) == MAGIC_ITEM) {
-		object_addref (child);
+		addref (child);
 		f->items[f->num_items] = child;
 		f->num_items++;
 	} else {

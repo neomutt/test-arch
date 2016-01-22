@@ -50,7 +50,7 @@ source_add_child (SOURCE *src, void *child)
 
 	OBJECT *obj = child;
 	if ((obj->type & 0xFF) == MAGIC_ITEM) {
-		object_addref (child);
+		addref (child);
 		src->items[src->num_items] = child;
 		src->num_items++;
 	} else {

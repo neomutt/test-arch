@@ -61,7 +61,7 @@ container_add_child (CONTAINER *c, void *child)
 		return -1;
 	}
 
-	object_addref (child);
+	addref (child);
 	c->children[c->num_children] = child;
 	c->num_children++;
 

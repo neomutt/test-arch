@@ -3,18 +3,6 @@
 
 #include "object.h"
 
-int
-object_addref (OBJECT *o)
-{
-	if (!o) {
-		return -1;
-	}
-
-	o->refcount++;
-
-	return o->refcount;
-}
-
 void
 object_release (OBJECT *o)
 {
@@ -54,6 +42,20 @@ object_create (OBJECT *o)
 	return o;
 }
 
+
+int
+addref (void *obj)
+{
+	if (!obj) {
+		return -1;
+	}
+
+	OBJECT *o = obj;
+
+	o->refcount++;
+
+	return o->refcount;
+}
 
 int
 release (void *obj)

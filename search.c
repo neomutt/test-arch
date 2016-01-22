@@ -122,7 +122,7 @@ search_add_child (SEARCH *s, void *child)
 
 	OBJECT *obj = child;
 	if ((obj->type & 0xFF) == MAGIC_SOURCE) {
-		object_addref (child);
+		addref (child);
 		s->sources[s->num_sources] = child;
 		s->num_sources++;
 	} else {
