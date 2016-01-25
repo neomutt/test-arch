@@ -1,3 +1,6 @@
+/* Copyright (c) 2016 Richard Russon <rich@flatcap.org>
+ * Released under the GPLv3 -- see LICENSE.md for details */
+
 #ifndef _CONTAINER_H_
 #define _CONTAINER_H_
 
