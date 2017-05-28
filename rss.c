@@ -87,7 +87,7 @@ rss_connect (SOURCE *s)
 		rs->feeds[i] = folder_create (NULL);
 		if (!rs->feeds[i]) {
 			printf ("rss_connect: folder_create failed\n");
-			return NULL;
+			return;
 		}
 		rs->feeds[i]->container.object.name = strdup (feeds[i]);
 
@@ -104,7 +104,7 @@ rss_connect (SOURCE *s)
 		ARTICLE *a = article_create (NULL);
 		if (!a) {
 			printf ("rss_connect: article_create failed\n");
-			return NULL;
+			return;
 		}
 
 		a->item.object.name = strdup (names[i]);
@@ -125,7 +125,7 @@ rss_connect (SOURCE *s)
 
 	if (!f1 || !f2) {
 		printf ("rss_connect: folder_create failed\n");
-		return NULL;
+		return;
 	}
 
 	f1->container.object.name = strdup ("tech");

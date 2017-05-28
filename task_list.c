@@ -86,7 +86,7 @@ task_list_connect (SOURCE *s)
 		tasks[i] = task_create (NULL);
 		if (!tasks[i]) {
 			printf ("task_list_connect: item_create failed\n");
-			return NULL;
+			return;
 		}
 		tasks[i]->item.object.name = strdup (names[i]);
 		tasks[i]->tags             = tags[i];
@@ -102,7 +102,7 @@ task_list_connect (SOURCE *s)
 
 	if (!f1 || !f2 || !f3) {
 		printf ("task_list_connect: folder_create failed\n");
-		return NULL;
+		return;
 	}
 
 	f1->container.object.name = strdup ("inside");

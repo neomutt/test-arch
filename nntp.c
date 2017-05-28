@@ -81,7 +81,7 @@ nntp_connect (SOURCE *s)
 
 	if (!f1 || !f2 || !f3) {
 		printf ("nntp_connect: folder_create failed\n");
-		return NULL;
+		return;
 	}
 
 	f1->container.object.name = strdup ("alt.swedish.chef");
@@ -98,7 +98,7 @@ nntp_connect (SOURCE *s)
 
 	if (!e1 || !e2 || !e3 || !e4 || !e5 || !e6 || !e7) {
 		printf ("nntp_connect: email_create failed\n");
-		return NULL;
+		return;
 	}
 
 	e1->item.object.name = strdup ("bork");

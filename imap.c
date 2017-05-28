@@ -81,7 +81,7 @@ imap_connect (SOURCE *s)
 
 	if (!f1 || !f2 || !f3) {
 		printf ("imap_connect: folder_create failed\n");
-		return NULL;
+		return;
 	}
 
 	f1->container.object.name = strdup ("fruit");
@@ -97,7 +97,7 @@ imap_connect (SOURCE *s)
 		e = email_create (NULL);
 		if (!e) {
 			printf ("imap_connect: email_create failed\n");
-			return NULL;
+			return;
 		}
 		e->item.object.name = strdup (names[i]);
 

@@ -78,7 +78,7 @@ mbox_connect (SOURCE *s)
 	FOLDER *f1 = folder_create (NULL);
 	if (!f1) {
 		printf ("mbox_connect: folder_create failed\n");
-		return NULL;
+		return;
 	}
 
 	f1->container.object.name = strdup ("music");
@@ -92,7 +92,7 @@ mbox_connect (SOURCE *s)
 		e = email_create (NULL);
 		if (!e) {
 			printf ("imap_connect: email_create failed\n");
-			return NULL;
+			return;
 		}
 		e->item.object.name = strdup (names[i]);
 

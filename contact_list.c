@@ -86,7 +86,7 @@ contact_list_connect (SOURCE *s)
 		contacts[i] = contact_create (NULL);
 		if (!contacts[i]) {
 			printf ("contact_list_connect: contact_create failed\n");
-			return NULL;
+			return;
 		}
 		contacts[i]->item.object.name = strdup (names[i]);
 		contacts[i]->tags             = tags[i];
@@ -103,7 +103,7 @@ contact_list_connect (SOURCE *s)
 
 	if (!f1 || !f2 || !f3 || !f4) {
 		printf ("contact_list_connect: folder_create failed\n");
-		return NULL;
+		return;
 	}
 
 	f1->container.object.name = strdup ("county");
