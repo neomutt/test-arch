@@ -7,16 +7,15 @@
 #include "source.h"
 #include "view.h"
 
-static int
+static void
 view_destroy (VIEW *v)
 {
 	if (!v) {
-		return -1;
+		return;
 	}
 
 	OBJECT *o = &v->container.object;
 	o->refcount--;
-	int rc = o->refcount;
 	if (o->refcount < 1) {
 		int i;
 		for (i = 0; i < v->container.num_children; i++) {
@@ -26,8 +25,6 @@ view_destroy (VIEW *v)
 		free (o->name);
 		free (v);
 	}
-
-	return rc;
 }
 
 void
