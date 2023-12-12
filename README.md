@@ -17,7 +17,7 @@ This will make mutt more robust and easier to maintain.
 
 This is the inheritance graph for the objects in the application.
 
-![inheritance](https://flatcap.org/mutt/arch.png)
+![inheritance](inherit.svg)
 
 To understand how the objects fit together, start with the **source**s.  Each
 **source** represents one connection to a data source: 1 imap connection, 1
